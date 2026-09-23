@@ -1,0 +1,662 @@
+<title>Tsumugi CRM Reload</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700;1,800&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* ---------- chrome (theme-aware) ---------- */
+:root{--c-ground:#f1f2f0;--c-panel:#fbfbfa;--c-ink:#1c1f1d;--c-muted:#5f665f;--c-rule:#d5d8d3;--c-sel:#1c1f1d;--c-on-sel:#f5f6f4;--c-font:"IBM Plex Sans JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--c-ground:#141614;--c-panel:#1b1e1b;--c-ink:#e6e9e5;--c-muted:#9aa19a;--c-rule:#2d312d;--c-sel:#e6e9e5;--c-on-sel:#141614}}
+:root[data-theme="dark"]{color-scheme:dark;--c-ground:#141614;--c-panel:#1b1e1b;--c-ink:#e6e9e5;--c-muted:#9aa19a;--c-rule:#2d312d;--c-sel:#e6e9e5;--c-on-sel:#141614}
+*{box-sizing:border-box}
+body{background:var(--c-ground);color:var(--c-ink);font-family:var(--c-font);font-size:14px;line-height:1.6}
+.ch-wrap{max-width:1440px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:grid;gap:18px}
+@media (min-width:900px){.ch-wrap{padding-inline:32px}}
+.ch-head h1{margin:0;font-size:22px;font-weight:700;text-wrap:balance}
+.ch-head p{margin:4px 0 0;color:var(--c-muted);max-width:74ch}
+.ch-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:1000px){.ch-grid{grid-template-columns:1fr 1fr}}
+.ch-card{background:var(--c-panel);border:1px solid var(--c-rule);border-radius:10px;padding:16px 20px}
+.ch-card h2{margin:0 0 8px;font-size:15px}
+.ch-card ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.ch-card a{color:inherit}
+.ch-ctrl{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font-size:13px}
+.ch-seg{display:inline-flex;border:1px solid var(--c-rule);border-radius:8px;overflow:hidden}
+.ch-seg button{font:inherit;font-size:13px;border:0;background:var(--c-panel);color:var(--c-ink);padding:5px 14px;cursor:pointer;border-right:1px solid var(--c-rule)}
+.ch-seg button:last-child{border-right:0}
+.ch-seg button[aria-pressed="true"]{background:var(--c-sel);color:var(--c-on-sel)}
+.ch-seg button:focus-visible,.ch-card a:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
+.ch-stage{overflow-x:auto;border-radius:14px;border:1px solid var(--c-rule)}
+.ch-note{font-size:12px;color:var(--c-muted);margin:0}
+
+/* ---------- game-inspired tokens (single dark look per theme, painted explicitly) ---------- */
+.rl{
+  --jp:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif;
+  --disp:"Barlow Condensed","Zen Kaku Gothic New",sans-serif;
+  /* 蒼 — Reload */
+  --bg0:#03102a; --bg1:#062456; --bg2:#0b3a7a;
+  --ink:#eef7ff; --ink2:#b3cdeb; --ink3:#86a9d0;
+  --accent:#39d0ff; --accent-ink:#021027; --accent2:#ff3d5e; --accent-soft:rgb(57 208 255 / .16);
+  --panel:rgb(5 26 66 / .78); --panel-solid:#071f4a; --panel-hi:rgb(120 200 255 / .12);
+  --line:rgb(120 190 255 / .26); --line-strong:rgb(120 200 255 / .5);
+  --good:#43e3a0; --warn:#ffcf4a; --bad:#ff5d73; --neutral:#9bb6d6;
+  --note-bg:rgb(255 207 74 / .12); --note-bd:#ffcf4a;
+  color-scheme:dark;
+}
+.rl[data-game="revival"]{
+  /* 黄 — Revival */
+  --bg0:#090909; --bg1:#131313; --bg2:#1f1f1f;
+  --ink:#fffbe8; --ink2:#ddd6b4; --ink3:#b0a984;
+  --accent:#ffe100; --accent-ink:#111111; --accent2:#19d3c5; --accent-soft:rgb(255 225 0 / .14);
+  --panel:rgb(18 18 18 / .9); --panel-solid:#161616; --panel-hi:rgb(255 225 0 / .08);
+  --line:rgb(255 225 0 / .22); --line-strong:rgb(255 225 0 / .55);
+  --good:#6fe3a1; --warn:#ffe100; --bad:#ff5b5b; --neutral:#c9c2a0;
+  --note-bg:rgb(25 211 197 / .12); --note-bd:#19d3c5;
+}
+
+/* ---------- stage & backgrounds ---------- */
+.rl{position:relative;height:820px;min-width:1180px;overflow:hidden;font-family:var(--jp);font-size:14px;line-height:1.5;color:var(--ink);background:var(--bg0)}
+.rl *{font-family:inherit}
+.rl button{cursor:pointer;color:inherit;font-size:inherit}
+.rl h1,.rl h2,.rl h3,.rl p{margin:0}
+.rl :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.rl-bg{position:absolute;inset:0;z-index:0;background:
+  radial-gradient(900px 520px at 78% -10%,var(--bg2),transparent 70%),
+  radial-gradient(700px 600px at 0% 110%,var(--bg1),transparent 70%),
+  linear-gradient(170deg,var(--bg1),var(--bg0) 62%)}
+/* water caustics (Reload) */
+.rl-caustic{position:absolute;inset:-20%;z-index:0;opacity:.5;pointer-events:none;
+  background:
+   radial-gradient(closest-side,rgb(120 210 255 / .10),transparent) 0 0/220px 160px,
+   radial-gradient(closest-side,rgb(120 210 255 / .08),transparent) 110px 80px/260px 190px;
+  animation:rl-drift 26s linear infinite;mix-blend-mode:screen}
+@keyframes rl-drift{to{transform:translate(120px,60px)}}
+.rl-bubbles{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.rl-bubbles i{position:absolute;bottom:-40px;border-radius:50%;border:1px solid rgb(170 225 255 / .35);background:radial-gradient(circle at 30% 30%,rgb(255 255 255 / .35),rgb(120 200 255 / .05) 60%);animation:rl-rise linear infinite}
+@keyframes rl-rise{to{transform:translate(var(--dx,20px),-900px)}}
+/* big diagonal band */
+.rl-band{position:absolute;z-index:0;left:-10%;right:-10%;top:300px;height:210px;transform:rotate(-8deg);background:linear-gradient(90deg,transparent,var(--accent-soft) 30%,var(--accent-soft) 70%,transparent);pointer-events:none}
+/* Revival: scanlines + hazard stripes, no water */
+.rl[data-game="revival"] .rl-caustic,.rl[data-game="revival"] .rl-bubbles{display:none}
+.rl-scan{display:none;position:absolute;inset:0;z-index:6;pointer-events:none;background:repeating-linear-gradient(0deg,rgb(255 255 255 / .035) 0 1px,transparent 1px 3px)}
+.rl[data-game="revival"] .rl-scan{display:block}
+.rl[data-game="revival"] .rl-band{height:120px;top:560px;transform:rotate(-8deg);background:repeating-linear-gradient(-45deg,rgb(255 225 0 / .16) 0 18px,transparent 18px 36px)}
+.rl-layer{position:absolute;inset:0;z-index:2}
+
+/* motion: Reload "sinks" in, Revival switches on like a CRT */
+.enter-sink{animation:rl-sink .42s cubic-bezier(.2,.7,.2,1) backwards}
+@keyframes rl-sink{from{opacity:0;transform:translateY(-14px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.rl[data-game="revival"] .enter-sink{animation:rl-crt .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rl-crt{0%{opacity:0;clip-path:inset(49.5% 0 49.5% 0)}40%{opacity:1;clip-path:inset(49.5% 0 49.5% 0)}100%{clip-path:inset(0 0 0 0)}}
+.stagger > *{animation:rl-slide .38s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(var(--i,0) * 40ms)}
+@keyframes rl-slide{from{opacity:0;transform:translateX(-28px) skewX(-8deg)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .rl-caustic,.rl-bubbles i,.enter-sink,.stagger > *{animation:none!important}
+  .rl *{transition:none!important}
+}
+</style>
+<style>
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:middle}
+.num,.en{font-family:var(--disp);font-variant-numeric:tabular-nums}
+.en{font-style:italic;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.muted{color:var(--ink2)} .dim{color:var(--ink3)} .small{font-size:12px}
+.row{display:flex;align-items:center;gap:8px} .grow{flex:1;min-width:0}
+.late{color:var(--bad);font-weight:700}
+/* tones */
+.t-neutral{--t:var(--neutral)} .t-info{--t:var(--accent)} .t-warn{--t:var(--warn)} .t-good{--t:var(--good)} .t-bad{--t:var(--bad)}
+.tag{display:inline-flex;align-items:center;justify-content:center;height:22px;padding:0 12px;font-size:12px;font-weight:900;color:var(--accent-ink);background:var(--t);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);white-space:nowrap}
+/* buttons: parallelograms */
+.gbtn{position:relative;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 22px;border:0;font-weight:900;font-size:14px;color:var(--accent-ink)!important;background:var(--accent);clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);white-space:nowrap;transition:transform .15s,filter .15s}
+.gbtn:hover{transform:translateX(3px);filter:brightness(1.08)}
+.gbtn.ghost{background:var(--panel-hi);color:var(--ink)!important;box-shadow:inset 0 0 0 1px var(--line-strong)}
+.gbtn.ghost:hover{background:var(--accent-soft)}
+.gbtn.sm{height:32px;padding:0 16px;font-size:13px}
+.gbtn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+.chroma:hover,.chroma:focus-visible{text-shadow:-3px 0 var(--accent2),3px 0 var(--accent)}
+.rl[data-game="revival"] .chroma:hover,.rl[data-game="revival"] .chroma:focus-visible{text-shadow:-3px 0 var(--accent2),3px 0 #ff3d8b}
+.xbtn{display:inline-grid;place-items:center;width:40px;height:40px;border:0;background:transparent;color:var(--ink2);border-radius:50%}
+.xbtn:hover{background:var(--panel-hi);color:var(--ink)}
+.rl input:not([type=checkbox]),.rl textarea{font-size:14px;color:var(--ink);background:rgb(0 0 0 / .28);border:1px solid var(--line);border-radius:4px;height:40px;padding:0 12px;width:100%}
+.rl textarea{height:auto;min-height:64px;padding:10px 12px;resize:vertical;line-height:1.55}
+.rl input::placeholder,.rl textarea::placeholder{color:var(--ink3)}
+.rl input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.av{width:28px;height:28px;display:inline-grid;place-items:center;font-size:12px;font-weight:900;color:var(--accent-ink);background:var(--ink2);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);flex:none}
+
+/* ---------- header, date widget, prompts ---------- */
+.rl-brand{position:absolute;z-index:3;left:36px;top:24px;display:flex;align-items:baseline;gap:10px}
+.rl-brand b{font-family:var(--disp);font-style:italic;font-weight:800;font-size:24px;letter-spacing:.08em}
+.rl-brand span{font-size:12px;color:var(--ink2);font-weight:700}
+.rl-date{position:absolute;z-index:3;right:36px;top:14px;display:flex;align-items:center;gap:14px}
+.rl-date .d{font-family:var(--disp);font-style:italic;font-weight:800;font-size:64px;line-height:.9;letter-spacing:-.01em}
+.rl-date .w{display:grid;line-height:1.15}
+.rl-date .w b{font-family:var(--disp);font-style:italic;font-weight:800;font-size:22px;color:var(--accent)}
+.rl-date .w span{font-size:12px;font-weight:700;color:var(--ink2)}
+.moon{width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--accent) var(--v),rgb(255 255 255 / .1) 0);display:grid;place-items:center}
+.moon span{width:36px;height:36px;border-radius:50%;background:var(--bg0);display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-size:14px}
+.rl-prompts{position:absolute;z-index:3;right:36px;bottom:18px;display:flex;gap:18px;font-size:12px;font-weight:700;color:var(--ink2)}
+.rl-prompts span{display:flex;align-items:center;gap:6px}
+.key{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--ink);color:var(--bg0);font-family:var(--disp);font-weight:800;font-size:12px}
+
+/* ---------- menu (views) ---------- */
+.rl-menu{position:absolute;z-index:3;left:28px;top:118px;width:470px;display:grid;gap:6px}
+.mi{--i:0;position:relative;display:grid;grid-template-columns:1fr auto;align-items:end;gap:12px;margin-left:calc(var(--i) * 20px);padding:8px 26px 8px 22px;border:0;background:none;text-align:left;color:var(--ink);transition:transform .18s}
+.mi::before{content:"";position:absolute;inset:0;z-index:-1;clip-path:polygon(18px 0,100% 0,calc(100% - 18px) 100%,0 100%);background:transparent;transition:background .18s}
+.mi:hover{transform:translateX(6px)}
+.mi .jp{font-size:30px;font-weight:900;line-height:1.15;letter-spacing:.02em}
+.mi .en{display:block;font-size:13px;color:var(--accent);margin-bottom:-2px}
+.mi .n{font-family:var(--disp);font-style:italic;font-weight:800;font-size:40px;line-height:1}
+.mi .ub{font-family:var(--disp);font-weight:800;font-size:13px;background:var(--accent2);color:#fff;padding:0 7px;margin-right:8px;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);vertical-align:12px}
+.mi[aria-pressed="true"]{transform:translateX(10px) scale(1.03);color:var(--accent-ink)}
+.mi[aria-pressed="true"]::before{background:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.mi[aria-pressed="true"] .en{color:var(--accent-ink);opacity:.8}
+.mi[aria-pressed="true"] .ub{background:var(--accent-ink);color:var(--accent)}
+.rl-owners{margin:18px 0 0 110px;display:grid;gap:8px}
+.rl-owners .en{font-size:12px;color:var(--ink2)}
+.rl-owners .row{gap:6px}
+.oc{height:32px;min-width:52px;padding:0 14px;border:0;font-weight:900;font-size:13px;color:var(--ink);background:var(--panel-hi);box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.oc[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+
+/* ---------- right pane: deals ---------- */
+.rl-pane{position:absolute;z-index:3;left:540px;right:36px;top:112px;bottom:56px;display:flex;flex-direction:column;gap:12px;min-height:0}
+.ph{position:relative;display:flex;align-items:flex-end;gap:12px}
+.ph .ghost{position:absolute;right:-6px;top:-54px;font-family:var(--disp);font-style:italic;font-weight:800;font-size:110px;line-height:1;color:transparent;-webkit-text-stroke:1px var(--line-strong);pointer-events:none;letter-spacing:.02em}
+.ph h1{font-size:26px;font-weight:900}
+.ph p{font-size:13px;color:var(--ink2);font-weight:700}
+.sortseg{display:inline-flex;gap:4px}
+.sortseg button{height:30px;padding:0 14px;border:0;font-size:12px;font-weight:900;color:var(--ink2);background:var(--panel-hi);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.sortseg button[aria-pressed="true"]{background:var(--ink);color:var(--bg0)}
+.todo{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:8px}
+.tile{position:relative;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:8px 18px 8px 16px;border:0;text-align:left;color:var(--ink);background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:transform .15s}
+.tile:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px var(--accent)}
+.tile .dd{font-family:var(--disp);font-style:italic;font-weight:800;font-size:28px;line-height:1}
+.tile .dd small{display:block;font-size:11px;color:var(--accent);letter-spacing:.08em}
+.tile.late .dd{color:var(--bad)}
+.tile b{display:block;font-size:13px;font-weight:900;line-height:1.3}
+.tile span.s{font-size:11px;color:var(--ink2)}
+.deals{flex:1;overflow:auto;min-height:0;display:grid;gap:6px;align-content:start;padding:2px 14px 12px 4px}
+.dr{--i:0;position:relative;display:grid;grid-template-columns:86px minmax(0,1fr) 132px 150px 100px;gap:14px;align-items:center;min-height:62px;padding:6px 24px 6px 22px;border:0;text-align:left;color:var(--ink);background:none;transition:transform .16s}
+.dr::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);transition:background .16s}
+.dr:hover{transform:translateX(8px)}
+.dr:hover::before{background:linear-gradient(90deg,var(--accent-soft),var(--panel) 60%);box-shadow:inset 0 0 0 1px var(--accent)}
+.dr .nm b{display:flex;align-items:center;gap:8px;font-weight:900;font-size:15px;line-height:1.3}
+.dr .nm span{font-size:12px;color:var(--ink2);font-weight:500}
+.udot{width:9px;height:9px;background:var(--accent2);transform:rotate(45deg);flex:none}
+.nx{display:grid;font-size:12px;line-height:1.35;font-weight:700}
+.nx small{font-size:11px;color:var(--ink2);font-weight:500}
+.amt{font-family:var(--disp);font-style:italic;font-weight:800;font-size:24px;text-align:right;line-height:1}
+.amt small{font-size:12px;margin-left:2px;color:var(--ink2);font-style:normal}
+.trk{display:grid;gap:4px}
+.trk-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.trk-bar i{height:8px;background:rgb(255 255 255 / .12);transform:skewX(-24deg)}
+.trk-bar i.done{background:var(--ink2)} .trk-bar i.cur{background:var(--accent);box-shadow:0 0 10px var(--accent)} .trk-bar i.lost{background:var(--bad)}
+.trk small{font-size:11px;color:var(--ink2);font-weight:700}
+.empty{padding:40px 16px;text-align:center;color:var(--ink2)}
+
+/* ---------- quick view: diagonal panel from the right ---------- */
+.veil{position:absolute;inset:0;z-index:18;background:rgb(0 0 0 / .45)}
+.qv{position:absolute;z-index:20;top:0;right:0;bottom:0;width:640px;padding:28px 36px 24px 96px;display:flex;flex-direction:column;gap:14px;
+  background:linear-gradient(160deg,var(--panel-solid),var(--bg0));clip-path:polygon(70px 0,100% 0,100% 100%,0 100%);box-shadow:-20px 0 60px rgb(0 0 0 / .5)}
+.qv::after{content:"";position:absolute;left:34px;top:0;bottom:0;width:4px;background:var(--accent);transform:skewX(-4.8deg);transform-origin:top;left:66px}
+.qv.in{animation:qv-in .34s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes qv-in{from{transform:translateX(120px);opacity:0}to{transform:none;opacity:1}}
+.qv h2{font-size:26px;font-weight:900;line-height:1.25}
+.qv .bigamt{font-family:var(--disp);font-style:italic;font-weight:800;font-size:60px;line-height:.95}
+.qv .bigamt small{font-size:20px;color:var(--ink2);font-style:normal;margin-left:4px}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin:0}
+.kv div{display:grid;gap:1px;border-left:3px solid var(--line-strong);padding-left:10px}
+.kv dt{font-size:11px;color:var(--accent)} .kv dd{margin:0;font-weight:700;font-size:14px}
+.qv-log{flex:1;min-height:0;overflow:auto;border-top:1px solid var(--line);padding-top:6px}
+.rl-status{height:40px;padding:0 20px;border:0;font-weight:900;font-size:14px;color:var(--accent-ink)!important;background:var(--t);clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);display:inline-flex;align-items:center;gap:8px}
+.rl-status:hover{filter:brightness(1.1)}
+
+/* ---------- detail: status screen ---------- */
+.dt{position:absolute;z-index:3;inset:0;padding:108px 36px 56px 36px;display:flex;flex-direction:column;gap:14px;min-height:0}
+.dtabs{position:absolute;z-index:4;left:230px;top:26px;display:flex;gap:6px;max-width:560px;overflow:hidden}
+.dtab{display:flex;align-items:center;height:34px;background:var(--panel-hi);box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);max-width:220px;min-width:0}
+.dtab button{border:0;background:none;height:100%;display:flex;align-items:center;gap:6px;padding:0 6px 0 18px;font-size:12px;font-weight:900;color:var(--ink2);min-width:0}
+.dtab button:only-child{padding-right:18px}
+.dtab .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dtab .x{padding:0 14px 0 4px;color:var(--ink3)}
+.dtab.on{background:var(--ink)} .dtab.on button{color:var(--bg0)}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end}
+.hero .huge{position:absolute;right:-10px;top:-92px;font-family:var(--disp);font-style:italic;font-weight:800;font-size:250px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--line-strong);pointer-events:none;z-index:-1;letter-spacing:-.02em}
+.hero h1{font-size:40px;font-weight:900;line-height:1.15;text-wrap:balance}
+.hero .code{font-size:14px;color:var(--accent)}
+.stats{display:flex;gap:26px;align-items:center;margin-top:10px}
+.stat{display:grid;gap:2px}
+.stat .en{font-size:12px;color:var(--accent)}
+.stat b{font-family:var(--disp);font-style:italic;font-weight:800;font-size:40px;line-height:1}
+.stat b small{font-size:16px;font-style:normal;color:var(--ink2);margin-left:2px}
+.ring{width:66px;height:66px;border-radius:50%;background:conic-gradient(var(--accent) var(--v),rgb(255 255 255 / .1) 0);display:grid;place-items:center}
+.ring span{width:52px;height:52px;border-radius:50%;background:var(--bg0);display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-style:italic;font-size:20px}
+.pathrow{display:flex;gap:16px;align-items:center}
+.path{flex:1;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr)}
+.path li{padding:10px 8px 10px 22px;margin-right:-10px;font-size:13px;font-weight:900;text-align:center;background:rgb(255 255 255 / .08);color:var(--ink2);clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%);white-space:nowrap}
+.path li:first-child{clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);padding-left:12px}
+.path li.done{background:var(--ink2);color:var(--bg0)}
+.path li.cur{background:var(--accent);color:var(--accent-ink);filter:drop-shadow(0 0 10px var(--accent))}
+.path li.lost{background:var(--bad);color:#fff}
+.cols{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:18px}
+.pnl{position:relative;min-height:0;display:flex;flex-direction:column;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,0 100%)}
+.pnl-h{display:flex;align-items:center;gap:10px;padding:12px 18px 10px;border-bottom:1px solid var(--line)}
+.pnl-h .en{font-size:18px;color:var(--accent)}
+.pnl-h .jp{font-size:13px;font-weight:900;color:var(--ink2)}
+.params{overflow:auto;padding:6px 18px 14px;display:grid;grid-template-columns:1fr 1fr;gap:0 24px;align-content:start}
+.param{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.param .en{font-size:12px;color:var(--ink3);grid-row:span 2;min-width:74px}
+.param small{font-size:11px;color:var(--ink2)} .param b{font-weight:900}
+.kinds{display:flex;gap:4px;padding:10px 14px 0}
+.kinds button{height:28px;padding:0 12px;border:0;font-size:12px;font-weight:900;color:var(--ink2);background:var(--panel-hi);clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+.kinds button[aria-pressed="true"]{background:var(--ink);color:var(--bg0)}
+/* message log (Slack-style thread) */
+.log{list-style:none;margin:0;padding:6px 14px 10px;display:grid;gap:4px;overflow:auto;min-height:0;flex:1}
+.day{display:flex;align-items:center;gap:10px;padding:8px 0 2px;font-family:var(--disp);font-style:italic;font-weight:800;font-size:13px;color:var(--accent);letter-spacing:.08em}
+.day::after{content:"";flex:1;height:1px;background:var(--line)}
+.msg{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:6px 4px}
+.msg .h{display:flex;align-items:baseline;gap:8px;font-size:12px}
+.msg .h b{font-size:14px;font-weight:900;color:var(--accent)}
+.msg .h .num{color:var(--ink3);font-size:13px}
+.msg .kind{font-size:11px;font-weight:900;color:var(--ink2);border:1px solid var(--line);padding:0 6px}
+.msg .b{font-size:14px;line-height:1.6;margin-top:1px}
+.msg.note .b{background:var(--note-bg);border-left:3px solid var(--note-bd);padding:5px 10px;margin-top:4px}
+.mention{color:var(--accent);font-weight:900}
+.reacts{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.react{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 9px;border:0;font-size:12px;background:var(--panel-hi);box-shadow:inset 0 0 0 1px var(--line);border-radius:12px}
+.react[aria-pressed="true"]{box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:900}
+.react.add{width:28px;padding:0;justify-content:center;color:var(--ink3)}
+.replies{border:0;background:none;padding:0;font-size:12px;font-weight:900;color:var(--accent)}
+.comp{display:grid;gap:8px;padding:10px 14px 14px;border-top:1px solid var(--line)}
+.comp.note textarea{border-color:var(--note-bd);background:var(--note-bg)}
+.comp .foot{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink2)}
+.chk{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700}
+
+/* ---------- command menu ---------- */
+.cmd{position:absolute;z-index:22;left:50%;top:120px;transform:translateX(-50%);width:640px;padding:18px 26px 16px;background:linear-gradient(160deg,var(--panel-solid),var(--bg0));box-shadow:0 0 0 1px var(--line-strong),0 30px 80px rgb(0 0 0 / .6);clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,28px 100%,0 calc(100% - 28px))}
+.cmd .en.t{font-size:30px;color:var(--accent);line-height:1}
+.cmd input{margin:10px 0 8px}
+.cmd-list{max-height:340px;overflow:auto;display:grid;gap:4px}
+.cmd-g{font-size:11px;font-weight:900;color:var(--ink3);padding:6px 4px 2px}
+.ci{position:relative;display:flex;align-items:center;gap:12px;padding:8px 20px;border:0;background:none;text-align:left;color:var(--ink);font-weight:900;font-size:15px}
+.ci::before{content:"";position:absolute;inset:0;z-index:-1;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);background:transparent}
+.ci[aria-selected="true"]{color:var(--accent-ink)}
+.ci[aria-selected="true"]::before{background:var(--accent)}
+.ci small{font-weight:500;font-size:12px;opacity:.8}
+.cmd-foot{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--ink2);font-weight:700}
+
+.toast{position:absolute;z-index:30;left:36px;bottom:18px;height:40px;padding:0 26px 0 20px;display:flex;align-items:center;gap:10px;font-weight:900;color:var(--accent-ink);background:var(--accent);clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);transition:opacity .2s,transform .2s}
+.toast[hidden]{display:flex!important;opacity:0;transform:translateX(-20px);pointer-events:none}
+</style>
+
+<div class="ch-wrap">
+  <header class="ch-head">
+    <h1>Tsumugi CRM Reload</h1>
+    <p>前回の統合案（一覧＝Garden＋kamii、詳細＝Lightning＋Serendie＋Atlassian、スレッド＝Slack、⌘K）の操作の流れはそのままに、見た目と動きをペルソナ 3 リロード／ペルソナ 4 リバイバルの UI の考え方で作り直した版です。</p>
+  </header>
+  <div class="ch-grid">
+    <section class="ch-card">
+      <h2>取り入れた考え方</h2>
+      <ul>
+        <li><b>蒼（リロード風）</b>：海のような青と「水・泡」のモチーフ。画面は上から「沈み込む」ように現れる。ホバーはシアンと赤の補色を左右にずらす。</li>
+        <li><b>黄（リバイバル風）</b>：黒地に黄色と青緑。明るさと「警告」を兼ねた黄色。画面はブラウン管が点くように開く。</li>
+        <li>要素を減らし、優先度の低い情報は小さく区切る。主役（ビュー名・商談名・金額）は大きく斜めに置く。</li>
+        <li>メニューは斜めに並べ、選択中の項目を色の帯で強調する。数字は細長い斜体で大きく見せる。</li>
+      </ul>
+    </section>
+    <section class="ch-card">
+      <h2>業務 UI として守っていること</h2>
+      <ul>
+        <li>文字色は背景に対して 4.5:1 以上。状態は色だけでなく文字（フェーズ名）でも示す。</li>
+        <li>動きは OS の「視差効果を減らす」設定で止まる。飾りの動き（泡・光）は操作の邪魔をしない層に置く。</li>
+        <li>ゲームの画像・ロゴ・キャラクター・専用フォントは使っていません。色・構図・動きの考え方だけを参考にしています。</li>
+        <li>参考：<a href="https://personacentral.com/p3r-interview-menu-ui/" target="_blank" rel="noopener">P3R 開発者インタビュー（UI）</a> / <a href="https://automaton-media.com/en/news/20240207-26873/" target="_blank" rel="noopener">AUTOMATON：P3R の UI デザイン</a> / <a href="https://www.gamesradar.com/games/persona/atlus-youve-done-it-again-new-look-at-persona-4-revivals-stylish-menu-ui-confirms-a-complete-transformation-for-the-og-jrpg/" target="_blank" rel="noopener">GamesRadar+：P4 Revival の UI</a></li>
+      </ul>
+    </section>
+  </div>
+  <div class="ch-ctrl">
+    <span>テーマ</span><div class="ch-seg" role="group" aria-label="テーマ"><button type="button" data-game="reload" aria-pressed="true">蒼（リロード風）</button><button type="button" data-game="revival" aria-pressed="false">黄（リバイバル風）</button></div>
+    <span class="ch-note">操作：行をクリックで詳細パネル、⌘K / Ctrl+K でコマンド、N で記録、Esc で戻る</span>
+  </div>
+  <div class="ch-stage">
+    <div class="rl" id="rl" data-game="reload">
+      <div class="rl-bg" aria-hidden="true"></div><div class="rl-caustic" aria-hidden="true"></div><div class="rl-band" aria-hidden="true"></div>
+      <div class="rl-bubbles" id="bubbles" aria-hidden="true"></div>
+      <div class="rl-layer" id="root"></div>
+      <div class="rl-scan" aria-hidden="true"></div>
+      <div class="toast" id="toast" role="status" hidden></div>
+    </div>
+  </div>
+  <p class="ch-note">金額・会社名・人物はすべて架空のサンプルです。</p>
+</div>
+
+<script>
+/* ---------- data ---------- */
+const STAGES = ["リード","ヒアリング","提案","見積","交渉","受注"];
+const TONE = {"リード":"neutral","ヒアリング":"info","提案":"info","見積":"warn","交渉":"warn","受注":"good","失注":"bad"};
+const TODAY = new Date("2026-09-23T00:00:00");
+const ME = "佐藤";
+const OWNERS = ["佐藤","田中","鈴木","高橋"];
+const KL = {call:"電話",mail:"メール",meet:"打合せ",memo:"社内メモ"};
+const WD = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+const deals = [
+ {id:1,co:"北辰ロジスティクス株式会社",name:"倉庫管理SaaS 全拠点導入",stage:"交渉",amt:4800000,p:70,close:"2026-10-15",owner:"佐藤",upd:2,unread:2,next:{t:"価格の最終回答を送る",d:"2026-09-25"},
+  info:{業種:"物流・倉庫",従業員数:"1,240名",流入経路:"展示会",競合:"A社 WMS"},
+  acts:[{k:"memo",who:"田中",d:"9/22",time:"18:40",x:"@佐藤 値引き 5% は部長承認済みです。回答期限は 9/25 で先方に伝えてください。",re:[["👍",2,true]],rep:1},
+        {k:"meet",who:"佐藤",d:"9/21",time:"15:10",x:"情報システム部と価格条件を協議。年額一括払いなら 5% 値引きで合意の見込み。",re:[["🎉",1,false]],rep:0},
+        {k:"mail",who:"佐藤",d:"9/17",time:"10:02",x:"全 6 拠点分の見積書（改訂版）を送付。",re:[],rep:0},
+        {k:"call",who:"佐藤",d:"9/10",time:"11:30",x:"物流部長より、年末の繁忙期前に稼働させたいとの連絡。",re:[],rep:2}]},
+ {id:2,co:"青葉メディカル",name:"予約・問診連携 PoC",stage:"提案",amt:1200000,p:40,close:"2026-11-02",owner:"田中",upd:5,unread:0,next:{t:"PoC 提案の感触を確認する",d:"2026-09-29"},
+  info:{業種:"医療法人",従業員数:"380名",流入経路:"Web問い合わせ",競合:"なし"},
+  acts:[{k:"mail",who:"田中",d:"9/18",time:"16:20",x:"PoC の範囲（2 診療科・3 か月）の提案書を送付。",re:[],rep:0},{k:"meet",who:"田中",d:"9/12",time:"14:00",x:"事務長と現行の電話予約の流れを確認。",re:[],rep:0}]},
+ {id:3,co:"株式会社ミナト精機",name:"生産管理 追加ライセンス",stage:"見積",amt:2350000,p:60,close:"2026-10-08",owner:"佐藤",upd:1,unread:1,next:{t:"稟議の進み具合を確認する",d:"2026-10-01"},
+  info:{業種:"精密機器製造",従業員数:"620名",流入経路:"既存顧客（追加）",競合:"なし"},
+  acts:[{k:"memo",who:"鈴木",d:"9/22",time:"19:05",x:"@佐藤 ミナト精機の購買担当、10 月から変わるそうです。",re:[["👀",1,false]],rep:0},{k:"mail",who:"佐藤",d:"9/22",time:"09:15",x:"追加 40 ライセンスの見積を提出。稟議は 10 月第 1 週。",re:[],rep:0}]},
+ {id:4,co:"くすのき不動産",name:"顧客ポータル刷新",stage:"ヒアリング",amt:3600000,p:20,close:"2026-12-20",owner:"鈴木",upd:16,unread:0,next:{t:"ヒアリング内容のまとめを送る",d:"2026-09-16"},
+  info:{業種:"不動産管理",従業員数:"210名",流入経路:"パートナー紹介",競合:"自社開発"},
+  acts:[{k:"meet",who:"鈴木",d:"9/7",time:"13:00",x:"入居者向けポータルの課題をヒアリング。解約手続きのオンライン化が最優先。",re:[],rep:0}]},
+ {id:5,co:"東雲フーズ",name:"受発注EDI 連携",stage:"受注",amt:1980000,p:100,close:"2026-09-18",owner:"田中",upd:0,unread:0,next:{t:"キックオフの日程を確定する",d:"2026-09-26"},
+  info:{業種:"食品卸",従業員数:"450名",流入経路:"セミナー",競合:"B社 EDI"},
+  acts:[{k:"meet",who:"田中",d:"9/18",time:"17:00",x:"契約締結。10 月から導入支援を開始。",re:[["🎉",4,true],["👏",2,false]],rep:3}]},
+ {id:6,co:"ヤマブキ電装",name:"保守契約 更新",stage:"交渉",amt:860000,p:80,close:"2026-09-30",owner:"鈴木",upd:3,unread:0,next:{t:"延長サポートの見積を出す",d:"2026-09-24"},
+  info:{業種:"電装部品",従業員数:"890名",流入経路:"既存顧客（更新）",競合:"なし"},
+  acts:[{k:"call",who:"鈴木",d:"9/20",time:"10:45",x:"サポート時間を平日 20 時まで延長する条件で更新を検討中。",re:[],rep:0}]},
+ {id:7,co:"オリオン教育",name:"学習管理 全校展開",stage:"リード",amt:5400000,p:10,close:"2027-01-31",owner:"高橋",upd:21,unread:0,next:{t:"面談の日程を再提案する",d:"2026-09-24"},
+  info:{業種:"学校法人",従業員数:"1,050名",流入経路:"資料ダウンロード",競合:"未確認"},
+  acts:[{k:"mail",who:"高橋",d:"9/2",time:"09:30",x:"資料ダウンロードへのお礼と、面談の候補日を送付（返信なし）。",re:[],rep:0}]},
+ {id:8,co:"さくら信用金庫",name:"融資審査ワークフロー",stage:"失注",amt:2700000,p:0,close:"2026-09-05",owner:"高橋",upd:18,unread:0,next:{t:"来期の再提案時期を確認する",d:"2027-03-01"},
+  info:{業種:"金融",従業員数:"730名",流入経路:"Web問い合わせ",競合:"C社（採用）"},
+  acts:[{k:"call",who:"高橋",d:"9/5",time:"16:00",x:"オンプレミスでの稼働が必須となり失注。来期に再提案の余地あり。",re:[["🙏",2,false]],rep:0}]},
+];
+
+/* ---------- state ---------- */
+const state = {view:"list", sel:1, openTabs:[1], quick:null, gview:"me", owner:null, sort:"due", kind:"call", cmd:false, cmdQ:"", cmdIdx:0, anim:"view", qanim:false};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const yen = n => "¥" + n.toLocaleString("ja-JP");
+const manN = n => Math.round(n/10000).toLocaleString("ja-JP");
+const isOpen = d => d.stage !== "受注" && d.stage !== "失注";
+const md = s => { const [y,m,d] = s.split("-"); return (y!=="2026"?y+"/":"") + (+m) + "/" + (+d); };
+const isLate = d => isOpen(d) && new Date(d.close+"T00:00:00") < TODAY;
+const nextLate = d => d.stage!=="失注" && new Date(d.next.d+"T00:00:00") < TODAY;
+const code = d => "OPP-" + (140 + d.id);
+const updTxt = d => d.upd===0 ? "今日" : d.upd + " 日前";
+const byId = id => deals.find(x => x.id === id);
+const cur = () => byId(state.sel) || deals[0];
+const P = {
+ search:"M7 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zM10.5 10.5l3 3", plus:"M8 3v10M3 8h10", x:"M4 4l8 8M12 4l-8 8",
+ play:"M5 3l8 5-8 5z", back:"M10 3.5 5.5 8l4.5 4.5", send:"M2.5 8 13.5 2.5 10 13.5 7.5 8.5z", smile:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM6 9.5c.5.7 1.2 1 2 1s1.5-.3 2-1M6 6.5h.01M10 6.5h.01",
+ expand:"M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9", flag:"M3.5 14V2.5M3.5 3h8l-1.5 3 1.5 3h-8", user:"M8 2.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM2.5 14c.8-2.6 2.9-4 5.5-4s4.7 1.4 5.5 4",
+ clock:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM8 5v3l2 1.5", gear:"M8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2",
+ thread:"M2.5 3.5h11v7.5H7l-3 2.5V11H2.5z",
+};
+const ic = (n, s=16) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"><path d="${P[n]}"/></svg>`;
+const tag = st => `<span class="tag t-${TONE[st]}">${st}</span>`;
+const av = n => `<span class="av" title="${n}">${n[0]}</span>`;
+const G = (label, act, cls="", extra="") => `<button type="button" class="gbtn chroma ${cls}" data-act="${act}" ${extra}>${label}</button>`;
+const key = k => `<span class="key">${k}</span>`;
+const withMentions = s => esc(s).replace(/@(佐藤|田中|鈴木|高橋)/g, '<span class="mention">@$1</span>');
+const GVIEWS = [["me","自分の担当","MY DEALS",{tab:"open",owner:ME}],["open","すべての進行中","IN PROGRESS",{tab:"open"}],["stale","停滞している商談","STALLED",{tab:"open",stale:true}],["won","受注","WON",{tab:"won"}],["lost","失注","LOST",{tab:"lost"}]];
+function match(d, o){
+  if(o.tab==="open" && !isOpen(d)) return false;
+  if(o.tab==="won" && d.stage!=="受注") return false;
+  if(o.tab==="lost" && d.stage!=="失注") return false;
+  if(o.owner && d.owner!==o.owner) return false;
+  if(o.stale && !(isOpen(d) && d.upd>=14)) return false;
+  return true;
+}
+const viewOpts = () => ({...GVIEWS.find(v=>v[0]===state.gview)[3], ...(state.owner?{owner:state.owner}:{})});
+function list(){
+  const l = deals.filter(d => match(d, viewOpts()));
+  return state.sort==="amt" ? l.sort((a,b)=>b.amt-a.amt) : l.sort((a,b)=>(isOpen(b)-isOpen(a)) || a.next.d.localeCompare(b.next.d));
+}
+function tracker(d){
+  const idx = STAGES.indexOf(d.stage), lost = d.stage==="失注";
+  return `<span class="trk" aria-label="進み具合 ${lost?"失注":`${idx+1}/6`}"><span class="trk-bar">${STAGES.map((s,i)=>`<i class="${lost?(i===5?"lost":""):i<idx?"done":i===idx?"cur":""}"></i>`).join("")}</span><small>${lost?"失注":`${d.stage}　${idx+1}/6`}</small></span>`;
+}
+function statusBtn(d){
+  if(!isOpen(d)) return tag(d.stage);
+  const nx = STAGES[STAGES.indexOf(d.stage)+1];
+  return `<button type="button" class="rl-status t-${TONE[d.stage]}" data-act="advance" data-id="${d.id}" title="次のフェーズ（${nx}）へ進める">${d.stage}${ic("play",12)}${nx}</button>`;
+}
+</script>
+<script>
+/* ---------- pieces ---------- */
+function header(){
+  const x = TODAY, days = new Date(x.getFullYear(), x.getMonth()+1, 0).getDate(), left = days - x.getDate();
+  return `<div class="rl-brand"><b>TSUMUGI</b><span>紡 CRM · 営業2部</span></div>
+  <div class="rl-date" aria-label="2026年9月23日 火曜日 午後、月末まで${left}日">
+    <span class="d">${x.getMonth()+1}/${x.getDate()}</span>
+    <span class="w"><b>${WD[x.getDay()]}</b><span>午後</span></span>
+    <span class="moon" style="--v:${Math.round(x.getDate()/days*100)}%" title="今月の経過"><span>${left}</span></span>
+    <span class="w"><span>月末まで</span><span>${left} 日</span></span>
+  </div>`;
+}
+function prompts(){
+  const p = state.cmd ? [["↑↓","選ぶ"],["↵","実行"],["Esc","閉じる"]]
+    : state.quick!=null ? [["N","記録"],["⌘↵","送信"],["Esc","閉じる"]]
+    : state.view==="detail" ? [["N","記録"],["⌘K","コマンド"],["Esc","ビューへ"]]
+    : [["↵","開く"],["⌘K","コマンド"]];
+  return `<div class="rl-prompts" aria-hidden="true">${p.map(([k,l])=>`<span>${key(k)}${l}</span>`).join("")}</div>`;
+}
+function thread(d){
+  let last = null;
+  return d.acts.map((a,i)=>({a,i})).reverse().map(({a,i})=>{
+    const day = a.d!==last ? `<li class="day">${a.d==="9/23"?"TODAY":a.d}</li>` : ""; last = a.d;
+    return day + `<li class="msg ${a.k==="memo"?"note":""}">${av(a.who)}<div>
+      <div class="h"><b>${a.who}</b><span class="num">${a.time}</span><span class="kind">${KL[a.k]}</span></div>
+      <div class="b">${withMentions(a.x)}</div>
+      <div class="reacts">${a.re.map((r,j)=>`<button type="button" class="react" data-act="react" data-id="${d.id}" data-i="${i}" data-j="${j}" aria-pressed="${r[2]}" aria-label="${r[0]} ${r[1]}件">${r[0]} <span class="num">${r[1]}</span></button>`).join("")}<button type="button" class="react add" data-act="react" data-id="${d.id}" data-i="${i}" data-j="new" aria-label="👍 でリアクション">${ic("smile",14)}</button>${a.rep?`<button type="button" class="replies" data-act="noop">${a.rep} 件の返信</button>`:""}</div>
+    </div></li>`;
+  }).join("");
+}
+const kinds = () => `<div class="kinds" role="group" aria-label="記録の種類">${[["call","電話"],["mail","メール"],["meet","打合せ"],["memo","社内メモ"]].map(([k,l])=>`<button type="button" data-act="kind" data-v="${k}" aria-pressed="${state.kind===k}">${l}</button>`).join("")}</div>`;
+function composer(d){
+  const note = state.kind==="memo";
+  return `<form class="comp ${note?"note":""}" id="logForm">
+    <textarea id="f-note" placeholder="${note?"チームだけに共有するメモ（@名前 で通知）":`「${esc(d.name)}」の${KL[state.kind]}を記録`}" aria-label="活動の内容"></textarea>
+    <div class="foot"><label class="chk" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後にリマインド</label><span class="grow"></span><span>${key("⌘↵")}</span><button type="submit" class="gbtn chroma sm">${ic("send",14)}送信</button></div>
+  </form>`;
+}
+function menu(){
+  return `<nav class="rl-menu ${state.anim?"stagger":""}" aria-label="ビュー">${GVIEWS.map(([k,jp,en,o],i)=>{
+      const m = deals.filter(d=>match(d,o)), un = m.reduce((a,d)=>a+d.unread,0);
+      return `<button type="button" class="mi chroma" style="--i:${i}" data-act="gview" data-v="${k}" aria-pressed="${state.gview===k}"><span><span class="en">${en}</span><span class="jp">${jp}</span></span><span>${un?`<span class="ub" title="未読 ${un} 件">${un} NEW</span>`:""}<span class="n">${m.length}</span></span></button>`;
+    }).join("")}
+    <div class="rl-owners"><span class="en">Filter by owner</span><div class="row">${OWNERS.map(n=>`<button type="button" class="oc" data-act="owner" data-v="${n}" aria-pressed="${state.owner===n}" aria-label="${n}の商談だけ表示">${n}</button>`).join("")}</div></div>
+  </nav>`;
+}
+function pane(){
+  const l = list(), g = GVIEWS.find(v=>v[0]===state.gview);
+  const todo = deals.filter(d=>d.stage!=="失注" && d.next.d<="2026-09-26" && (!state.owner || d.owner===state.owner)).sort((a,b)=>a.next.d.localeCompare(b.next.d)).slice(0,3);
+  return `<section class="rl-pane ${state.anim==="view"?"enter-sink":""}" aria-label="${g[1]}">
+    <div class="ph"><span class="ghost" aria-hidden="true">${g[2]}</span><div class="grow"><h1>${g[1]}</h1><p><span class="num">${l.length}</span> 件　合計 <span class="num">${manN(l.reduce((a,d)=>a+d.amt,0))}</span> 万円${state.owner?`　担当 ${state.owner}`:""}</p></div>
+      <div class="sortseg" role="group" aria-label="並び順"><button type="button" data-act="sort" data-v="due" aria-pressed="${state.sort==="due"}">期限順</button><button type="button" data-act="sort" data-v="amt" aria-pressed="${state.sort==="amt"}">金額順</button></div>
+      ${G(ic("play",12)+"次の商談へ","play","sm",l.length?"":"disabled")}</div>
+    ${todo.length?`<div class="todo" aria-label="3日以内にやること">${todo.map(d=>{const x=new Date(d.next.d+"T00:00:00"); return `<button type="button" class="tile ${nextLate(d)?"late":""}" data-act="quick" data-id="${d.id}"><span class="dd"><small>${nextLate(d)?"OVERDUE":WD[x.getDay()]}</small>${x.getMonth()+1}/${x.getDate()}</span><span><b>${d.next.t}</b><span class="s">${d.co}</span></span></button>`;}).join("")}</div>`:""}
+    <div class="deals ${state.anim?"stagger":""}" data-scroll="deals">${l.map((d,i)=>`<button type="button" class="dr" style="--i:${i}" data-act="quick" data-id="${d.id}">
+        ${tag(d.stage)}
+        <span class="nm"><b>${d.unread?`<span class="udot" title="未読 ${d.unread} 件"></span>`:""}${d.name}</b><span>${d.co}${isOpen(d)&&d.upd>=14?`　<span class="late">${d.upd}日間更新なし</span>`:""}</span></span>
+        ${tracker(d)}
+        <span class="nx"><span>${d.next.t}</span><small class="${nextLate(d)?"late":""}">${md(d.next.d)} まで${nextLate(d)?"（期限切れ）":""}　担当 ${d.owner}</small></span>
+        <span class="amt">${manN(d.amt)}<small>万円</small></span>
+      </button>`).join("") || `<div class="empty">このビューに商談はありません。</div>`}</div>
+  </section>`;
+}
+function quickView(){
+  const d = cur();
+  return `<div class="veil" data-act="closeq"></div>
+  <aside class="qv ${state.qanim?"in":""}" role="dialog" aria-modal="true" aria-label="${d.name}">
+    <div class="row"><span class="en" style="color:var(--accent);font-size:18px">Status</span><span class="en dim" style="font-size:14px">${code(d)}</span><span class="grow"></span><button type="button" class="xbtn" data-act="closeq" aria-label="閉じる">${ic("x",20)}</button></div>
+    <div><h2>${d.name}</h2><p class="muted" style="font-weight:700">${d.co}</p></div>
+    <div class="row" style="align-items:flex-end;gap:18px"><span class="bigamt">${manN(d.amt)}<small>万円</small></span><span class="grow">${tracker(d)}</span></div>
+    <div class="row">${statusBtn(d)}${G(ic("expand",14)+"詳細を開く","tabopen","ghost sm",`data-id="${d.id}"`)}</div>
+    <dl class="kv"><div><dt class="en">Owner</dt><dd>${d.owner}</dd></div><div><dt class="en">Probability</dt><dd class="num" style="font-size:18px">${d.p}%</dd></div><div><dt class="en">Close</dt><dd class="${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</dd></div>
+      <div style="grid-column:span 2"><dt class="en">Next</dt><dd>${d.next.t}（<span class="${nextLate(d)?"late":""}">${md(d.next.d)}</span>）</dd></div><div><dt class="en">Rival</dt><dd>${d.info.競合}</dd></div></dl>
+    ${kinds()}
+    <ol class="log qv-log" data-scroll="qlog" style="list-style:none">${thread(d)}</ol>
+    ${composer(d)}
+  </aside>`;
+}
+function detail(){
+  const d = cur(), idx = STAGES.indexOf(d.stage), lost = d.stage==="失注";
+  const params = [["Account","取引先",d.co],["Industry","業種",d.info.業種],["Size","従業員数",d.info.従業員数],["Source","流入経路",d.info.流入経路],["Rival","競合",d.info.競合],["Owner","担当",d.owner],["Close","完了予定日",d.close.replaceAll("-","/")],["Updated","最終更新",updTxt(d)],["Next","次にやること",`${d.next.t}（${md(d.next.d)}）`],["Code","商談番号",code(d)]];
+  return `<section class="dt ${state.anim==="view"?"enter-sink":""}" aria-label="${d.name}">
+    <div class="hero">
+      <span class="huge" aria-hidden="true">${manN(d.amt)}</span>
+      <div><span class="en code">${code(d)} · Opportunity</span><h1>${d.name}</h1><p class="muted" style="font-weight:700">${d.co}</p>
+        <div class="stats">
+          <div class="stat"><span class="en">Amount</span><b>${manN(d.amt)}<small>万円</small></b></div>
+          <div class="ring" style="--v:${d.p}%" title="確度 ${d.p}%"><span>${d.p}</span></div>
+          <div class="stat"><span class="en">Close</span><b class="${isLate(d)?"late":""}">${md(d.close)}</b></div>
+          <div class="stat"><span class="en">Owner</span><span class="row" style="font-weight:900;font-size:16px">${av(d.owner)}${d.owner}</span></div>
+        </div></div>
+      <div class="row" style="flex-direction:column;align-items:flex-end;gap:10px">${statusBtn(d)}${G(ic("thread",14)+"活動を記録 "+key("N"),"focuslog","ghost sm")}</div>
+    </div>
+    <div class="pathrow"><ol class="path" aria-label="商談フェーズ">${STAGES.map((s,i)=>lost?(i===5?`<li class="lost">失注</li>`:`<li>${s}</li>`):`<li class="${i<idx?"done":i===idx?"cur":""}">${s}</li>`).join("")}</ol>
+      ${isOpen(d)?G((d.stage==="交渉"?"受注にする":"フェーズ完了")+ic("play",12),"advance","",`data-id="${d.id}"`):""}</div>
+    <div class="cols">
+      <section class="pnl"><div class="pnl-h"><span class="en">Parameter</span><span class="jp">詳細</span></div>
+        <div class="params">${params.map(([en,jp,v])=>`<div class="param"><span class="en">${en}</span><small>${jp}</small><b>${v}</b></div>`).join("")}</div></section>
+      <section class="pnl"><div class="pnl-h"><span class="en">Log</span><span class="jp">活動スレッド</span><span class="grow"></span>${d.unread?`<span class="tag t-bad">未読 ${d.unread}</span>`:""}</div>
+        ${kinds()}<ol class="log" data-scroll="dlog${d.id}">${thread(d)}</ol>${composer(d)}</section>
+    </div>
+  </section>`;
+}
+function dtabs(){
+  return `<nav class="dtabs" aria-label="開いている画面">
+    <div class="dtab ${state.view==="list"?"on":""}"><button type="button" data-act="home">VIEW</button></div>
+    ${state.openTabs.map(id=>{const x=byId(id), on=state.view==="detail"&&state.sel===id; return `<div class="dtab ${on?"on":""}"><button type="button" data-act="tabopen" data-id="${id}"><span class="t">${x.name}</span></button><button type="button" class="x" data-act="closetab" data-id="${id}" aria-label="${x.name}のタブを閉じる">${ic("x",12)}</button></div>`;}).join("")}
+  </nav>`;
+}
+function cmdItems(){
+  const q = state.cmdQ.trim().toLowerCase();
+  const ds = deals.filter(d=>!q || (d.name+d.co+d.stage).toLowerCase().includes(q)).slice(0,6).map(d=>({g:"商談を開く",label:d.name,sub:`${d.co}・${d.stage}`,run:()=>openTab(d.id)}));
+  const acts = [
+    {g:"操作",label:"自分の担当を表示",run:()=>{Object.assign(state,{gview:"me",owner:null,view:"list",anim:"view"}); render();}},
+    {g:"操作",label:"停滞している商談を表示",run:()=>{Object.assign(state,{gview:"stale",owner:null,view:"list",anim:"view"}); render();}},
+    {g:"操作",label:"テーマを切り替える（蒼 / 黄）",run:()=>setGame($("#rl").dataset.game==="reload"?"revival":"reload")},
+    {g:"操作",label:"新規商談を作成",run:()=>toast("新規商談の作成画面はこのモックに含まれていません")},
+  ].filter(a=>!q || a.label.toLowerCase().includes(q));
+  return [...ds, ...acts];
+}
+function cmd(){
+  const items = cmdItems(); if(state.cmdIdx >= items.length) state.cmdIdx = Math.max(0, items.length-1);
+  let last = null;
+  return `<div class="veil" data-act="closecmd" style="z-index:21"></div>
+  <div class="cmd" role="dialog" aria-label="コマンド">
+    <span class="en t">Command</span>
+    <input id="cmd-q" type="text" placeholder="商談名・操作を入力" value="${esc(state.cmdQ)}" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-activedescendant="ci-${state.cmdIdx}">
+    <div class="cmd-list" id="cmd-list" role="listbox">${items.map((it,i)=>{ const h = it.g!==last ? `<div class="cmd-g">${it.g}</div>` : ""; last = it.g;
+      return h + `<button type="button" class="ci" id="ci-${i}" role="option" data-act="cmdrun" data-i="${i}" aria-selected="${i===state.cmdIdx}">${i===state.cmdIdx?ic("play",12):"<span style='width:16px'></span>"}<span class="grow">${it.label}${it.sub?` <small>${it.sub}</small>`:""}</span></button>`; }).join("") || `<div class="empty">該当する項目はありません。</div>`}</div>
+    <div class="cmd-foot"><span>${key("↑↓")} 選ぶ</span><span>${key("↵")} 実行</span><span>${key("Esc")} 閉じる</span></div>
+  </div>`;
+}
+</script>
+<script>
+const rl = $("#rl"), root = $("#root");
+function render(){
+  const a = document.activeElement, fid = rl.contains(a) && a.id ? a.id : null;
+  let s0 = null, s1 = null; try{ s0 = a.selectionStart; s1 = a.selectionEnd; }catch(_){}
+  const draft = $("#f-note")?.value;
+  const sc = {}; rl.querySelectorAll("[data-scroll]").forEach(el => sc[el.dataset.scroll] = el.scrollTop);
+  root.innerHTML = header() + dtabs() + (state.view==="detail" ? detail() : menu() + pane()) + (state.quick!=null ? quickView() : "") + (state.cmd ? cmd() : "") + prompts();
+  rl.querySelectorAll("[data-scroll]").forEach(el => { if(sc[el.dataset.scroll] != null) el.scrollTop = sc[el.dataset.scroll]; });
+  if(draft && $("#f-note")) $("#f-note").value = draft;
+  state.anim = null; state.qanim = false;
+  if(state.cmd){ const p = $("#cmd-q"); p.focus({preventScroll:true}); p.setSelectionRange(p.value.length, p.value.length); return; }
+  if(fid){ const el = document.getElementById(fid); if(el){ el.focus({preventScroll:true}); try{ if(s0 != null) el.setSelectionRange(s0, s1); }catch(_){} } }
+}
+let tt;
+function toast(msg){ const t = $("#toast"); t.innerHTML = ic("play",12) + esc(msg); t.hidden = false; clearTimeout(tt); tt = setTimeout(()=>{ t.hidden = true; }, 2400); }
+function openTab(id){
+  byId(id).unread = 0;
+  if(!state.openTabs.includes(id)) state.openTabs.push(id);
+  Object.assign(state, {view:"detail", sel:id, quick:null, cmd:false, anim:"view"});
+  render();
+}
+const now = () => { const n = new Date(); return `${String(n.getHours()).padStart(2,"0")}:${String(n.getMinutes()).padStart(2,"0")}`; };
+function advance(id){
+  const d = byId(id), i = STAGES.indexOf(d.stage); if(i<0 || i>=5) return;
+  const prev = d.stage; d.stage = STAGES[i+1]; d.p = d.stage==="受注" ? 100 : Math.min(90, d.p+15); d.upd = 0;
+  d.acts.unshift({k:"memo",who:ME,d:"9/23",time:now(),x:`フェーズを変更しました：${prev} → ${d.stage}`,re:[],rep:0});
+  render(); toast(d.stage==="受注" ? `「${d.name}」を受注にしました` : `フェーズを「${d.stage}」に進めました`);
+}
+function react(id, i, j){
+  const a = byId(id).acts[i];
+  if(j==="new"){ const r = a.re.find(x=>x[0]==="👍"); if(!r) a.re.push(["👍",1,true]); else if(!r[2]){ r[1]++; r[2]=true; } }
+  else { const r = a.re[+j]; if(r[2]){ r[1]--; r[2]=false; if(r[1]<=0) a.re.splice(+j,1); } else { r[1]++; r[2]=true; } }
+  render();
+}
+function focusLog(){ const t = $("#f-note"); if(t) t.focus(); }
+function act(name, el){
+  const id = el.dataset.id ? +el.dataset.id : null, v = el.dataset.v;
+  switch(name){
+    case "home": Object.assign(state,{view:"list",quick:null,anim:"view"}); break;
+    case "gview": if(state.gview!==v){ state.gview = v; state.anim = "list"; } break;
+    case "owner": state.owner = state.owner===v ? null : v; state.anim = "list"; break;
+    case "sort": state.sort = v; state.anim = "list"; break;
+    case "play": { const f = list()[0]; if(f) return openTab(f.id); return; }
+    case "quick": Object.assign(state,{sel:id, quick:id, kind:"call", qanim:true}); byId(id).unread = 0; break;
+    case "closeq": state.quick = null; break;
+    case "tabopen": return openTab(id);
+    case "closetab":
+      state.openTabs = state.openTabs.filter(x=>x!==id);
+      if(state.view==="detail" && state.sel===id){ if(state.openTabs.length) state.sel = state.openTabs.at(-1); else state.view = "list"; state.anim = "view"; }
+      break;
+    case "advance": return advance(id || state.sel);
+    case "kind": state.kind = v; render(); return focusLog();
+    case "react": return react(id, +el.dataset.i, el.dataset.j);
+    case "closecmd": state.cmd = false; break;
+    case "cmdrun": { const it = cmdItems()[+el.dataset.i]; state.cmd = false; if(it) it.run(); else render(); return; }
+    case "focuslog": return focusLog();
+    case "noop": return toast("この操作はモックに含まれていません");
+    default: return;
+  }
+  render();
+}
+rl.addEventListener("click", e=>{
+  const t = e.target; if(t.matches("input,textarea,label")) return;
+  const el = t.closest("[data-act]"); if(!el || el.disabled || !rl.contains(el)) return;
+  e.preventDefault(); act(el.dataset.act, el);
+});
+rl.addEventListener("input", e=>{ if(e.target.id==="cmd-q"){ state.cmdQ = e.target.value; state.cmdIdx = 0; render(); } });
+rl.addEventListener("submit", e=>{
+  e.preventDefault();
+  const t = $("#f-note"), x = t ? t.value.trim() : "";
+  if(!x){ t?.focus(); toast("内容を入力してください"); return; }
+  const d = cur(), rem = $("#f-rem")?.checked !== false;
+  d.acts.unshift({k:state.kind, who:ME, d:"9/23", time:now(), x, re:[], rep:0}); d.upd = 0;
+  t.value = ""; render();
+  toast((state.kind==="memo" ? "社内メモを投稿しました" : `${KL[state.kind]}を記録しました`) + (rem ? "（9/26 にリマインド）" : ""));
+});
+document.addEventListener("keydown", e=>{
+  const typing = e.target.matches?.("input,textarea,select");
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); Object.assign(state,{cmd:!state.cmd, cmdQ:"", cmdIdx:0}); render(); return; }
+  if(state.cmd){
+    const n = Math.max(cmdItems().length, 1);
+    if(e.key==="ArrowDown"){ e.preventDefault(); state.cmdIdx = (state.cmdIdx+1) % n; render(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); state.cmdIdx = (state.cmdIdx-1+n) % n; render(); }
+    else if(e.key==="Enter"){ e.preventDefault(); const it = cmdItems()[state.cmdIdx]; state.cmd = false; if(it) it.run(); else render(); }
+    else if(e.key==="Escape"){ state.cmd = false; render(); }
+    return;
+  }
+  if(e.key==="Enter" && (e.metaKey || e.ctrlKey) && e.target.id==="f-note"){ e.preventDefault(); $("#logForm").requestSubmit(); return; }
+  if(e.key==="Escape"){
+    if(state.quick!=null){ state.quick = null; render(); return; }
+    if(state.view==="detail" && (rl.contains(document.activeElement) || document.activeElement===document.body)){ Object.assign(state,{view:"list",anim:"view"}); render(); return; }
+  }
+  const inScope = rl.contains(document.activeElement) || document.activeElement===document.body;
+  if(!typing && inScope && !e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase()==="n" && (state.quick!=null || state.view==="detail")){ e.preventDefault(); focusLog(); }
+});
+function setGame(g){
+  rl.dataset.game = g; document.querySelectorAll("[data-game]").forEach(b=>{ if(b!==rl) b.setAttribute("aria-pressed", b.dataset.game===g); });
+  try{ localStorage.setItem("crm-game", g); }catch(_){}
+  state.anim = "view"; render();
+}
+document.querySelectorAll(".ch-seg [data-game]").forEach(b=>b.addEventListener("click", ()=>setGame(b.dataset.game)));
+/* bubbles: decorative only */
+$("#bubbles").innerHTML = Array.from({length:16}, (_,i)=>{ const s = 6 + (i*7)%22; return `<i style="left:${(i*61)%100}%;width:${s}px;height:${s}px;animation-duration:${14 + (i*5)%16}s;animation-delay:-${(i*3.7)%18}s;--dx:${(i%2?1:-1)*(10+i*3)}px"></i>`; }).join("");
+let g0 = "reload"; try{ g0 = localStorage.getItem("crm-game") || "reload"; }catch(_){}
+rl.dataset.game = g0; document.querySelectorAll(".ch-seg [data-game]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.game===g0));
+render();
+</script>

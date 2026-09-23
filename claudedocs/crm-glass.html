@@ -1,0 +1,729 @@
+<title>Tsumugi CRM Glass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* ---------- chrome (theme-aware) ---------- */
+:root{
+  --c-ground:#f1f2f0; --c-panel:#fbfbfa; --c-ink:#1c1f1d; --c-muted:#5f665f; --c-rule:#d5d8d3; --c-chip:#e6e8e4; --c-sel:#1c1f1d; --c-on-sel:#f5f6f4;
+  --c-font:"IBM Plex Sans JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif; --c-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){color-scheme:dark;--c-ground:#141614;--c-panel:#1b1e1b;--c-ink:#e6e9e5;--c-muted:#9aa19a;--c-rule:#2d312d;--c-chip:#242824;--c-sel:#e6e9e5;--c-on-sel:#141614}
+}
+:root[data-theme="dark"]{color-scheme:dark;--c-ground:#141614;--c-panel:#1b1e1b;--c-ink:#e6e9e5;--c-muted:#9aa19a;--c-rule:#2d312d;--c-chip:#242824;--c-sel:#e6e9e5;--c-on-sel:#141614}
+*{box-sizing:border-box}
+body{background:var(--c-ground);color:var(--c-ink);font-family:var(--c-font);font-size:14px;line-height:1.6}
+.ch-wrap{max-width:1440px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:grid;gap:18px}
+@media (min-width:900px){.ch-wrap{padding-inline:32px}}
+.ch-head h1{margin:0;font-size:22px;font-weight:700;text-wrap:balance}
+.ch-head p{margin:4px 0 0;color:var(--c-muted);max-width:72ch}
+.ch-src{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:13px}
+.ch-src span{color:var(--c-muted)} .ch-src b{font-weight:500}
+.ch-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:1000px){.ch-grid{grid-template-columns:1.5fr 1fr}}
+.ch-card{background:var(--c-panel);border:1px solid var(--c-rule);border-radius:10px;padding:18px 20px}
+.ch-card h2{margin:0 0 10px;font-size:15px;font-weight:700}
+.ch-rules{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.ch-rules li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+.ch-rules .src{font-size:11px;font-family:var(--c-mono);color:var(--c-muted);border:1px solid var(--c-rule);border-radius:4px;padding:0 6px;white-space:nowrap}
+.ch-card pre{margin:0;overflow:auto;background:var(--c-ground);border:1px solid var(--c-rule);border-radius:8px;padding:12px;font-family:var(--c-mono);font-size:12px;line-height:1.55;max-height:260px}
+.ch-card a{color:inherit}
+.ch-ctrl{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;font-size:13px}
+.ch-seg{display:inline-flex;border:1px solid var(--c-rule);border-radius:8px;overflow:hidden}
+.ch-seg button{font:inherit;font-size:13px;border:0;background:var(--c-panel);color:var(--c-ink);padding:5px 14px;cursor:pointer;border-right:1px solid var(--c-rule)}
+.ch-seg button:last-child{border-right:0}
+.ch-seg button[aria-pressed="true"]{background:var(--c-sel);color:var(--c-on-sel)}
+.ch-seg button:focus-visible,.ch-card a:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
+.ch-stage{overflow-x:auto;border-radius:14px;border:1px solid var(--c-rule)}
+.ch-note{font-size:12px;color:var(--c-muted);margin:0}
+
+/* ---------- mock tokens ---------- */
+.gx{
+  --font:"Atlassian Sans",-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;
+  --bg:#e8edf2; --blob1:rgb(3 54 61 / .20); --blob2:rgb(12 102 228 / .18); --blob3:rgb(0 150 160 / .14);
+  --surface:#ffffff; --surface2:#f7f8f9; --border:#d5dbe3; --text:#172b4d; --text2:#4d5b73; --text3:#6b778c;
+  --primary:#0c66e4; --on-primary:#ffffff; --kale:#03363d; --focus:#388bff;
+  --btn2-bg:rgb(9 30 66 / .06); --btn2-hover:rgb(9 30 66 / .1); --field-bg:rgb(255 255 255 / .7); --field-bd:rgb(9 30 66 / .16);
+  --glass-bg:rgb(255 255 255 / .56); --glass-strong:rgb(255 255 255 / .84); --glass-sheen:rgb(255 255 255 / .38); --glass-bd:rgb(255 255 255 / .72);
+  --glass-hi:inset 0 1px 0 rgb(255 255 255 / .9),inset 0 -1px 0 rgb(9 30 66 / .04);
+  --glass-shadow:0 10px 30px rgb(9 30 66 / .14),0 1px 2px rgb(9 30 66 / .08); --blur:22px;
+  --rail-bg:rgb(3 54 61 / .80); --solid-bg:#ffffff; --tab-on:#ffffff; --smoke:rgb(9 30 66 / .34);
+  --card-shadow:0 1px 1px rgb(9 30 66 / .2),0 0 1px rgb(9 30 66 / .28);
+  --lz-default-bg:#dcdfe4; --lz-default-fg:#44546f; --lz-blue-bg:#cce0ff; --lz-blue-fg:#0055cc;
+  --lz-yellow-bg:#f8e6a0; --lz-yellow-fg:#7f5f01; --lz-green-bg:#baf3db; --lz-green-fg:#216e4e; --lz-red-bg:#ffd5d2; --lz-red-fg:#ae2e24;
+  --late:#ae2e24; --warn:#a54800; --note-bg:#fff7d6; --note-bd:#f5cd47;
+  --path-done:#1f845a; --path-cur:#0c3d8a; --path-todo:#e9ecf0; --path-todo-fg:#44546f;
+}
+.gx[data-mode="dark"]{
+  color-scheme:dark;
+  --bg:#0d1417; --blob1:rgb(0 120 130 / .28); --blob2:rgb(40 110 230 / .24); --blob3:rgb(0 90 100 / .22);
+  --surface:#161c22; --surface2:#1c232b; --border:#2c3642; --text:#e6edf3; --text2:#aab6c4; --text3:#8c9aab;
+  --primary:#579dff; --on-primary:#0b1a33; --focus:#85b8ff;
+  --btn2-bg:rgb(255 255 255 / .08); --btn2-hover:rgb(255 255 255 / .13); --field-bg:rgb(255 255 255 / .06); --field-bd:rgb(255 255 255 / .14);
+  --glass-bg:rgb(26 33 41 / .52); --glass-strong:rgb(22 28 34 / .88); --glass-sheen:rgb(255 255 255 / .07); --glass-bd:rgb(255 255 255 / .12);
+  --glass-hi:inset 0 1px 0 rgb(255 255 255 / .12),inset 0 -1px 0 rgb(0 0 0 / .2);
+  --glass-shadow:0 12px 32px rgb(0 0 0 / .45),0 1px 2px rgb(0 0 0 / .3);
+  --rail-bg:rgb(3 54 61 / .72); --solid-bg:#1c232b; --tab-on:#2a333d; --smoke:rgb(0 0 0 / .5);
+  --card-shadow:0 0 0 1px #2c3642;
+  --lz-default-bg:#454f59; --lz-default-fg:#dee4ea; --lz-blue-bg:#09326c; --lz-blue-fg:#b3d4ff;
+  --lz-yellow-bg:#533f04; --lz-yellow-fg:#f8e6a0; --lz-green-bg:#164b35; --lz-green-fg:#baf3db; --lz-red-bg:#5d1f1a; --lz-red-fg:#ffd5d2;
+  --late:#fd9891; --warn:#fea362; --note-bg:#3a300a; --note-bd:#7f5f01;
+  --path-done:#2abb7f; --path-cur:#579dff; --path-todo:#2a333d; --path-todo-fg:#aab6c4;
+}
+
+/* ---------- mock base ---------- */
+.gx{position:relative;height:820px;min-width:1180px;overflow:hidden;font-family:var(--font);font-size:14px;line-height:1.5;color:var(--text);background:var(--bg)}
+.gx *{font-family:inherit}
+.gx button{cursor:pointer;font-size:inherit;color:inherit;font-family:inherit}
+.gx h1,.gx h2,.gx h3,.gx h4,.gx p{margin:0}
+.gx h1,.gx h2,.gx h3{font-weight:650;line-height:1.3}
+.gx :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.gx-canvas{position:absolute;inset:0;z-index:0;background:
+  radial-gradient(620px 440px at 10% 16%,var(--blob1),transparent 70%),
+  radial-gradient(720px 520px at 90% 8%,var(--blob2),transparent 70%),
+  radial-gradient(680px 500px at 62% 100%,var(--blob3),transparent 70%),var(--bg)}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:middle}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:ui-monospace,Menlo,monospace!important;font-size:12px}
+.muted{color:var(--text2)} .small{font-size:12px} .grow{flex:1;min-width:0}
+.row{display:flex;align-items:center;gap:8px}
+.late{color:var(--late);font-weight:600} .warn{color:var(--warn)}
+
+/* material: glass (navigation / control layer only) */
+.glass{background:linear-gradient(180deg,var(--glass-sheen),transparent 46%),var(--glass-bg);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(170%);backdrop-filter:blur(var(--blur)) saturate(170%);
+  border:1px solid var(--glass-bd);box-shadow:var(--glass-hi),var(--glass-shadow)}
+.glass.thick{background:linear-gradient(180deg,var(--glass-sheen),transparent 40%),var(--glass-strong)}
+.gx[data-material="solid"] .glass{background:var(--solid-bg);-webkit-backdrop-filter:none;backdrop-filter:none;border-color:var(--border);box-shadow:var(--glass-shadow)}
+.gx[data-material="solid"] .gx-canvas{background:var(--bg)}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border-radius:10px;border:0;background:var(--btn2-bg);color:var(--text);font-weight:500;white-space:nowrap;flex:none}
+.btn:hover{background:var(--btn2-hover)}
+.btn.primary{background:var(--primary);color:var(--on-primary)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.sm{height:30px;padding:0 10px;border-radius:8px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;border:0;background:transparent;color:var(--text2);flex:none}
+.iconbtn:hover{background:var(--btn2-bg);color:var(--text)}
+.gx input:not([type=checkbox]),.gx select,.gx textarea{font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--field-bd);border-radius:10px;height:36px;padding:0 12px;width:100%}
+.gx textarea{height:auto;min-height:76px;padding:10px 12px;resize:vertical;line-height:1.5}
+.gx input::placeholder,.gx textarea::placeholder{color:var(--text3)}
+.gx input[type=checkbox]{accent-color:var(--primary);width:16px;height:16px;margin:0}
+.av{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;font-weight:650;background:var(--btn2-bg);color:var(--text);flex:none}
+.lz{display:inline-flex;align-items:center;font-size:11px;font-weight:700;line-height:18px;padding:0 6px;border-radius:4px;white-space:nowrap;background:var(--lz-default-bg);color:var(--lz-default-fg)}
+.lz.blue{background:var(--lz-blue-bg);color:var(--lz-blue-fg)} .lz.yellow{background:var(--lz-yellow-bg);color:var(--lz-yellow-fg)}
+.lz.green{background:var(--lz-green-bg);color:var(--lz-green-fg)} .lz.red{background:var(--lz-red-bg);color:var(--lz-red-fg)}
+.card{background:var(--surface);border-radius:16px;box-shadow:var(--card-shadow)}
+
+/* rail (Garden kale, tinted glass) */
+.gx-rail{position:absolute;z-index:5;left:12px;top:12px;bottom:12px;width:68px;border-radius:24px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;color:#d4e3e5;
+  background:linear-gradient(180deg,rgb(255 255 255 / .16),transparent 40%),var(--rail-bg);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+  border:1px solid rgb(255 255 255 / .18);box-shadow:inset 0 1px 0 rgb(255 255 255 / .22),var(--glass-shadow)}
+.gx[data-material="solid"] .gx-rail{background:var(--kale);-webkit-backdrop-filter:none;backdrop-filter:none}
+.gx-logo{width:40px;height:40px;border-radius:14px;background:#fff;color:var(--kale);display:grid;place-items:center;font-weight:700;margin-bottom:8px}
+.gx-rb{width:52px;padding:6px 0;border-radius:14px;border:0;background:transparent;color:inherit!important;display:grid;justify-items:center;gap:2px;font-size:10px}
+.gx-rb:hover{background:rgb(255 255 255 / .1)}
+.gx-rb.on{background:rgb(255 255 255 / .2);color:#fff!important;font-weight:600}
+.gx-rail .av{margin-top:auto;background:rgb(255 255 255 / .2);color:#fff;width:34px;height:34px}
+
+/* top bar (glass) with workspace tabs */
+.gx-bar{position:absolute;z-index:5;left:92px;right:12px;top:12px;height:60px;border-radius:20px;display:flex;align-items:center;gap:6px;padding:0 10px}
+.gx-tabs{display:flex;gap:4px;min-width:0;overflow:hidden}
+.gx-tab{display:flex;align-items:center;height:40px;border-radius:12px;color:var(--text2);font-size:13px;max-width:230px;min-width:0}
+.gx-tab.on{background:var(--tab-on);color:var(--text);box-shadow:0 1px 2px rgb(9 30 66 / .14)}
+.gx-tab > button{border:0;background:none;display:flex;align-items:center;gap:8px;height:100%;padding:0 6px 0 12px;min-width:0;font-weight:500}
+.gx-tab > button:only-child{padding-right:12px}
+.gx-tab .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gx-tab .x{width:24px;height:24px;padding:0;margin-right:6px;border-radius:6px;justify-content:center;color:var(--text3)!important}
+.gx-tab .x:hover{background:var(--btn2-bg)}
+.gx-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.gx-search{position:relative;width:260px;flex:none}
+.gx-search .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3)}
+.gx .gx-search input{padding-left:36px;height:40px;border-radius:12px;background:var(--field-bg);border-color:var(--field-bd)}
+
+/* main scroll area: content passes beneath the glass bar */
+.gx-main{position:absolute;z-index:1;top:0;bottom:0;left:92px;right:0;overflow:auto;padding:88px 12px 28px 0;scroll-padding-top:88px}
+
+/* ---------- list view (Garden views + kamii tracker) ---------- */
+.gx-list{display:grid;grid-template-columns:236px minmax(0,1fr);gap:16px;align-items:start}
+.gx-views{border-radius:20px;padding:14px 10px;display:grid;gap:2px}
+.gx-views h2{font-size:13px;color:var(--text2);font-weight:600;padding:2px 10px 8px}
+.gx-views button.v{display:flex;justify-content:space-between;gap:8px;border:0;background:none;padding:9px 10px;border-radius:12px;text-align:left;font-size:14px;color:var(--text)}
+.gx-views button.v:hover{background:var(--btn2-bg)}
+.gx-views button.v[aria-pressed="true"]{background:var(--tab-on);font-weight:650;box-shadow:0 1px 2px rgb(9 30 66 / .12)}
+.gx-views .sep{height:1px;background:var(--glass-bd);margin:8px 6px;opacity:.8}
+.gx-owners{display:flex;gap:6px;padding:4px 10px 6px}
+.gx-owners .av{border:0;width:32px;height:32px;cursor:pointer}
+.gx-owners .av[aria-pressed="true"]{background:var(--primary);color:var(--on-primary)}
+.gx-content{display:grid;gap:14px;min-width:0}
+.gx-head{display:flex;align-items:flex-end;gap:12px}
+.gx-head h1{font-size:24px}
+.gx-sort{display:inline-flex;padding:3px;border-radius:12px;background:var(--btn2-bg)}
+.gx-sort button{border:0;background:none;padding:5px 12px;border-radius:9px;font-size:13px;color:var(--text2)}
+.gx-sort button[aria-pressed="true"]{background:var(--surface);color:var(--text);font-weight:600;box-shadow:0 1px 2px rgb(9 30 66 / .14)}
+.gx-todo{padding:14px 16px;display:grid;gap:10px}
+.gx-todo h2{font-size:14px;display:flex;gap:8px;align-items:center}
+.gx-todo-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.gx-ti{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;text-align:left;border:1px solid var(--border);background:var(--surface2);border-radius:12px;padding:8px 10px}
+.gx-ti:hover{border-color:var(--primary)}
+.date{border:1.5px solid var(--text);border-radius:8px;text-align:center;line-height:1.1;padding:3px 0;background:var(--surface)}
+.date b{display:block;font-size:17px}
+.date small{font-size:10px;color:var(--text2)}
+.date.late{border-color:var(--late);color:var(--late)}
+.gx-rows{overflow:hidden}
+.gx-rh,.gx-r{display:grid;grid-template-columns:92px minmax(0,1.5fr) 168px minmax(0,1.35fr) 112px 84px 20px;gap:14px;align-items:center;padding:0 16px}
+.gx-rh{height:40px;font-size:12px;font-weight:650;color:var(--text2);border-bottom:2px solid var(--border)}
+.gx-r{min-height:66px;border-bottom:1px solid var(--border);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+.gx-r:last-child{border-bottom:0}
+.gx-r:hover{background:var(--surface2)}
+.gx-r .nm b{display:block;font-weight:650;line-height:1.35}
+.gx-r .nm span{font-size:12px;color:var(--text2)}
+.trk{display:grid;gap:5px}
+.trk-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.trk-bar i{height:6px;border-radius:3px;background:var(--path-todo)}
+.trk-bar i.done{background:var(--path-done)} .trk-bar i.cur{background:var(--primary)} .trk-bar i.lost{background:var(--late)}
+.trk small{font-size:11px;color:var(--text2)}
+.nx{display:grid;gap:1px;font-size:13px;line-height:1.4}
+.nx small{font-size:12px;color:var(--text2)}
+.gx-r .amt{text-align:right;font-weight:650}
+.empty{padding:40px 16px;text-align:center;color:var(--text2)}
+
+/* ---------- quick view modal (Atlassian) on thick glass ---------- */
+.gx-smoke{position:absolute;inset:0;z-index:20;background:var(--smoke)}
+.gx-modal{position:absolute;z-index:21;left:50%;top:48px;transform:translateX(-50%);width:880px;height:calc(100% - 96px);border-radius:28px;display:flex;flex-direction:column;overflow:hidden}
+.gx-mh{display:flex;align-items:center;gap:8px;padding:16px 16px 8px 24px}
+.gx-mb{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;padding:0 16px 16px 24px}
+.gx-ml{overflow:auto;display:grid;gap:16px;align-content:start;padding-right:6px}
+.gx-ml h2{font-size:24px;font-weight:600}
+.gx-mr{display:grid;gap:12px;align-content:start;overflow:auto}
+.gx-panel{background:var(--surface);border-radius:16px;padding:14px 16px;box-shadow:var(--card-shadow)}
+.gx-panel h3{font-size:13px;color:var(--text2);margin-bottom:10px}
+.status{height:36px;padding:0 12px;border-radius:10px;border:0;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.dl{display:grid;grid-template-columns:96px 1fr;gap:10px 12px;margin:0;font-size:14px}
+.dl dt{color:var(--text2);font-size:12px;font-weight:650;padding-top:2px}
+.dl dd{margin:0}
+
+/* ---------- detail view (Serendie hero + Lightning record + Atlassian status) ---------- */
+.gx-detail{display:grid;gap:14px;padding-left:4px;padding-bottom:84px}
+.hero{padding:20px 24px;display:grid;gap:18px}
+.hero-top{display:flex;gap:14px;align-items:flex-start}
+.obj{width:44px;height:44px;border-radius:14px;background:var(--kale);color:#fff;display:grid;place-items:center;flex:none}
+.hero-top h1{font-size:26px}
+.hero-f{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:0;border-top:1px solid var(--border);padding-top:16px}
+.hero-f > div{padding:0 16px;border-left:1px solid var(--border);display:grid;gap:2px}
+.hero-f > div:first-child{padding-left:0;border-left:0}
+.hero-f small{font-size:12px;color:var(--text2)}
+.hero-amt{font-size:30px;font-weight:700;line-height:1.1}
+.pathcard{padding:14px 16px;display:flex;gap:16px;align-items:center}
+.path{flex:1;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr)}
+.path li{font-size:13px;text-align:center;padding:9px 6px 9px 16px;margin-right:-6px;background:var(--path-todo);color:var(--path-todo-fg);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.path li:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);border-radius:20px 0 0 20px;padding-left:10px}
+.path li:last-child{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,10px 50%);border-radius:0 20px 20px 0;margin-right:0}
+.path li.done{background:var(--path-done);color:#fff}
+.path li.cur{background:var(--path-cur);color:#fff;font-weight:700}
+.path li.lost{background:var(--late);color:#fff;font-weight:700}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:14px;align-items:start}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);padding:0 12px}
+.tabs button{border:0;background:none;padding:12px 12px 10px;font-size:14px;color:var(--text2);border-bottom:3px solid transparent;margin-bottom:-1px;font-weight:500}
+.tabs button[aria-selected="true"]{color:var(--text);border-color:var(--primary);font-weight:650}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;padding:6px 20px 18px}
+.field{padding:10px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto;gap:2px;align-items:end}
+.field small{grid-column:1/-1;font-size:12px;color:var(--text2)}
+.field .ic{color:var(--text3);width:14px;height:14px}
+.rel{padding:14px 20px;display:grid;gap:10px}
+.relc{border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center}
+.pub{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid var(--border)}
+.pub button{border:0;background:none;padding:12px 10px 10px;font-size:13px;color:var(--text2);border-bottom:3px solid transparent;margin-bottom:-1px;font-weight:500}
+.pub button[aria-pressed="true"]{color:var(--text);border-color:var(--primary);font-weight:650}
+.composer{padding:14px 16px;display:grid;gap:10px;border-bottom:1px solid var(--border)}
+.composer.note{background:var(--note-bg)}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px}
+.tl{list-style:none;margin:0;padding:14px 16px;display:grid;gap:14px}
+.tl li{display:grid;grid-template-columns:30px 1fr;gap:10px}
+.tli{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.k-call{background:#1d7f8c}.k-mail{background:#5e6c84}.k-meet{background:#8f4bd0}.k-memo{background:#1f845a}
+.tl .h{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--text2)}
+.tl .h b{color:var(--text);font-weight:650}
+.tl .b{margin-top:3px;font-size:13px;line-height:1.55}
+.tl li.note .b{background:var(--note-bg);border:1px solid var(--note-bd);border-radius:10px;padding:8px 10px}
+.secth{font-size:12px;font-weight:700;color:var(--text2);padding:12px 16px 0}
+.nextbox{margin:12px 16px 0;padding:10px 12px;border-radius:12px;background:var(--surface2);display:flex;gap:10px;align-items:center;font-size:13px}
+.float{position:sticky;bottom:16px;display:flex;justify-content:center;pointer-events:none;z-index:3}
+.float > div{pointer-events:auto;display:flex;align-items:center;gap:8px;padding:8px;border-radius:22px}
+.float .btn{height:40px;border-radius:14px}
+.float .btn:not(.primary){background:transparent}
+.float .btn:not(.primary):hover{background:var(--btn2-bg)}
+
+.toast{position:absolute;z-index:30;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 18px;border-radius:16px;font-size:13px;font-weight:500;transition:opacity .2s,transform .2s}
+.toast[hidden]{display:block!important;opacity:0;transform:translate(-50%,8px);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+<style>
+/* ---------- modern patterns: Slack threads & unread, Linear/Slack ⌘K + shortcuts ---------- */
+.kbd{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:6px;font-size:11px;font-weight:600;color:var(--text2);background:var(--btn2-bg);border:1px solid var(--field-bd);font-family:ui-monospace,Menlo,monospace}
+.gx-cmdk{display:flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 12px;border-radius:12px;border:1px solid var(--field-bd);background:var(--field-bg);color:var(--text3);width:280px;flex:none;text-align:left}
+.gx-cmdk span.grow{font-size:14px}
+.unread b{font-weight:800!important}
+.udot{width:8px;height:8px;border-radius:50%;background:var(--primary);flex:none}
+.mbadge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#c9372c;color:#fff;font-size:11px;font-weight:700;display:inline-grid;place-items:center}
+.gx-views button.v .cnt{display:flex;gap:6px;align-items:center}
+/* thread (Slack): each activity is a message; replies & reactions */
+.thread{list-style:none;margin:0;padding:6px 8px 12px;display:grid;gap:2px}
+.msg{display:grid;grid-template-columns:36px 1fr;gap:10px;padding:8px 8px;border-radius:12px}
+.msg:hover{background:var(--surface2)}
+.msg .av{width:36px;height:36px;border-radius:10px;font-size:13px}
+.msg .h{display:flex;align-items:baseline;gap:8px;font-size:13px}
+.msg .h b{font-weight:800}
+.msg .h small{color:var(--text3);font-size:12px}
+.msg .kind{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:650;color:var(--text2);background:var(--btn2-bg);border-radius:6px;padding:0 6px;line-height:18px}
+.msg .b{font-size:14px;line-height:1.6;margin-top:2px}
+.msg.note .b{background:var(--note-bg);border-left:3px solid var(--note-bd);border-radius:6px;padding:6px 10px;margin-top:4px}
+.mention{background:color-mix(in oklab,var(--primary) 16%,transparent);color:var(--primary);border-radius:4px;padding:0 3px;font-weight:600}
+.reacts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.react{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-size:12px}
+.react[aria-pressed="true"]{border-color:var(--primary);background:color-mix(in oklab,var(--primary) 12%,var(--surface));color:var(--primary);font-weight:650}
+.react.add{color:var(--text3);width:28px;padding:0;justify-content:center}
+.replies{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:12px;font-weight:650;color:var(--primary);border:0;background:none;padding:0}
+.day{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:650;color:var(--text2);padding:8px 8px 2px}
+.day::before,.day::after{content:"";flex:1;height:1px;background:var(--border)}
+.slk-composer{margin:10px 12px 12px;border:1px solid var(--field-bd);border-radius:14px;background:var(--surface);overflow:hidden}
+.slk-composer.note{background:var(--note-bg);border-color:var(--note-bd)}
+.slk-fmt{display:flex;gap:2px;padding:6px 8px;border-bottom:1px solid var(--border);color:var(--text3)}
+.slk-fmt .iconbtn{width:28px;height:28px;border-radius:7px}
+.gx .slk-composer textarea{border:0;background:transparent;min-height:64px;border-radius:0;padding:10px 12px}
+.gx .slk-composer textarea:focus-visible{outline:none}
+.slk-composer:focus-within{border-color:var(--focus);box-shadow:0 0 0 1px var(--focus)}
+.slk-foot{display:flex;align-items:center;gap:8px;padding:6px 8px 8px 10px}
+.gx .slk-foot select{width:auto;height:30px;font-size:13px;border-radius:8px}
+.send{width:34px;height:30px;border-radius:8px;border:0;background:var(--primary);color:var(--on-primary);display:grid;place-items:center}
+.send[disabled]{background:var(--btn2-bg);color:var(--text3);cursor:not-allowed}
+/* command palette (transient → thick glass) */
+.gx-pal{position:absolute;z-index:23;left:50%;top:90px;transform:translateX(-50%);width:620px;border-radius:24px;overflow:hidden}
+.gx-pal-in{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--glass-bd)}
+.gx .gx-pal-in input{border:0;background:transparent;font-size:17px;height:32px;padding:0}
+.gx .gx-pal-in input:focus-visible{outline:none}
+.gx-pal-list{max-height:380px;overflow:auto;padding:8px}
+.gx-pal-g{font-size:11px;font-weight:700;color:var(--text2);padding:8px 10px 4px}
+.gx-pal-i{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:9px 10px;border-radius:12px;text-align:left;font-size:14px}
+.gx-pal-i[aria-selected="true"]{background:var(--tab-on);box-shadow:0 1px 2px rgb(9 30 66 / .12)}
+.gx-pal-foot{display:flex;gap:14px;padding:10px 18px;border-top:1px solid var(--glass-bd);font-size:12px;color:var(--text2)}
+</style>
+
+<div class="ch-wrap">
+  <header class="ch-head">
+    <h1>Tsumugi CRM Glass</h1>
+    <p>比較で選んだ要素を 1 つの CRM にまとめ、Liquid Glass などの素材の仕様と、Slack・Linear の現代的な操作パターンを加えた統合案です。一覧の行を開くとクイックビュー、「タブで開く」で詳細ページになります。</p>
+    <div class="ch-src">
+      <span>一覧</span><b>Garden のビューとタブ ＋ kamii の進み具合と「やること」</b>
+      <span>詳細</span><b>Lightning のレコードページと Path ＋ Serendie の大きな金額 ＋ Atlassian のステータスとモーダル</b>
+      <span>配色</span><b>Atlassian と Garden のコントラスト</b>
+      <span>素材</span><b>Apple Liquid Glass ＋ Fluent 2 の Acrylic / Smoke</b>
+      <span>操作</span><b>Slack のスレッド・リアクション・未読 ＋ Linear / Slack の ⌘K とショートカット</b>
+    </div>
+  </header>
+
+  <div class="ch-grid">
+    <section class="ch-card" aria-labelledby="rules-h">
+      <h2 id="rules-h">このモックで守っているルール</h2>
+      <ul class="ch-rules">
+        <li><span class="src">Apple</span><span>ガラスは<b>ナビゲーションと操作の層だけ</b>に使う（レール・上部バー・浮かぶ操作バー・⌘K）。表・フォーム・活動などのコンテンツは不透明にする。</span></li>
+        <li><span class="src">Apple</span><span>ガラスの上にガラスを重ねない。ガラスの中のタブや入力欄は不透明の面にする。</span></li>
+        <li><span class="src">Fluent 2</span><span>一時的な面（クイックビュー・⌘K）は Acrylic 相当の厚いガラス、長く表示される土台は不透明（Solid / Mica の考え方）。</span></li>
+        <li><span class="src">Fluent 2</span><span>モーダルの背後は Smoke で暗くし、下の画面を操作できないことを示す。</span></li>
+        <li><span class="src">Apple</span><span>色付きのガラスは 1 か所だけ（ナビのレール＝Garden の Kale）。主要なボタンは不透明の主色で目立たせる。</span></li>
+        <li><span class="src">Apple</span><span>角丸は入れ子で同心円状にそろえる：外側 = 内側 + 余白（レール 24px = ボタン 14px + 余白 10px）。</span></li>
+        <li><span class="src">Apple / Fluent</span><span>OS の「透明度を下げる」設定では自動で不透明に切り替える。下の切替でも確認できる。</span></li>
+        <li><span class="src">Slack</span><span>活動はスレッド形式：短い発言単位、@メンション、リアクション、返信数。未読の商談は太字と件数で示す。</span></li>
+        <li><span class="src">Linear / Slack</span><span>⌘K（Ctrl+K）でどこからでも商談や操作を呼び出す。主な操作にはショートカットを添える。</span></li>
+        <li><span class="src">Atlassian</span><span>文字は本文 #172B4D 相当の濃さを保ち、ガラスの不透明度は 56% 以上にしてコントラストを確保する。</span></li>
+      </ul>
+    </section>
+    <section class="ch-card" aria-labelledby="tok-h">
+      <h2 id="tok-h">ガラスのトークン（ライト）</h2>
+      <pre>--glass-bg: rgb(255 255 255 / .56);
+--glass-strong: rgb(255 255 255 / .84); /* 一時的な面 */
+--glass-sheen: rgb(255 255 255 / .38); /* 上部の反射 */
+--glass-bd: rgb(255 255 255 / .72);
+--glass-hi: inset 0 1px 0 rgb(255 255 255 / .9);
+--glass-shadow: 0 10px 30px rgb(9 30 66 / .14);
+--blur: 22px;  /* backdrop-filter: blur() saturate(170%) */
+--rail-bg: rgb(3 54 61 / .80);  /* Kale の色付きガラス */
+--smoke: rgb(9 30 66 / .34);
+--radius: rail 24 / bar 20 / tab 12 / button 10</pre>
+      <p class="ch-note" style="margin-top:10px">SVG の displacement を使った屈折表現は Chromium でしか動かないため採用していません（Safari / Firefox 非対応）。</p>
+    </section>
+  </div>
+
+  <div class="ch-ctrl">
+    <span>素材</span><div class="ch-seg" role="group" aria-label="素材"><button type="button" data-mat="glass" aria-pressed="true">ガラス</button><button type="button" data-mat="solid" aria-pressed="false">不透明（透明度を下げる）</button></div>
+    <span>表示</span><div class="ch-seg" role="group" aria-label="表示モード"><button type="button" data-mode="light" aria-pressed="true">ライト</button><button type="button" data-mode="dark" aria-pressed="false">ダーク</button></div>
+    <span class="ch-note">ショートカット：⌘K / Ctrl+K コマンドパレット、N 活動を記録、Esc 閉じる</span>
+  </div>
+
+  <div class="ch-stage">
+    <div class="gx" id="gx" data-material="glass" data-mode="light" tabindex="-1"><div class="gx-canvas" aria-hidden="true"></div><div id="root" style="display:contents"></div><div class="toast glass thick" id="toast" role="status" hidden></div></div>
+  </div>
+  <p class="ch-note">金額・会社名・人物はすべて架空のサンプルです。参考資料：<a href="https://developer.apple.com/design/human-interface-guidelines/materials" target="_blank" rel="noopener">Apple HIG Materials</a> / <a href="https://developer.apple.com/videos/play/wwdc2025/219/" target="_blank" rel="noopener">Meet Liquid Glass (WWDC25)</a> / <a href="https://fluent2.microsoft.design/material" target="_blank" rel="noopener">Fluent 2 Material</a> / <a href="https://docs.slack.dev/concepts/designing-with-block-kit/" target="_blank" rel="noopener">Slack: Designing with Block Kit</a> / <a href="https://linear.app/now/how-we-redesigned-the-linear-ui" target="_blank" rel="noopener">Linear: How we redesigned the Linear UI</a> / <a href="https://atlassian.design/" target="_blank" rel="noopener">Atlassian Design System</a></p>
+</div>
+
+<script>
+/* ---------- data ---------- */
+const STAGES = ["リード","ヒアリング","提案","見積","交渉","受注"];
+const LZ = {"リード":"","ヒアリング":"blue","提案":"blue","見積":"yellow","交渉":"yellow","受注":"green","失注":"red"};
+const TODAY = new Date("2026-09-23T00:00:00");
+const ME = "佐藤";
+const OWNERS = ["佐藤","田中","鈴木","高橋"];
+const KL = {call:"電話",mail:"メール",meet:"打合せ",memo:"社内メモ"};
+const KI = {call:"phone",mail:"mail",meet:"meet",memo:"memo"};
+const WD = ["日","月","火","水","木","金","土"];
+const deals = [
+ {id:1,co:"北辰ロジスティクス株式会社",name:"倉庫管理SaaS 全拠点導入",stage:"交渉",amt:4800000,p:70,close:"2026-10-15",owner:"佐藤",upd:2,unread:2,next:{t:"価格の最終回答を送る",d:"2026-09-25"},
+  info:{業種:"物流・倉庫",従業員数:"1,240名",流入経路:"展示会",競合:"A社 WMS"},
+  acts:[{k:"memo",who:"田中",d:"9/22",time:"18:40",x:"@佐藤 値引き 5% は部長承認済みです。回答期限は 9/25 で先方に伝えてください。",re:[["👍",2,true]],rep:1},
+        {k:"meet",who:"佐藤",d:"9/21",time:"15:10",x:"情報システム部と価格条件を協議。年額一括払いなら 5% 値引きで合意の見込み。",re:[["🎉",1,false]],rep:0},
+        {k:"mail",who:"佐藤",d:"9/17",time:"10:02",x:"全 6 拠点分の見積書（改訂版）を送付。",re:[],rep:0},
+        {k:"call",who:"佐藤",d:"9/10",time:"11:30",x:"物流部長より、年末の繁忙期前に稼働させたいとの連絡。",re:[],rep:2}]},
+ {id:2,co:"青葉メディカル",name:"予約・問診連携 PoC",stage:"提案",amt:1200000,p:40,close:"2026-11-02",owner:"田中",upd:5,unread:0,next:{t:"PoC 提案の感触を確認する",d:"2026-09-29"},
+  info:{業種:"医療法人",従業員数:"380名",流入経路:"Web問い合わせ",競合:"なし"},
+  acts:[{k:"mail",who:"田中",d:"9/18",time:"16:20",x:"PoC の範囲（2 診療科・3 か月）の提案書を送付。",re:[],rep:0},{k:"meet",who:"田中",d:"9/12",time:"14:00",x:"事務長と現行の電話予約の流れを確認。",re:[],rep:0}]},
+ {id:3,co:"株式会社ミナト精機",name:"生産管理 追加ライセンス",stage:"見積",amt:2350000,p:60,close:"2026-10-08",owner:"佐藤",upd:1,unread:1,next:{t:"稟議の進み具合を確認する",d:"2026-10-01"},
+  info:{業種:"精密機器製造",従業員数:"620名",流入経路:"既存顧客（追加）",競合:"なし"},
+  acts:[{k:"memo",who:"鈴木",d:"9/22",time:"19:05",x:"@佐藤 ミナト精機の購買担当、10 月から変わるそうです。",re:[["👀",1,false]],rep:0},{k:"mail",who:"佐藤",d:"9/22",time:"09:15",x:"追加 40 ライセンスの見積を提出。稟議は 10 月第 1 週。",re:[],rep:0}]},
+ {id:4,co:"くすのき不動産",name:"顧客ポータル刷新",stage:"ヒアリング",amt:3600000,p:20,close:"2026-12-20",owner:"鈴木",upd:16,unread:0,next:{t:"ヒアリング内容のまとめを送る",d:"2026-09-16"},
+  info:{業種:"不動産管理",従業員数:"210名",流入経路:"パートナー紹介",競合:"自社開発"},
+  acts:[{k:"meet",who:"鈴木",d:"9/7",time:"13:00",x:"入居者向けポータルの課題をヒアリング。解約手続きのオンライン化が最優先。",re:[],rep:0}]},
+ {id:5,co:"東雲フーズ",name:"受発注EDI 連携",stage:"受注",amt:1980000,p:100,close:"2026-09-18",owner:"田中",upd:0,unread:0,next:{t:"キックオフの日程を確定する",d:"2026-09-26"},
+  info:{業種:"食品卸",従業員数:"450名",流入経路:"セミナー",競合:"B社 EDI"},
+  acts:[{k:"meet",who:"田中",d:"9/18",time:"17:00",x:"契約締結。10 月から導入支援を開始。",re:[["🎉",4,true],["👏",2,false]],rep:3}]},
+ {id:6,co:"ヤマブキ電装",name:"保守契約 更新",stage:"交渉",amt:860000,p:80,close:"2026-09-30",owner:"鈴木",upd:3,unread:0,next:{t:"延長サポートの見積を出す",d:"2026-09-24"},
+  info:{業種:"電装部品",従業員数:"890名",流入経路:"既存顧客（更新）",競合:"なし"},
+  acts:[{k:"call",who:"鈴木",d:"9/20",time:"10:45",x:"サポート時間を平日 20 時まで延長する条件で更新を検討中。",re:[],rep:0}]},
+ {id:7,co:"オリオン教育",name:"学習管理 全校展開",stage:"リード",amt:5400000,p:10,close:"2027-01-31",owner:"高橋",upd:21,unread:0,next:{t:"面談の日程を再提案する",d:"2026-09-24"},
+  info:{業種:"学校法人",従業員数:"1,050名",流入経路:"資料ダウンロード",競合:"未確認"},
+  acts:[{k:"mail",who:"高橋",d:"9/2",time:"09:30",x:"資料ダウンロードへのお礼と、面談の候補日を送付（返信なし）。",re:[],rep:0}]},
+ {id:8,co:"さくら信用金庫",name:"融資審査ワークフロー",stage:"失注",amt:2700000,p:0,close:"2026-09-05",owner:"高橋",upd:18,unread:0,next:{t:"来期の再提案時期を確認する",d:"2027-03-01"},
+  info:{業種:"金融",従業員数:"730名",流入経路:"Web問い合わせ",競合:"C社（採用）"},
+  acts:[{k:"call",who:"高橋",d:"9/5",time:"16:00",x:"オンプレミスでの稼働が必須となり失注。来期に再提案の余地あり。",re:[["🙏",2,false]],rep:0}]},
+];
+
+/* ---------- state ---------- */
+const state = {view:"list", sel:1, openTabs:[], quick:null, gview:"me", owner:null, sort:"due", q:"", dtab:"info", kind:"call", note:false, pal:false, palQ:"", palIdx:0};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const yen = n => "¥" + n.toLocaleString("ja-JP");
+const man = n => Math.round(n/10000).toLocaleString("ja-JP") + "万円";
+const isOpen = d => d.stage !== "受注" && d.stage !== "失注";
+const md = s => { const [y,m,d] = s.split("-"); return (y!=="2026"?y+"/":"") + (+m) + "/" + (+d); };
+const isLate = d => isOpen(d) && new Date(d.close+"T00:00:00") < TODAY;
+const nextLate = d => d.stage!=="失注" && new Date(d.next.d+"T00:00:00") < TODAY;
+const code = d => "OPP-" + (140 + d.id);
+const updTxt = d => d.upd===0 ? "今日" : d.upd + " 日前";
+const byId = id => deals.find(x => x.id === id);
+const cur = () => byId(state.sel) || deals[0];
+const P = {
+ inbox:"M2.5 9l1.5-5.5h8L13.5 9v4h-11zM2.5 9h3l1 1.5h3l1-1.5h3", user:"M8 2.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM2.5 14c.8-2.6 2.9-4 5.5-4s4.7 1.4 5.5 4",
+ building:"M3 13.5V3h6v10.5M9 6h4v7.5M2 13.5h12M5 5.5h2M5 8h2M5 10.5h2", chart:"M2.5 13.5h11M4.5 11V8M8 11V4.5M11.5 11V6.5",
+ gear:"M8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4",
+ search:"M7 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zM10.5 10.5l3 3", plus:"M8 3v10M3 8h10", chev:"M4 6l4 4 4-4", x:"M4 4l8 8M12 4l-8 8",
+ right:"M6 3.5 10.5 8 6 12.5", check:"M3 8.5 6.5 12 13 4.5", bell:"M4 11V7a4 4 0 0 1 8 0v4l1 1.5H3zM6.5 14h3",
+ phone:"M3 2.5h3l1.2 3-1.7 1.2a8 8 0 0 0 3.8 3.8L10.5 8.8l3 1.2v3a1 1 0 0 1-1 1A11.5 11.5 0 0 1 2 3.5a1 1 0 0 1 1-1z",
+ mail:"M3.5 3.5h9a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V5a1.5 1.5 0 0 1 1.5-1.5zM2.5 4.5 8 8.5l5.5-4",
+ meet:"M6 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM1.5 13.5c.6-2.3 2.3-3.5 4.5-3.5s3.9 1.2 4.5 3.5M11.5 3.5a2 2 0 1 1 0 4M11 9.6c1.8 0 3.1 1.1 3.5 3",
+ memo:"M3 2.5h7l3 3v8H3zM5.5 8h5M5.5 10.5h3.5", edit:"M10.5 2.5l3 3-8 8h-3v-3z", dots:"M3.5 8h.01M8 8h.01M12.5 8h.01",
+ flag:"M3.5 14V2.5M3.5 3h8l-1.5 3 1.5 3h-8", expand:"M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9",
+ cal:"M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3", clock:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM8 5v3l2 1.5",
+ bold:"M5 3h4a2.5 2.5 0 0 1 0 5H5zM5 8h4.5a2.5 2.5 0 0 1 0 5H5z", link:"M7 9a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.7.7M9 7a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.7-.7",
+ list:"M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.5M2.5 8h.5M2.5 12h.5", at:"M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM10.5 8v1.2a1.8 1.8 0 0 0 3.5.5A6 6 0 1 0 11 13.2",
+ send:"M2.5 8 13.5 2.5 10 13.5 7.5 8.5z", smile:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM6 9.5c.5.7 1.2 1 2 1s1.5-.3 2-1M6 6.5h.01M10 6.5h.01",
+ thread:"M2.5 3.5h11v7.5H7l-3 2.5V11H2.5z", arrow:"M3 8h10M9 4l4 4-4 4", warn:"M8 2.5l6 11H2zM8 6.5v3M8 11.5h.01",
+};
+const ic = (n, s=16) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"${n==="dots"?' style="stroke-width:2.6"':""}><path d="${P[n]}"/></svg>`;
+const lz = st => `<span class="lz ${LZ[st]}">${st}</span>`;
+const av = n => `<span class="av" title="${n}">${n[0]}</span>`;
+const B = (label, act, cls="", extra="") => `<button type="button" class="btn ${cls}" data-act="${act}" ${extra}>${label}</button>`;
+const kbd = k => `<span class="kbd">${k}</span>`;
+const advLabel = d => d.stage==="交渉" ? "受注にする" : "フェーズを進める";
+const dateBox = (s, late) => { const x = new Date(s+"T00:00:00"); return `<span class="date ${late?"late":""}"><small>${x.getMonth()+1}月</small><b class="num">${x.getDate()}</b><small>${WD[x.getDay()]}</small></span>`; };
+const withMentions = s => esc(s).replace(/@(佐藤|田中|鈴木|高橋)/g, '<span class="mention">@$1</span>');
+const GVIEWS = [["me","自分の担当",{tab:"open",owner:ME}],["open","すべての進行中",{tab:"open"}],["stale","14日以上更新なし",{tab:"open",stale:true}],["won","受注",{tab:"won"}],["lost","失注",{tab:"lost"}]];
+function match(d, o){
+  if(o.tab==="open" && !isOpen(d)) return false;
+  if(o.tab==="won" && d.stage!=="受注") return false;
+  if(o.tab==="lost" && d.stage!=="失注") return false;
+  if(o.owner && d.owner!==o.owner) return false;
+  if(o.stale && !(isOpen(d) && d.upd>=14)) return false;
+  if(o.q && !(d.name+d.co).toLowerCase().includes(o.q.toLowerCase())) return false;
+  return true;
+}
+const viewOpts = () => ({...GVIEWS.find(v=>v[0]===state.gview)[2], ...(state.owner?{owner:state.owner}:{}), q:state.q});
+function list(){
+  const l = deals.filter(d => match(d, viewOpts()));
+  return state.sort==="amt" ? l.sort((a,b)=>b.amt-a.amt) : l.sort((a,b)=>(isOpen(b)-isOpen(a)) || a.next.d.localeCompare(b.next.d));
+}
+function tracker(d){
+  const idx = STAGES.indexOf(d.stage), lost = d.stage==="失注";
+  return `<div class="trk" aria-label="進み具合 ${lost?"失注":`${idx+1}/6`}"><div class="trk-bar">${STAGES.map((s,i)=>`<i class="${lost?(i===5?"lost":""):i<idx?"done":i===idx?"cur":""}"></i>`).join("")}</div><small>${lost?"失注":`${d.stage} · ${idx+1}/6`}</small></div>`;
+}
+function pathHTML(d){
+  const idx = STAGES.indexOf(d.stage), lost = d.stage==="失注";
+  return `<ol class="path" aria-label="商談フェーズ">${STAGES.map((s,i)=>lost ? (i===5?`<li class="lost">失注</li>`:`<li>${s}</li>`) : `<li class="${i<idx?"done":i===idx?"cur":""}">${i<idx?"✓ ":""}${s}</li>`).join("")}</ol>`;
+}
+function statusBtn(d){
+  if(!isOpen(d)) return lz(d.stage);
+  return `<button type="button" class="status lz ${LZ[d.stage]}" style="font-size:13px;line-height:1" data-act="advance" data-id="${d.id}" title="次のフェーズ（${STAGES[STAGES.indexOf(d.stage)+1]}）へ進める">${d.stage}${ic("chev",14)}</button>`;
+}
+</script>
+<script>
+/* ---------- pieces ---------- */
+const DOT = {"":"var(--lz-default-fg)",blue:"var(--lz-blue-fg)",yellow:"var(--lz-yellow-fg)",green:"var(--lz-green-fg)",red:"var(--lz-red-fg)"};
+const avSq = n => `<span class="av" title="${n}">${n[0]}</span>`;
+function thread(d){
+  let last = null;
+  const rows = d.acts.map((a,i)=>({a,i})).reverse().map(({a,i})=>{
+    const day = a.d!==last ? `<li class="day">${a.d==="9/23"?"今日":a.d}</li>` : ""; last = a.d;
+    return day + `<li class="msg ${a.k==="memo"?"note":""}">${avSq(a.who)}<div>
+      <div class="h"><b>${a.who}</b><small class="num">${a.time}</small><span class="kind">${ic(KI[a.k],12)}${KL[a.k]}</span></div>
+      <div class="b">${withMentions(a.x)}</div>
+      <div class="reacts">${a.re.map((r,j)=>`<button type="button" class="react" data-act="react" data-id="${d.id}" data-i="${i}" data-j="${j}" aria-pressed="${r[2]}" aria-label="${r[0]} ${r[1]}件">${r[0]} <span class="num">${r[1]}</span></button>`).join("")}<button type="button" class="react add" data-act="react" data-id="${d.id}" data-i="${i}" data-j="new" aria-label="👍 でリアクション">${ic("smile",14)}</button>${a.rep?`<button type="button" class="replies" data-act="noop">${ic("thread",14)}${a.rep} 件の返信</button>`:""}</div>
+    </div></li>`;
+  }).join("");
+  return `<ol class="thread">${rows}</ol>`;
+}
+function composer(d){
+  const note = state.kind==="memo";
+  return `<form class="slk-composer ${note?"note":""}" id="logForm">
+    <div class="slk-fmt">${[["bold","太字"],["link","リンク"],["list","箇条書き"],["at","メンション"]].map(([i,l])=>`<button type="button" class="iconbtn" data-act="noop" aria-label="${l}">${ic(i,14)}</button>`).join("")}<span class="grow"></span><span class="small" style="align-self:center">${note?"社内メモ（チームだけに表示）":KL[state.kind]+"の記録"}</span></div>
+    <textarea id="f-note" placeholder="${note?"@名前 で通知できます":`「${esc(d.name)}」の${KL[state.kind]}の内容`}" aria-label="活動の内容"></textarea>
+    <div class="slk-foot"><label class="chk small" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後にリマインド</label><span class="grow"></span><span class="small muted">${kbd("⌘")} ${kbd("↵")} で送信</span><button type="submit" class="send" aria-label="送信">${ic("send")}</button></div>
+  </form>`;
+}
+const kindTabs = () => `<div class="pub" role="group" aria-label="記録の種類">${[["call","電話を記録"],["mail","メール"],["meet","打合せ"],["memo","社内メモ"]].map(([k,l])=>`<button type="button" data-act="kind" data-v="${k}" aria-pressed="${state.kind===k}">${l}</button>`).join("")}</div>`;
+
+function rail(){
+  const items = [["inbox","ビュー","home"],["building","取引先"],["user","連絡先"],["chart","レポート"],["gear","設定"]];
+  return `<nav class="gx-rail" aria-label="メインメニュー"><span class="gx-logo">紡</span>${items.map(([i,l,a],k)=>`<button type="button" class="gx-rb ${k===0&&state.view==="list"?"on":""}" data-act="${a||"noop"}">${ic(i,20)}${l}</button>`).join("")}<span class="av">佐</span></nav>`;
+}
+function bar(){
+  return `<header class="gx-bar glass">
+    <div class="gx-tabs" role="tablist" aria-label="開いている画面">
+      <div class="gx-tab ${state.view==="list"?"on":""}"><button type="button" role="tab" aria-selected="${state.view==="list"}" data-act="home">${ic("inbox")}<span class="t">ビュー</span></button></div>
+      ${state.openTabs.map(id=>{const x=byId(id), on=state.view==="detail"&&state.sel===id; return `<div class="gx-tab ${on?"on":""}"><button type="button" role="tab" aria-selected="${on}" data-act="tabopen" data-id="${id}"><span class="gx-dot" style="background:${DOT[LZ[x.stage]]}"></span><span class="t">${x.name}</span></button><button type="button" class="x" data-act="closetab" data-id="${id}" aria-label="${x.name}のタブを閉じる">${ic("x",12)}</button></div>`;}).join("")}
+    </div>
+    <span class="grow"></span>
+    <button type="button" class="gx-cmdk" data-act="pal">${ic("search")}<span class="grow">商談を検索・操作を実行</span>${kbd("⌘K")}</button>
+    ${B(ic("plus")+"新規商談","noop","primary")}
+    <button type="button" class="iconbtn" data-act="noop" aria-label="通知">${ic("bell")}</button>
+  </header>`;
+}
+function listView(){
+  const l = list(), g = GVIEWS.find(v=>v[0]===state.gview);
+  const todo = deals.filter(d=>d.stage!=="失注" && d.next.d<="2026-09-26" && (!state.owner || d.owner===state.owner)).sort((a,b)=>a.next.d.localeCompare(b.next.d));
+  return `<main class="gx-main" data-scroll="list"><div class="gx-list">
+    <nav class="gx-views glass" aria-label="ビュー"><h2>ビュー</h2>
+      ${GVIEWS.map(([k,lb,o])=>{ const m = deals.filter(d=>match(d,o)); const un = m.reduce((a,d)=>a+d.unread,0);
+        return `<button type="button" class="v ${un?"unread":""}" data-act="gview" data-v="${k}" aria-pressed="${state.gview===k}"><b style="font-weight:inherit">${lb}</b><span class="cnt">${un?`<span class="mbadge num" title="未読 ${un} 件">${un}</span>`:""}<span class="num muted">${m.length}</span></span></button>`; }).join("")}
+      <div class="sep"></div><h2>担当者で絞り込み</h2>
+      <div class="gx-owners">${OWNERS.map(n=>`<button type="button" class="av" data-act="owner" data-v="${n}" aria-pressed="${state.owner===n}" title="${n}" aria-label="${n}の商談だけ表示">${n[0]}</button>`).join("")}</div>
+    </nav>
+    <div class="gx-content">
+      <div class="gx-head"><div class="grow"><h1>${g[1]}</h1><p class="muted small num">${l.length} 件 · 合計 ${man(l.reduce((a,d)=>a+d.amt,0))}${state.owner?` · 担当 ${state.owner}`:""}</p></div>
+        <div class="gx-sort" role="group" aria-label="並び順"><button type="button" data-act="sort" data-v="due" aria-pressed="${state.sort==="due"}">期限が近い順</button><button type="button" data-act="sort" data-v="amt" aria-pressed="${state.sort==="amt"}">金額が大きい順</button></div>
+        ${B("次の商談を開く"+ic("arrow",14),"play","primary",l.length?"":"disabled")}</div>
+      ${todo.length?`<section class="card gx-todo" aria-label="3日以内にやること"><h2>${ic("flag")}3 日以内にやること <span class="muted num" style="font-weight:500">${todo.length} 件</span></h2>
+        <div class="gx-todo-items">${todo.map(d=>`<button type="button" class="gx-ti" data-act="quick" data-id="${d.id}">${dateBox(d.next.d,nextLate(d))}<span><b style="display:block;font-weight:650">${d.next.t}</b><span class="small muted">${d.co}${nextLate(d)?' · <span class="late">期限切れ</span>':""}</span></span></button>`).join("")}</div></section>`:""}
+      <div class="card gx-rows">
+        <div class="gx-rh"><span>フェーズ</span><span>商談</span><span>進み具合</span><span>次にやること</span><span style="text-align:right">金額</span><span>担当</span><span></span></div>
+        ${l.map(d=>`<button type="button" class="gx-r ${d.unread?"unread":""}" data-act="quick" data-id="${d.id}">
+          <span>${lz(d.stage)}</span>
+          <span class="nm"><b class="row" style="gap:6px">${d.unread?`<span class="udot" title="未読 ${d.unread} 件"></span>`:""}${d.name}</b><span>${d.co}${isOpen(d)&&d.upd>=14?` · <span class="warn">${d.upd}日間更新なし</span>`:""}</span></span>
+          ${tracker(d)}
+          <span class="nx"><span>${d.next.t}</span><small class="${nextLate(d)?"late":""}">${md(d.next.d)} まで${nextLate(d)?"（期限切れ）":""}</small></span>
+          <span class="amt num">${man(d.amt)}</span>
+          <span class="row small">${av(d.owner)}${d.owner}</span>
+          <span class="muted">${ic("right",14)}</span>
+        </button>`).join("") || `<div class="empty">このビューに商談はありません。</div>`}
+      </div>
+    </div>
+  </div></main>`;
+}
+function quickView(){
+  const d = cur();
+  return `<div class="gx-smoke" data-act="closeq"></div>
+  <div class="gx-modal glass thick" role="dialog" aria-modal="true" aria-label="${d.name}">
+    <div class="gx-mh"><span class="small muted">${code(d)} · ${d.co}</span><span class="grow"></span>${B(ic("expand",14)+"タブで開く","tabopen","sm",`data-id="${d.id}"`)}<button type="button" class="iconbtn" data-act="noop" aria-label="その他の操作">${ic("dots")}</button><button type="button" class="iconbtn" data-act="closeq" aria-label="閉じる">${ic("x")}</button></div>
+    <div class="gx-mb">
+      <div class="gx-ml" data-scroll="qm"><h2>${d.name}</h2>
+        <div class="gx-panel" style="padding:0">${kindTabs()}${thread(d)}${composer(d)}</div>
+      </div>
+      <div class="gx-mr">
+        <div class="row">${statusBtn(d)}<span class="small muted">${isOpen(d)?"クリックで次のフェーズへ":"クローズ済み"}</span></div>
+        <div class="gx-panel"><p class="small muted">金額</p><p class="num" style="font-size:28px;font-weight:700;line-height:1.2;margin-bottom:10px">${yen(d.amt)}</p>${tracker(d)}</div>
+        <div class="gx-panel"><h3>詳細</h3><dl class="dl"><dt>担当者</dt><dd class="row">${av(d.owner)}${d.owner}</dd><dt>確度</dt><dd class="num">${d.p}%</dd><dt>完了予定</dt><dd class="num ${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</dd><dt>次にやること</dt><dd>${d.next.t}<br><span class="small ${nextLate(d)?"late":"muted"}">${md(d.next.d)} まで</span></dd><dt>業種</dt><dd>${d.info.業種}</dd><dt>競合</dt><dd>${d.info.競合}</dd></dl></div>
+      </div>
+    </div>
+  </div>`;
+}
+function detailView(){
+  const d = cur();
+  const fields = [["商談名",d.name],["取引先名",d.co],["金額",yen(d.amt)],["確度",d.p+"%"],["完了予定日",d.close.replaceAll("-","/")],["フェーズ",d.stage],["商談 所有者",d.owner],["業種",d.info.業種],["従業員数",d.info.従業員数],["流入経路",d.info.流入経路],["競合",d.info.競合],["最終更新",updTxt(d)]];
+  return `<main class="gx-main" data-scroll="d${d.id}"><div class="gx-detail">
+    <section class="card hero">
+      <div class="hero-top"><span class="obj">${ic("flag",20)}</span><div class="grow"><p class="small muted">商談 · ${code(d)} · ${d.co}</p><h1>${d.name}</h1></div>${statusBtn(d)}${B(ic("edit",14)+"編集","noop")}<button type="button" class="iconbtn" data-act="noop" aria-label="その他の操作">${ic("dots")}</button></div>
+      <div class="hero-f">
+        <div><small>金額</small><span class="hero-amt num">${yen(d.amt)}</span></div>
+        <div><small>確度</small><b class="num" style="font-size:18px">${d.p}%</b></div>
+        <div><small>完了予定日</small><b class="num ${isLate(d)?"late":""}" style="font-size:18px">${md(d.close)}</b></div>
+        <div><small>担当</small><span class="row">${av(d.owner)}<b style="font-weight:600">${d.owner}</b></span></div>
+        <div><small>次にやること</small><span style="font-size:13px;line-height:1.4">${d.next.t}<br><span class="${nextLate(d)?"late":"muted"}">${md(d.next.d)} まで</span></span></div>
+      </div>
+    </section>
+    <section class="card pathcard">${pathHTML(d)}${isOpen(d)?B(ic("check",14)+(d.stage==="交渉"?"受注としてマーク":"フェーズを完了としてマーク"),"advance","primary",`data-id="${d.id}"`):""}</section>
+    <div class="cols">
+      <section class="card">
+        <div class="tabs" role="tablist"><button type="button" role="tab" data-act="dtab" data-v="info" aria-selected="${state.dtab==="info"}">詳細</button><button type="button" role="tab" data-act="dtab" data-v="rel" aria-selected="${state.dtab==="rel"}">関連</button></div>
+        ${state.dtab==="info"?`<div class="fields">${fields.map(([k,v])=>`<div class="field"><small>${k}</small><span>${v}</span>${ic("edit",14)}</div>`).join("")}</div>`:
+        `<div class="rel">${[["user","取引先責任者","2 名 · 情報システム部長 ほか"],["memo","ファイル","1 件 · 見積書_改訂版.pdf"],["list","商談商品","3 件 · 年額ライセンス ほか"]].map(([i,l,s])=>`<div class="relc"><span class="obj" style="width:32px;height:32px;border-radius:10px">${ic(i)}</span><b>${l}</b><span class="grow"></span><span class="small muted">${s}</span></div>`).join("")}</div>`}
+      </section>
+      <section class="card">
+        ${kindTabs()}${composer(d)}
+        <div class="nextbox">${ic("clock")}<span class="grow">${d.next.t}</span><span class="num ${nextLate(d)?"late":"muted"}">${md(d.next.d)}</span></div>
+        <div class="secth">スレッド</div>${thread(d)}
+      </section>
+    </div>
+    <div class="float"><div class="glass">${B(ic("thread",14)+"活動を記録 "+kbd("N"),"focuslog")}${isOpen(d)?B(advLabel(d),"advance","primary",`data-id="${d.id}"`):""}${B(ic("mail",14)+"メールを作成","noop")}${B(ic("x",14)+"タブを閉じる","closetab","",`data-id="${d.id}"`)}</div></div>
+  </div></main>`;
+}
+function palItems(){
+  const q = state.palQ.trim().toLowerCase();
+  const ds = deals.filter(d=>!q || (d.name+d.co+d.stage).toLowerCase().includes(q)).slice(0,6).map(d=>({g:"商談",label:d.name,sub:`${d.co} · ${d.stage}`,icon:"flag",run:()=>openTab(d.id)}));
+  const acts = [
+    {g:"操作",label:"新規商談を作成",icon:"plus",run:()=>toast("新規商談の作成画面はこのモックに含まれていません")},
+    {g:"操作",label:"自分の担当を表示",icon:"user",run:()=>{Object.assign(state,{gview:"me",owner:null,view:"list"}); render();}},
+    {g:"操作",label:"14日以上更新なしの商談を表示",icon:"clock",run:()=>{Object.assign(state,{gview:"stale",owner:null,view:"list"}); render();}},
+    {g:"操作",label:"表示をダーク / ライトに切り替え",icon:"gear",run:()=>setMode($("#gx").dataset.mode==="dark"?"light":"dark")},
+    {g:"操作",label:"素材をガラス / 不透明に切り替え",icon:"gear",run:()=>setMat($("#gx").dataset.material==="glass"?"solid":"glass")},
+  ].filter(a=>!q || a.label.toLowerCase().includes(q));
+  return [...ds, ...acts];
+}
+function palette(){
+  const items = palItems(); if(state.palIdx >= items.length) state.palIdx = Math.max(0, items.length-1);
+  let lastG = null;
+  return `<div class="gx-smoke" data-act="closepal" style="background:transparent"></div>
+  <div class="gx-pal glass thick" role="dialog" aria-label="コマンドパレット">
+    <div class="gx-pal-in">${ic("search",18)}<input id="pal-q" type="text" placeholder="商談を探す・操作を実行…" value="${esc(state.palQ)}" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-activedescendant="pal-${state.palIdx}"></div>
+    <div class="gx-pal-list" id="pal-list" role="listbox">${items.map((it,i)=>{ const h = it.g!==lastG ? `<div class="gx-pal-g">${it.g}</div>` : ""; lastG = it.g;
+      return h + `<button type="button" class="gx-pal-i" id="pal-${i}" role="option" data-act="palrun" data-i="${i}" aria-selected="${i===state.palIdx}">${ic(it.icon)}<span class="grow">${it.label}${it.sub?` <span class="small muted">${it.sub}</span>`:""}</span>${i===state.palIdx?ic("arrow",14):""}</button>`; }).join("") || `<div class="empty">該当する項目はありません。</div>`}</div>
+    <div class="gx-pal-foot"><span>${kbd("↑")} ${kbd("↓")} 移動</span><span>${kbd("↵")} 実行</span><span>${kbd("Esc")} 閉じる</span></div>
+  </div>`;
+}
+</script>
+<script>
+const root = $("#root"), gx = $("#gx");
+function render(){
+  const a = document.activeElement, fid = gx.contains(a) && a.id ? a.id : null;
+  let s0 = null, s1 = null; try{ s0 = a.selectionStart; s1 = a.selectionEnd; }catch(_){}
+  const draft = $("#f-note")?.value;
+  const sc = {}; gx.querySelectorAll("[data-scroll]").forEach(el => sc[el.dataset.scroll] = el.scrollTop);
+  root.innerHTML = rail() + bar() + (state.view==="detail" ? detailView() : listView()) + (state.quick!=null ? quickView() : "") + (state.pal ? palette() : "");
+  gx.querySelectorAll("[data-scroll]").forEach(el => { if(sc[el.dataset.scroll] != null) el.scrollTop = sc[el.dataset.scroll]; });
+  if(draft && $("#f-note")) $("#f-note").value = draft;
+  if(state.pal){ const p = $("#pal-q"); p.focus({preventScroll:true}); p.setSelectionRange(p.value.length, p.value.length); return; }
+  if(fid){ const el = document.getElementById(fid); if(el){ el.focus({preventScroll:true}); try{ if(s0 != null) el.setSelectionRange(s0, s1); }catch(_){} } }
+}
+let tt;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(tt); tt = setTimeout(()=>{ t.hidden = true; }, 2400); }
+function openTab(id){
+  const d = byId(id); d.unread = 0;
+  if(!state.openTabs.includes(id)) state.openTabs.push(id);
+  Object.assign(state, {view:"detail", sel:id, quick:null, pal:false, dtab:"info"});
+  render();
+}
+function advance(id){
+  const d = byId(id), i = STAGES.indexOf(d.stage); if(i<0 || i>=5) return;
+  const prev = d.stage; d.stage = STAGES[i+1]; d.p = d.stage==="受注" ? 100 : Math.min(90, d.p+15); d.upd = 0;
+  const now = new Date(); d.acts.unshift({k:"memo",who:ME,d:"9/23",time:`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`,x:`フェーズを変更しました：${prev} → ${d.stage}`,re:[],rep:0});
+  render(); toast(d.stage==="受注" ? `「${d.name}」を受注にしました` : `フェーズを「${d.stage}」に進めました`);
+}
+function react(id, i, j){
+  const a = byId(id).acts[i];
+  if(j==="new"){ const r = a.re.find(x=>x[0]==="👍"); if(!r) a.re.push(["👍",1,true]); else if(!r[2]){ r[1]++; r[2]=true; } }
+  else { const r = a.re[+j]; if(r[2]){ r[1]--; r[2]=false; if(r[1]<=0) a.re.splice(+j,1); } else { r[1]++; r[2]=true; } }
+  render();
+}
+function focusLog(){ const t = $("#f-note"); if(t){ t.focus(); t.scrollIntoView({block:"center",behavior:"smooth"}); } }
+function act(name, el){
+  const id = el.dataset.id ? +el.dataset.id : null, v = el.dataset.v;
+  switch(name){
+    case "home": Object.assign(state,{view:"list",quick:null}); break;
+    case "gview": state.gview = v; break;
+    case "owner": state.owner = state.owner===v ? null : v; break;
+    case "sort": state.sort = v; break;
+    case "play": { const f = list()[0]; if(f) return openTab(f.id); return; }
+    case "quick": state.sel = id; state.quick = id; byId(id).unread = 0; state.kind = "call"; break;
+    case "closeq": state.quick = null; break;
+    case "tabopen": return openTab(id);
+    case "closetab":
+      state.openTabs = state.openTabs.filter(x=>x!==id);
+      if(state.view==="detail" && state.sel===id){ if(state.openTabs.length) state.sel = state.openTabs.at(-1); else state.view = "list"; }
+      break;
+    case "advance": return advance(id || state.sel);
+    case "dtab": state.dtab = v; break;
+    case "kind": state.kind = v; render(); return focusLog();
+    case "react": return react(id, +el.dataset.i, el.dataset.j);
+    case "pal": state.pal = true; state.palQ = ""; state.palIdx = 0; break;
+    case "closepal": state.pal = false; break;
+    case "palrun": { const it = palItems()[+el.dataset.i]; state.pal = false; if(it) it.run(); else render(); return; }
+    case "focuslog": return focusLog();
+    case "noop": return toast("この操作はモックに含まれていません");
+    default: return;
+  }
+  render();
+}
+gx.addEventListener("click", e=>{
+  const t = e.target; if(t.matches("input,select,textarea,option,label")) return;
+  const el = t.closest("[data-act]"); if(!el || el.disabled || !gx.contains(el)) return;
+  e.preventDefault(); act(el.dataset.act, el);
+});
+gx.addEventListener("input", e=>{ if(e.target.id==="pal-q"){ state.palQ = e.target.value; state.palIdx = 0; render(); } });
+gx.addEventListener("submit", e=>{
+  e.preventDefault();
+  const t = $("#f-note"), x = t ? t.value.trim() : "";
+  if(!x){ t?.focus(); toast("内容を入力してください"); return; }
+  const d = cur(), now = new Date(), rem = $("#f-rem")?.checked !== false;
+  d.acts.unshift({k:state.kind, who:ME, d:"9/23", time:`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`, x, re:[], rep:0}); d.upd = 0;
+  t.value = ""; render();
+  toast((state.kind==="memo" ? "社内メモを投稿しました" : `${KL[state.kind]}を記録しました`) + (rem ? "（9/26 にリマインド）" : ""));
+});
+document.addEventListener("keydown", e=>{
+  const typing = e.target.matches?.("input,textarea,select");
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); state.pal = !state.pal; state.palQ = ""; state.palIdx = 0; render(); return; }
+  if(state.pal){
+    const n = palItems().length;
+    if(e.key==="ArrowDown"){ e.preventDefault(); state.palIdx = (state.palIdx+1) % Math.max(n,1); render(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); state.palIdx = (state.palIdx-1+n) % Math.max(n,1); render(); }
+    else if(e.key==="Enter"){ e.preventDefault(); const it = palItems()[state.palIdx]; state.pal = false; if(it) it.run(); else render(); }
+    else if(e.key==="Escape"){ state.pal = false; render(); }
+    return;
+  }
+  if(e.key==="Enter" && (e.metaKey || e.ctrlKey) && e.target.id==="f-note"){ e.preventDefault(); $("#logForm").requestSubmit(); return; }
+  if(e.key==="Escape" && state.quick!=null){ state.quick = null; render(); return; }
+  if(!typing && !e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase()==="n" && (state.quick!=null || state.view==="detail") && gx.contains(document.activeElement) ){ e.preventDefault(); focusLog(); }
+  if(!typing && e.key==="n" && document.activeElement===document.body && (state.quick!=null || state.view==="detail")){ e.preventDefault(); focusLog(); }
+});
+function setMat(m){ gx.dataset.material = m; document.querySelectorAll("[data-mat]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.mat===m)); render(); }
+function setMode(m){ gx.dataset.mode = m; document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.mode===m)); render(); }
+document.querySelectorAll("[data-mat]").forEach(b=>b.addEventListener("click", ()=>setMat(b.dataset.mat)));
+document.querySelectorAll(".ch-seg [data-mode]").forEach(b=>b.addEventListener("click", ()=>setMode(b.dataset.mode)));
+const docTheme = document.documentElement.dataset.theme;
+const prefersDark = docTheme ? docTheme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const lowTransparency = matchMedia("(prefers-reduced-transparency: reduce)").matches;
+gx.dataset.mode = prefersDark ? "dark" : "light"; gx.dataset.material = lowTransparency ? "solid" : "glass";
+document.querySelectorAll(".ch-seg [data-mode]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.mode===gx.dataset.mode));
+document.querySelectorAll("[data-mat]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.mat===gx.dataset.material));
+state.openTabs = [1];
+render();
+</script>

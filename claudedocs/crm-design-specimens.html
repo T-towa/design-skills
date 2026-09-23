@@ -1,0 +1,1736 @@
+<title>CRM スタイル標本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<style>
+/* ---------- chrome (theme-aware) ---------- */
+:root{
+  --c-ground:#f1f2f0; --c-panel:#fbfbfa; --c-ink:#1c1f1d; --c-muted:#5f665f;
+  --c-rule:#d5d8d3; --c-chip:#e6e8e4; --c-sel:#1c1f1d; --c-on-sel:#f5f6f4;
+  --c-font:"IBM Plex Sans JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --c-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --c-ground:#141614; --c-panel:#1b1e1b; --c-ink:#e6e9e5; --c-muted:#9aa19a;
+    --c-rule:#2d312d; --c-chip:#242824; --c-sel:#e6e9e5; --c-on-sel:#141614;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --c-ground:#141614; --c-panel:#1b1e1b; --c-ink:#e6e9e5; --c-muted:#9aa19a;
+  --c-rule:#2d312d; --c-chip:#242824; --c-sel:#e6e9e5; --c-on-sel:#141614;
+}
+*{box-sizing:border-box}
+body{background:var(--c-ground);color:var(--c-ink);font-family:var(--c-font);font-size:14px;line-height:1.6}
+.ch-wrap{max-width:1440px;margin:0 auto;padding-inline:16px;padding-block:28px 48px;display:grid;gap:20px}
+@media (min-width:900px){.ch-wrap{padding-inline:32px}}
+.ch-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px}
+.ch-head h1{margin:0;font-size:22px;font-weight:700;letter-spacing:.02em;text-wrap:balance}
+.ch-head p{margin:0;color:var(--c-muted);max-width:66ch}
+.ch-picker{display:flex;flex-wrap:wrap;gap:14px 28px}
+.ch-group{display:grid;gap:6px}
+.ch-group-label{font-size:11px;letter-spacing:.08em;color:var(--c-muted)}
+.ch-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ch-chip{font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:8px;padding:5px 12px 5px 8px;border-radius:6px;border:1px solid var(--c-rule);background:var(--c-panel);color:var(--c-ink);cursor:pointer}
+.ch-chip:hover{border-color:var(--c-muted)}
+.ch-chip[aria-pressed="true"]{background:var(--c-sel);color:var(--c-on-sel);border-color:var(--c-sel)}
+.ch-chip i{width:12px;height:12px;border-radius:3px;box-shadow:inset 0 0 0 1px rgb(0 0 0 / .12)}
+.ch-chip:focus-visible,.ch-btn:focus-visible,.ch-panel a:focus-visible,summary:focus-visible{outline:2px solid var(--c-ink);outline-offset:2px}
+.ch-panel{background:var(--c-panel);border:1px solid var(--c-rule);border-radius:10px;padding:20px;display:grid;gap:20px 32px;grid-template-columns:1fr}
+@media (min-width:960px){.ch-panel{grid-template-columns:1.1fr 1.4fr 1fr}}
+.ch-panel h2{margin:0 0 2px;font-size:18px;font-weight:700}
+.ch-org{color:var(--c-muted);font-size:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ch-org a{color:inherit}
+.ch-cert{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid var(--c-rule)}
+.ch-cert[data-k="公開値"]{border-color:transparent;background:var(--c-ink);color:var(--c-ground)}
+.ch-lede{margin:10px 0 0;max-width:60ch}
+.ch-h3{font-size:11px;letter-spacing:.08em;color:var(--c-muted);margin:0 0 6px;font-weight:500}
+.ch-ux{margin:0 0 8px;font-size:15px;font-weight:700}
+.ch-list{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.ch-look{margin:10px 0 0;font-size:13px;color:var(--c-muted)}
+.ch-tokens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;font-family:var(--c-mono);font-size:12px}
+.ch-tok{display:flex;align-items:center;gap:8px;min-width:0}
+.ch-tok i{flex:none;width:16px;height:16px;border-radius:4px;box-shadow:inset 0 0 0 1px rgb(127 127 127 / .35)}
+.ch-tok span{color:var(--c-muted);white-space:nowrap}
+.ch-metrics{margin-top:10px;display:flex;flex-wrap:wrap;gap:4px 14px;font-family:var(--c-mono);font-size:12px;color:var(--c-muted)}
+.ch-metrics b{color:var(--c-ink);font-weight:500}
+details.ch-export{grid-column:1/-1;border-top:1px solid var(--c-rule);padding-top:12px}
+details.ch-export summary{cursor:pointer;font-size:13px;color:var(--c-muted)}
+.ch-export-bar{display:flex;justify-content:space-between;align-items:center;margin:10px 0 6px;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--c-muted)}
+.ch-btn{font:inherit;font-size:12px;padding:4px 12px;border-radius:6px;border:1px solid var(--c-rule);background:var(--c-chip);color:var(--c-ink);cursor:pointer}
+.ch-export pre{margin:0;overflow:auto;max-height:280px;background:var(--c-ground);border:1px solid var(--c-rule);border-radius:8px;padding:12px;font-family:var(--c-mono);font-size:12px;line-height:1.55}
+.ch-stage{overflow-x:auto;border-radius:12px;border:1px solid var(--c-rule)}
+.ch-note{font-size:12px;color:var(--c-muted);margin:0}
+
+/* ---------- mock primitives (all colors come from per-system tokens) ---------- */
+.crm{position:relative;height:780px;min-width:1180px;background:var(--bg);color:var(--text);font-family:var(--font);font-size:var(--fs);line-height:1.5;overflow:hidden;
+  --mono:ui-monospace,"Geist Mono",Menlo,monospace}
+#root{height:100%}
+.crm *{font-family:inherit}
+.crm button{cursor:pointer;font-size:inherit;color:inherit}
+.crm h1,.crm h2,.crm h3{margin:0;font-weight:var(--headW);line-height:1.3}
+.crm p{margin:0}
+.crm a{color:var(--accent);text-decoration:none;cursor:pointer}
+.crm :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:middle}
+.num{font-variant-numeric:tabular-nums;font-family:var(--numFont)}
+.mono{font-family:var(--mono)}
+.scroll{overflow:auto;min-height:0}
+.muted{color:var(--text2)} .small{font-size:12px}
+.row{display:flex;align-items:center;gap:8px} .grow{flex:1;min-width:0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.logo{width:28px;height:28px;border-radius:min(var(--radius),8px);background:var(--primary);color:var(--onPrimary);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.iconbtn{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:min(var(--rbtn),8px);border:0;background:transparent;color:var(--text2);flex:none}
+.iconbtn:hover{background:var(--subtle);color:var(--text)}
+.crm input:not([type=checkbox]),.crm select,.crm textarea{font-size:var(--fs);color:var(--text);background:var(--surface);border:1px solid var(--inputBd);border-radius:min(var(--rbtn),10px);height:calc(var(--btnh) + 2px);padding:0 10px;width:100%}
+.crm textarea{height:auto;min-height:72px;padding:8px 10px;resize:vertical;line-height:1.5}
+.crm input::placeholder,.crm textarea::placeholder{color:var(--text2)}
+.crm input[type=checkbox]{accent-color:var(--primary);width:16px;height:16px;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:var(--btnh);padding:0 calc(var(--btnh) * .42);border-radius:var(--rbtn);font-size:var(--fs);font-weight:var(--btnw);border:1px solid var(--btn2bd);background:var(--btn2bg);color:var(--btn2fg);white-space:nowrap;flex:none}
+.btn:hover{filter:brightness(.97)}
+.btn.primary{background:var(--primary);color:var(--onPrimary);border-color:var(--primaryBd)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--accent)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+.tone-neutral{--t:var(--neutral)} .tone-info{--t:var(--info)} .tone-success{--t:var(--success)} .tone-warning{--t:var(--warning)} .tone-danger{--t:var(--danger)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;line-height:20px;padding:0 8px;border-radius:var(--rbadge);white-space:nowrap;font-weight:500;
+  background:color-mix(in oklab,var(--t) 15%,var(--surface));color:color-mix(in oklab,var(--t) 72%,var(--text));border:1px solid transparent}
+[data-badge="outline"] .badge{background:transparent;border-color:color-mix(in oklab,var(--t) 55%,var(--surface))}
+[data-badge="dot"] .badge{background:var(--surface);color:var(--text);border-color:var(--border)}
+[data-badge="dot"] .badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--t)}
+[data-badge="lozenge"] .badge{font-size:11px;font-weight:700;line-height:18px;padding:0 5px;background:color-mix(in oklab,var(--t) 20%,var(--surface));color:color-mix(in oklab,var(--t) 60%,var(--text))}
+.av{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;font-weight:600;background:var(--subtle);color:var(--text);flex:none;box-shadow:inset 0 0 0 1px var(--border)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:var(--thFs);font-weight:var(--thW);text-transform:var(--thCase);color:var(--thFg);background:var(--thBg);padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1}
+.tbl td{padding:0 12px;height:var(--row);border-bottom:1px solid var(--border)}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tbody tr[data-act]{cursor:pointer}
+.tbl tbody tr:nth-child(even){background:var(--zebra)}
+.tbl tbody tr[data-act]:hover{background:color-mix(in oklab,var(--selBg) 50%,var(--surface))}
+.tbl tbody tr[aria-selected="true"]{background:var(--selBg);color:var(--selFg)}
+.tbl .r{text-align:right} .tbl .w1{width:1%}
+.cellmain{display:flex;flex-direction:column;line-height:1.35;padding-block:6px}
+.cellmain b{font-weight:600}
+.stale{font-size:11px;color:color-mix(in oklab,var(--warning) 80%,var(--text))}
+.late{color:color-mix(in oklab,var(--danger) 85%,var(--text));font-weight:600}
+.empty{padding:40px 16px;text-align:center;color:var(--text2)}
+.tl{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.tl li{display:grid;grid-template-columns:28px 1fr;gap:10px}
+.tli{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--subtle);color:var(--text2)}
+.tl .h{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--text2)}
+.tl .h b{color:var(--text);font-weight:600}
+.tl p{margin:2px 0 0;font-size:13px}
+.form{display:grid;gap:10px;padding:14px;background:var(--subtle);border-radius:min(var(--radius),12px);border:1px solid var(--border)}
+.form label{display:grid;gap:4px;font-size:12px;color:var(--text2);font-weight:500}
+.chk{display:flex!important;align-items:center;gap:8px;color:var(--text);font-size:13px;font-weight:400}
+.formrow{display:flex;justify-content:flex-end;gap:8px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:13px}
+.kv dt{color:var(--text2)} .kv dd{margin:0}
+.path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.path li{font-size:11px;text-align:center;padding:5px 2px;background:var(--subtle);color:var(--text2);border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.path li.done{background:color-mix(in oklab,var(--accent) 22%,var(--surface));color:color-mix(in oklab,var(--accent) 70%,var(--text))}
+.path li.cur{background:var(--primary);color:var(--onPrimary);font-weight:600}
+.path li.lostcur{background:var(--danger);color:#fff;font-weight:600}
+.stepper{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr)}
+.stepper li{position:relative;display:grid;justify-items:center;gap:6px;font-size:12px;color:var(--text2);text-align:center}
+.stepper li::before{content:"";position:absolute;top:13px;left:-50%;right:50%;height:2px;background:var(--border)}
+.stepper li:first-child::before{display:none}
+.stepper .dot{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:2px solid var(--border);font-weight:700;font-size:12px}
+.stepper li.done .dot{background:var(--primary);border-color:var(--primary);color:var(--onPrimary)}
+.stepper li.done::before,.stepper li.cur::before{background:var(--primary)}
+.stepper li.cur .dot{border-color:var(--primary);color:var(--primary)}
+.stepper li.cur{color:var(--text);font-weight:700}
+.stepper li.lostcur .dot{border-color:var(--danger);color:var(--danger)}
+.stepper li.lostcur{color:var(--danger);font-weight:700}
+.scrim{position:absolute;inset:0;background:rgb(15 20 25 / .4);z-index:20}
+.sheet{position:absolute;top:0;right:0;bottom:0;width:440px;background:var(--surface);z-index:21;display:flex;flex-direction:column;box-shadow:-8px 0 30px rgb(0 0 0 / .18);border-left:1px solid var(--border)}
+.sheet-head{display:flex;align-items:flex-start;gap:8px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.sheet-body{flex:1;overflow:auto;padding:20px;display:grid;gap:16px;align-content:start}
+.sheet-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.utabs{display:flex;gap:4px;border-bottom:1px solid var(--border)}
+.utabs button{background:none;border:0;border-bottom:2px solid transparent;padding:6px 8px;color:var(--text2);font-size:13px;margin-bottom:-1px}
+.utabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+.toast{position:absolute;right:20px;bottom:20px;z-index:40;background:var(--text);color:var(--surface);padding:10px 16px;border-radius:min(var(--radius),12px);font-size:13px;box-shadow:0 6px 20px rgb(0 0 0 / .2);transition:opacity .2s,transform .2s}
+.toast[hidden]{display:block!important;opacity:0;transform:translateY(8px);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+<style>
+/* ===== Supabase: table editor ===== */
+.sb{display:grid;grid-template-columns:48px 232px minmax(0,1fr);height:100%;position:relative}
+.sb-rail{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;border-right:1px solid var(--border);background:var(--bg)}
+.sb-logo{width:28px;height:28px;display:grid;place-items:center;color:var(--accent);margin-bottom:10px}
+.sb-railbtn{width:34px;height:34px;display:grid;place-items:center;border:0;background:transparent;color:var(--text2);border-radius:6px}
+.sb-railbtn.on,.sb-railbtn:hover{background:var(--subtle);color:var(--text)}
+.sb-panel{border-right:1px solid var(--border);background:var(--surface);padding:12px;display:flex;flex-direction:column;gap:10px}
+.sb-ph{font-size:14px;font-weight:500}
+.sb-schema{display:flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px}
+.sb-full{width:100%;justify-content:flex-start}
+.sb-tables{list-style:none;margin:0;padding:0;display:grid;gap:1px;font-size:13px}
+.sb-tables li{display:flex;gap:8px;align-items:center;padding:4px 8px;border-radius:4px;color:var(--text2)}
+.sb-tables li.on{background:var(--subtle);color:var(--text)}
+.sb-main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.sb-top{display:flex;align-items:center;gap:8px;padding:0 14px;height:44px;border-bottom:1px solid var(--border);font-size:13px}
+.sb-rls{font-size:11px;padding:0 6px;border-radius:99px;border:1px solid color-mix(in oklab,var(--accent) 50%,transparent);color:var(--accent);margin-left:6px}
+.sb-tool{display:flex;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid var(--border)}
+.sb-seg{display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.sb-seg button{border:0;background:transparent;color:var(--text2);padding:0 10px;height:26px;font-size:12px;border-right:1px solid var(--border)}
+.sb-seg button:last-child{border-right:0}
+.sb-seg button[aria-pressed="true"]{background:var(--subtle);color:var(--text)}
+.crm .sb-q{width:200px;height:28px}
+.sb-gridwrap{flex:1}
+.sb-grid{border-collapse:separate;border-spacing:0;min-width:100%;font-size:12.5px}
+.sb-grid th,.sb-grid td{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:0 10px;height:34px;white-space:nowrap;text-align:left}
+.sb-grid th{position:sticky;top:0;background:var(--surface);font-weight:500;z-index:1}
+.sb-grid th small{margin-left:6px;color:var(--text2);font-weight:400;font-family:var(--numFont);font-size:11px}
+.sb-grid .sb-idx{width:44px;color:var(--text2);text-align:center}
+.sb-grid tbody tr{cursor:pointer}
+.sb-grid tbody tr:hover td{background:var(--subtle)}
+.sb-grid tbody tr[aria-selected="true"] td{background:var(--selBg)}
+.sb-grid td.r{text-align:right}
+.sb-enum{font-family:var(--numFont);font-size:12px}
+.sb-foot{display:flex;gap:8px;align-items:center;height:36px;padding:0 14px;border-top:1px solid var(--border);font-size:12px}
+.sb-sheet{width:480px}
+.sb-field{display:grid;grid-template-columns:140px 1fr;gap:12px;align-items:center}
+.sb-field b{display:block;font-weight:500;font-size:13px}
+.sb-field small{color:var(--text2);font-family:var(--numFont);font-size:11px}
+.sb-rel{border-top:1px solid var(--border);padding-top:14px;display:grid;gap:12px}
+.sb .btn.primary{box-shadow:inset 0 0 0 1px rgb(62 207 142 / .35)}
+
+/* ===== shadcn: dashboard-01 ===== */
+.sh{display:grid;grid-template-columns:248px minmax(0,1fr);height:100%;background:var(--sideBg);position:relative}
+.sh-side{display:flex;flex-direction:column;gap:14px;padding:12px 10px;color:var(--sideFg)}
+.sh-team{display:flex;gap:10px;align-items:center;padding:6px 8px}
+.sh-team b{display:block;font-size:14px;line-height:1.2;color:var(--text)} .sh-team small{font-size:12px;color:var(--text2)}
+.sh-quick .btn{width:100%;justify-content:flex-start}
+.nav{display:grid;gap:2px}
+.nav-l{font-size:12px;color:var(--text2);padding:0 8px;margin:4px 0 2px}
+.nav .navi{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:min(var(--rbtn),8px);color:inherit;font-size:14px;border:0;background:transparent;text-align:left;width:100%}
+.nav .navi:hover{background:color-mix(in oklab,var(--sideActBg) 60%,transparent)}
+.nav .navi.on{background:var(--sideActBg);color:var(--sideActFg);font-weight:500}
+.nav .cnt{margin-left:auto;font-size:12px;opacity:.7}
+.sh-user{margin-top:auto;display:flex;gap:10px;align-items:center;padding:6px 8px;font-size:13px;color:var(--text)}
+.sh-user small{display:block;color:var(--text2);font-size:12px;line-height:1.2}
+.sh-inset{margin:8px 8px 8px 0;background:var(--surface);border-radius:12px;box-shadow:0 1px 2px rgb(0 0 0 / .06);border:1px solid var(--border);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.sh-head{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-bottom:1px solid var(--border);font-size:14px}
+.sh-sep{width:1px;height:16px;background:var(--border)}
+.sh-body{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+.sh-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sh-card{padding:16px;display:grid;gap:4px;background:linear-gradient(to top,var(--subtle),var(--surface))}
+.sh-card .v{font-size:26px;font-weight:600;line-height:1.2}
+.sh-card .tr{justify-self:start}
+.sh-chart{padding:16px 20px;display:grid;gap:12px}
+.sh-bars{display:grid;gap:8px}
+.sh-bar{display:grid;grid-template-columns:80px 1fr 90px;gap:12px;align-items:center;font-size:13px}
+.sh-track{height:10px;border-radius:4px;background:var(--subtle)}
+.sh-track i{display:block;height:100%;border-radius:4px;background:var(--primary)}
+.sh-toggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.sh-toggle button{border:0;background:transparent;padding:4px 10px;font-size:12px;color:var(--text2)}
+.sh-toggle button[aria-pressed="true"]{background:var(--subtle);color:var(--text)}
+.sh-tbar{display:flex;align-items:center;gap:8px}
+.sh-tabs{display:inline-flex;padding:3px;background:var(--subtle);border-radius:10px}
+.sh-tabs button{border:0;background:transparent;padding:4px 10px;border-radius:7px;font-size:13px;color:var(--text2);display:flex;gap:6px;align-items:center}
+.sh-tabs button[aria-selected="true"]{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgb(0 0 0 / .08)}
+.sh-cnt{font-size:11px;min-width:18px;height:18px;border-radius:99px;background:var(--border);display:grid;place-items:center;padding:0 5px}
+.crm .sh-q{width:200px}
+.sh-tablecard{overflow:hidden}
+.sh-pag{display:flex;align-items:center;gap:8px;font-size:13px}
+
+/* ===== Primer: issues ===== */
+.pr{display:flex;flex-direction:column;height:100%;background:var(--bg)}
+.pr-gh{display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;background:var(--subtle)}
+.pr-mark{width:32px;height:32px;border-radius:50%;background:#1f2328;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.pr-crumb{font-size:14px} .pr-crumb b{font-weight:600}
+.crm .pr-search{width:280px;height:32px}
+.pr-under{display:flex;gap:8px;padding:0 16px;background:var(--subtle);border-bottom:1px solid var(--border)}
+.pr-under a{display:flex;align-items:center;gap:8px;padding:8px 8px 10px;color:var(--text);font-size:14px;position:relative}
+.pr-under a.on{font-weight:600}
+.pr-under a.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#fd8c73;border-radius:2px}
+.pr-ctr{font-size:12px;line-height:18px;padding:0 6px;border-radius:99px;background:rgba(129,139,152,.2);font-weight:500}
+.pr-body{flex:1}
+.pr-container{max-width:1080px;margin:0 auto;padding:24px 24px 40px;display:grid;gap:16px}
+.pr-bar{display:flex;gap:8px;align-items:center}
+.pr-filter{flex:1;display:flex;align-items:center;gap:8px;height:32px;border:1px solid var(--border);border-radius:6px;padding:0 10px;background:var(--subtle);color:var(--text2);font-size:14px}
+.pr-filter b{color:var(--text);font-weight:400}
+.pr-box{border:1px solid var(--border);border-radius:6px;background:var(--surface);overflow:hidden}
+.pr-boxhead{display:flex;align-items:center;gap:16px;padding:0 16px;height:48px;background:var(--subtle);border-bottom:1px solid var(--border);font-size:14px}
+.pr-boxhead button{border:0;background:none;display:flex;gap:6px;align-items:center;color:var(--text2);padding:0}
+.pr-boxhead button[aria-pressed="true"]{color:var(--text);font-weight:600}
+.pr-menu{color:var(--text2)!important;font-size:14px}
+.pr-row{display:grid;grid-template-columns:16px 1fr auto;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;align-items:start}
+.pr-row:last-child{border-bottom:0}
+.pr-row:hover{background:var(--subtle)}
+.pr-row .ic{margin-top:4px}
+.pr-title{font-weight:600;color:var(--text);font-size:16px;margin-right:6px}
+.pr-row:hover .pr-title{color:var(--accent)}
+.pr-row .meta{font-size:12px;color:var(--text2);margin-top:2px}
+.pr-lbls{display:inline-flex;gap:4px;vertical-align:2px}
+.pr-right{display:flex;align-items:center;gap:14px;color:var(--text2);font-size:12px}
+.st-open{color:#1a7f37}.st-won{color:#8250df}.st-lost{color:#59636e}
+.pr-back{font-size:14px}
+.pr-h1{font-size:32px!important;font-weight:400!important}
+.pr-statebar{display:flex;align-items:center;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--border);color:var(--text2);font-size:14px}
+.pr-state{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:99px;color:#fff;font-weight:500;font-size:14px}
+.pr-state.open{background:#1f883d}.pr-state.won{background:#8250df}.pr-state.lost{background:#59636e}
+.pr-cols{display:grid;grid-template-columns:minmax(0,1fr) 256px;gap:24px}
+.pr-tl{display:grid;gap:16px;align-content:start}
+.pr-ev{display:grid;grid-template-columns:40px 1fr;gap:12px}
+.pr-ev > .av{width:40px;height:40px;font-size:14px}
+.pr-cbox{border:1px solid var(--border);border-radius:6px;background:var(--surface);overflow:hidden}
+.pr-chead{padding:8px 16px;background:var(--subtle);border-bottom:1px solid var(--border);font-size:14px;display:flex;gap:6px;align-items:center}
+.pr-cbody{padding:12px 16px;font-size:14px}
+.pr-ctabs b{font-weight:600} .pr-ctabs span{color:var(--text2);margin-left:10px}
+.crm .pr-ctabs select{width:auto;height:28px;font-size:12px}
+.crm .pr-composer textarea{min-height:90px;background:var(--subtle)}
+.pr-cfoot{margin-top:10px}
+.pr-sb{display:grid;align-content:start}
+.pr-sbsec{padding:12px 0;border-bottom:1px solid var(--border);display:grid;gap:6px;font-size:14px}
+.pr-sbsec h3{font-size:12px;font-weight:600;color:var(--text2)}
+.pr-prog{height:8px;border-radius:6px;background:var(--subtle);overflow:hidden}
+.pr-prog i{display:block;height:100%;background:#1f883d}
+
+/* ===== Atlassian: board + modal ===== */
+.at{display:grid;grid-template-columns:240px minmax(0,1fr);grid-template-rows:48px minmax(0,1fr);height:100%;position:relative}
+.at-top{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:0 12px;border-bottom:1px solid var(--border);background:var(--surface)}
+.at-brand{display:flex;gap:6px;align-items:center;font-weight:700;color:var(--accent);margin-right:8px}
+.crm .at-search{width:280px;height:32px}
+.at-side{background:var(--sideBg);border-right:1px solid var(--sideBd);padding:16px 8px;display:flex;flex-direction:column;gap:14px;color:var(--sideFg)}
+.at-proj{display:flex;gap:10px;align-items:center;padding:0 8px}
+.at-pic{width:32px;height:32px;border-radius:4px;background:#1f845a;color:#fff;display:grid;place-items:center;font-weight:700}
+.at-proj b{display:block;color:var(--text);font-size:14px;line-height:1.3} .at-proj small{font-size:12px}
+.at-main{display:flex;flex-direction:column;gap:12px;padding:20px 24px 0;min-height:0;min-width:0}
+.at-crumb{font-size:14px;color:var(--text2)}
+.at-title{font-size:24px}
+.at-tool{display:flex;align-items:center;gap:10px}
+.crm .at-q{width:180px}
+.at-avs{display:flex;padding-left:4px}
+.at-avs .av{margin-left:-4px;border:2px solid var(--surface);width:32px;height:32px;box-shadow:none;cursor:pointer;padding:0}
+.at-avs .av.on{outline:2px solid var(--accent);z-index:1}
+.at-board{flex:1;display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:8px;padding-bottom:16px;align-items:start}
+.at-col{background:var(--subtle);border-radius:6px;padding:8px;display:grid;gap:6px;min-height:240px;align-content:start}
+.at-colh{display:flex;align-items:baseline;gap:6px;padding:4px 4px 6px;font-size:12px;font-weight:600;color:var(--text2)}
+.at-colh .num{font-weight:400}
+.at-card{display:grid;gap:4px;text-align:left;background:var(--surface);border:0;border-radius:4px;padding:10px;box-shadow:0 1px 1px rgba(9,30,66,.25),0 0 1px rgba(9,30,66,.31);font-size:14px;color:var(--text)}
+.at-card:hover{background:#f7f8f9}
+.at-cfoot{display:flex;align-items:center;gap:6px;margin-top:4px}
+.at-key{font-size:12px;color:var(--text2)}
+.at-flag{color:#c9372c;display:inline-flex}
+.at-modal{position:absolute;z-index:21;left:50%;top:40px;transform:translateX(-50%);width:min(940px,92%);height:calc(100% - 80px);background:var(--surface);border-radius:8px;box-shadow:0 8px 12px rgba(9,30,66,.15),0 0 1px rgba(9,30,66,.31);display:flex;flex-direction:column}
+.at-mhead{display:flex;align-items:center;gap:4px;padding:12px 16px 4px 24px}
+.at-mbody{flex:1;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;padding:0 24px 16px;min-height:0}
+.at-mleft{display:flex;flex-direction:column;gap:16px;padding-right:8px}
+.at-mtitle{font-size:24px;font-weight:500!important}
+.at-h{font-size:14px;font-weight:600!important;margin-bottom:6px!important}
+.at-atabs{display:flex;gap:4px;margin-bottom:10px}
+.at-atabs span{padding:2px 8px;border-radius:3px;font-size:13px;color:var(--text2)}
+.at-atabs .on{background:#e9f2ff;color:#0c66e4}
+.at-fake{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;padding:0;margin-bottom:14px;color:var(--text2)}
+.at-fake span:last-child{flex:1;text-align:left;border:1px solid var(--inputBd);border-radius:3px;padding:6px 10px}
+.at-mright{display:flex;flex-direction:column;gap:12px;overflow:auto}
+.at-status{font-weight:700;background:color-mix(in oklab,var(--t) 18%,var(--surface));color:color-mix(in oklab,var(--t) 70%,var(--text));border-color:transparent}
+.at-details{border:1px solid var(--border);border-radius:6px}
+.at-dhead{padding:10px 12px;border-bottom:1px solid var(--border);font-weight:600}
+.at-dl{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:12px;margin:0;font-size:14px}
+.at-dl dt{color:var(--text2);font-weight:600;font-size:12px;padding-top:2px} .at-dl dd{margin:0}
+
+/* ===== EUI: discover ===== */
+.eu{display:grid;grid-template-columns:232px minmax(0,1fr);grid-template-rows:48px minmax(0,1fr);height:100%;position:relative}
+.eu-head{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:0 12px;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 1px 2px rgb(7 16 29 / .06);z-index:2}
+.eu-crumbs{display:flex;align-items:center}
+.eu-cr{background:var(--subtle);padding:2px 16px 2px 12px;margin-right:-4px;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%);font-size:12px;color:var(--text2)}
+.eu-cr:first-child{clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%);border-radius:4px 0 0 4px}
+.eu-cr.last{background:#e8f1ff;color:var(--accent);font-weight:600}
+.eu-nav{padding:12px 8px;border-right:1px solid var(--border);background:var(--sideBg);display:flex;flex-direction:column;gap:12px}
+.eu-navt{font-size:12px;font-weight:700;padding:4px 8px;display:flex;gap:6px;align-items:center;color:var(--text)}
+.eu-main{display:flex;flex-direction:column;gap:10px;padding:12px 16px;min-height:0;min-width:0}
+.eu-query{display:flex;gap:8px;align-items:center}
+.crm .eu-q{flex:1}
+.eu-filters{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.eu-pill{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 2px 0 10px;border-radius:4px;background:var(--subtle);border:1px solid var(--border);font-size:12px}
+.eu-pill button{border:0;background:none;display:grid;place-items:center;width:20px;height:20px;color:var(--text2);padding:0}
+.eu-pill .lk{border:0;background:none;padding:0;width:auto;font-size:12px;color:var(--text)}
+.eu-hist{padding:10px 16px 8px;display:grid;gap:6px}
+.eu-bars{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:end;height:84px;border-bottom:1px solid var(--border);background-image:linear-gradient(var(--border) 1px,transparent 1px);background-size:100% 28px}
+.eu-bars i{display:block;background:var(--accent);border-radius:2px 2px 0 0;opacity:.85;min-height:2px}
+.eu-axis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;font-size:11px;color:var(--text2);text-align:center}
+.eu-gridwrap{flex:1;border:1px solid var(--border);border-radius:6px;background:var(--surface)}
+.eu-gridwrap .tbl td{height:36px;font-size:13px}
+.eu-mask{position:absolute;inset:48px 0 0 0;background:rgb(7 16 29 / .15);z-index:20}
+.eu-fly{position:absolute;top:48px;right:0;bottom:0;width:520px;z-index:21;background:var(--surface);border-left:1px solid var(--border);box-shadow:-12px 0 24px rgb(7 16 29 / .12);display:flex;flex-direction:column}
+.eu-fh{padding:16px 20px 0;border-bottom:1px solid var(--border);display:grid;gap:4px}
+.eu-ftabs{display:flex;gap:16px;margin-top:8px}
+.eu-ftabs button{border:0;background:none;padding:8px 0;border-bottom:2px solid transparent;color:var(--text2);font-weight:500;margin-bottom:-1px}
+.eu-ftabs button[aria-selected="true"]{color:var(--accent);border-color:var(--accent)}
+.eu-fb{flex:1;overflow:auto;padding:16px 20px;display:grid;gap:14px;align-content:start}
+.eu-ff{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--subtle)}
+.eu-fields{width:100%;border-collapse:collapse;font-size:13px}
+.eu-fields td{padding:6px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+.eu-fields td:first-child{width:180px;font-family:var(--mono);font-size:12px}
+.eu-tok{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:3px;font-size:10px;font-weight:700;margin-right:6px;background:#e6f1fa;color:#0b64dd;font-family:var(--font)}
+.eu-json{margin:0;font-family:var(--mono);font-size:12px;background:var(--subtle);padding:12px;border-radius:6px;white-space:pre;overflow:auto}
+</style>
+<style>
+/* ===== Salesforce Lightning: list view → record page ===== */
+.sf{display:flex;flex-direction:column;height:100%;background:var(--bg)}
+.sf-global{display:flex;align-items:center;gap:12px;height:50px;padding:0 16px;background:var(--surface)}
+.sf-logo{width:40px;height:26px;border-radius:13px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px}
+.sf-gsearch{flex:0 1 480px;margin:0 auto;position:relative}
+.sf-gsearch .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text2)}
+.crm .sf-gsearch input{padding-left:32px;height:32px}
+.sf-appnav{display:flex;align-items:stretch;height:40px;padding:0 12px;background:var(--surface);border-bottom:3px solid var(--primary)}
+.sf-appname{display:flex;align-items:center;gap:10px;padding-right:16px;font-size:18px}
+.sf-appnav a{display:flex;align-items:center;gap:6px;padding:0 12px;color:var(--text);font-size:13px}
+.sf-appnav a.on{background:#eef4ff;box-shadow:inset 0 -3px var(--primary);font-weight:700}
+.sf-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:12px}
+.obj{width:32px;height:32px;border-radius:4px;background:#ff5d2d;color:#fff;display:grid;place-items:center;flex:none}
+.sf-lv{display:flex;flex-direction:column;min-height:0;flex:1}
+.sf-lvhead{display:flex;align-items:center;gap:12px;padding:12px 16px 4px}
+.sf-lvhead small,.sf-hltop small{display:block;font-size:12px;color:var(--text2)}
+.sf-h1{border:0;background:none;padding:0;font-size:18px;font-weight:700;display:flex;gap:6px;align-items:center;color:var(--text)}
+.btngroup{display:inline-flex}
+.btngroup .btn{border-radius:0;margin-left:-1px}
+.btngroup .btn:first-child{border-radius:var(--rbtn) 0 0 var(--rbtn);margin-left:0}
+.btngroup .btn:last-child{border-radius:0 var(--rbtn) var(--rbtn) 0}
+.sf-meta{display:flex;align-items:center;gap:8px;padding:4px 16px 10px;font-size:12px;color:var(--text2)}
+.crm .sf-lq{width:220px;height:30px}
+.sf-ibtn{width:32px;height:32px;border:1px solid var(--inputBd);border-radius:4px;background:var(--surface);display:grid;place-items:center;color:var(--text2);flex:none}
+.sf-tblwrap{flex:1;border-top:1px solid var(--border)}
+.sf-rowact{width:24px;height:24px;border:1px solid var(--inputBd);border-radius:4px;display:grid;place-items:center;background:var(--surface);color:var(--text2);padding:0}
+.sf-hl{padding:14px 16px;display:grid;gap:14px}
+.sf-hltop{display:flex;align-items:center;gap:12px}
+.sf-hltop h1{font-size:20px}
+.sf-hlf{display:flex;gap:48px;font-size:13px}
+.sf-hlf small{display:block;font-size:12px;color:var(--text2)}
+.sf-pathcard{padding:12px 16px;display:flex;gap:16px;align-items:center}
+.sf-pathcard .path{flex:1;gap:0}
+.sf .path li{border-radius:0;padding:6px 4px 6px 12px;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%);margin-right:-5px;font-size:12px}
+.sf .path li:first-child{clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%);border-radius:15px 0 0 15px}
+.sf .path li:last-child{clip-path:polygon(0 0,100% 0,100% 100%,0 100%,8px 50%);border-radius:0 15px 15px 0}
+.sf .path li.done{background:#2e844a;color:#fff}
+.sf .path li.cur{background:#014486;color:#fff}
+.sf-cols{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:12px;align-items:start}
+.sf-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 16px}
+.sf-tabs button{border:0;background:none;padding:10px 12px;font-size:14px;color:var(--text);border-bottom:3px solid transparent;margin-bottom:-1px}
+.sf-tabs button[aria-selected="true"]{border-color:var(--primary);font-weight:700}
+.sf-fields{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;padding:8px 16px 16px}
+.sf-field{padding:8px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto;align-items:end;font-size:13px}
+.sf-field small{grid-column:1/-1;font-size:12px;color:var(--text2)}
+.sf-field .ic{color:var(--text2);opacity:.5;width:14px;height:14px}
+.sf-rel{padding:12px 16px;display:grid;gap:12px}
+.sf-relc{border:1px solid var(--border);border-radius:4px;padding:10px 12px;display:flex;gap:10px;align-items:center;font-size:13px}
+.sf-acthead{padding:12px 16px 8px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center}
+.sf-pub{display:flex;border-bottom:1px solid var(--border);padding:0 12px}
+.sf-pub button{border:0;background:none;padding:8px 10px;font-size:13px;border-bottom:3px solid transparent;margin-bottom:-1px}
+.sf-pub button[aria-pressed="true"]{border-color:var(--primary);font-weight:700}
+.sf-pubform{padding:12px 16px}
+.sf-pubform .form{background:transparent;border:0;padding:0}
+.sf-sec{padding:8px 16px 12px;display:grid;gap:10px}
+.sf-sech{font-size:13px;font-weight:700;background:var(--subtle);padding:6px 10px;border-radius:4px}
+.sf .tli.k-call{background:#48c3cc;color:#fff}.sf .tli.k-mail{background:#95aec5;color:#fff}.sf .tli.k-meet{background:#cb65ff;color:#fff}.sf .tli.k-memo{background:#4bc076;color:#fff}
+
+/* ===== Garden: agent workspace ===== */
+.zd{display:grid;grid-template-columns:60px minmax(0,1fr);grid-template-rows:52px minmax(0,1fr);height:100%;background:var(--bg)}
+.zd-rail{grid-row:1/-1;background:#03363d;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0;color:#c2d3d5}
+.zd-logo{width:36px;height:36px;border-radius:6px;background:#fff;color:#03363d;display:grid;place-items:center;font-weight:700;margin-bottom:10px}
+.zd-rb{width:40px;height:40px;border:0;background:transparent;color:inherit!important;border-radius:6px;display:grid;place-items:center}
+.zd-rb.on{background:#17494d;color:#fff!important}
+.zd-rail .av{margin-top:auto;background:#17494d;color:#fff;box-shadow:none;width:32px;height:32px}
+.zd-top{display:flex;align-items:stretch;background:var(--surface);border-bottom:1px solid var(--border);padding-right:12px;min-width:0}
+.zd-tab{display:flex;align-items:center;gap:8px;padding:0 12px;border-right:1px solid var(--border);max-width:230px;font-size:13px;min-width:0}
+.zd-tab.on{box-shadow:inset 0 -3px #1f73b7}
+.zd-tab button{border:0;background:none;display:flex;gap:6px;align-items:center;min-width:0;padding:0}
+.zd-tab .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zd-x{color:var(--text2)!important;width:20px;height:20px;justify-content:center}
+.crm .zd-search{width:220px;height:32px;align-self:center}
+.zd-online{display:flex;align-items:center;gap:6px;font-size:12px;align-self:center;margin-left:12px}
+.zd-online i{width:8px;height:8px;border-radius:50%;background:#038153}
+.zd-body{min-height:0;display:grid}
+.zd-listv{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:0}
+.zd-views{border-right:1px solid var(--border);background:var(--surface);padding:16px 12px;display:grid;align-content:start;gap:2px}
+.zd-views h2{font-size:18px;padding:0 8px 10px}
+.zd-views button{display:flex;justify-content:space-between;gap:8px;border:0;background:none;padding:8px;border-radius:4px;text-align:left;font-size:14px}
+.zd-views button[aria-pressed="true"]{background:var(--selBg);font-weight:600}
+.zd-listmain{padding:20px 24px;display:flex;flex-direction:column;gap:12px;min-height:0}
+.zd-st{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;line-height:18px;border-radius:4px;background:var(--t);color:#fff;white-space:nowrap}
+.zd-rec{display:grid;grid-template-columns:280px minmax(0,1fr) 300px;min-height:0}
+.zd-props{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;min-height:0}
+.zd-propsb{flex:1;overflow:auto;padding:16px;display:grid;gap:14px;align-content:start}
+.zd-props label{display:grid;gap:4px;font-size:13px;font-weight:600}
+.zd-tags{display:flex;flex-wrap:wrap;gap:6px}
+.zd-tag{font-size:12px;background:var(--subtle);border-radius:4px;padding:0 8px;line-height:22px}
+.zd-propsf{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.zd-conv{display:flex;flex-direction:column;min-height:0;background:var(--surface)}
+.zd-convh{padding:14px 20px;border-bottom:1px solid var(--border)}
+.zd-convh h2{font-size:18px}
+.zd-thread{flex:1;overflow:auto;padding:16px 20px;display:grid;gap:16px;align-content:start}
+.zd-msg{display:grid;grid-template-columns:32px 1fr;gap:10px}
+.zd-msg > .av{width:32px;height:32px}
+.zd-msg .body{padding:10px 12px;border-radius:4px;border:1px solid var(--border);font-size:14px}
+.zd-msg .who{font-size:13px;margin-bottom:4px}
+.zd-msg.note .body{background:#fff6e5;border-color:#ffd9a3}
+.zd-composer{border-top:1px solid var(--border);padding:10px 16px 12px;display:grid;gap:8px;background:var(--surface)}
+.zd-composer.note{background:#fff6e5}
+.zd-ctabs{display:flex;gap:4px}
+.zd-ctabs button{border:0;background:none;padding:4px 10px;border-radius:4px;font-size:13px;color:var(--text2)}
+.zd-ctabs button[aria-pressed="true"]{background:var(--subtle);color:var(--text);font-weight:600}
+.zd-composer.note .zd-ctabs button[aria-pressed="true"]{background:#ffd9a3}
+.crm .zd-composer select{width:auto;height:30px;font-size:13px}
+.zd-ctx{border-left:1px solid var(--border);background:var(--bg);padding:16px;overflow:auto;display:grid;gap:12px;align-content:start}
+.zd-ctxcard{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;display:grid;gap:10px}
+.zd-ctxcard h3{font-size:14px;display:flex;gap:8px;align-items:center}
+
+/* ===== freee vibes: search form + list → detail ===== */
+.fr{display:flex;flex-direction:column;height:100%;background:var(--bg)}
+.fr-gh{display:flex;align-items:center;gap:4px;height:56px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border);flex:none}
+.fr-brand{display:flex;gap:8px;align-items:center;font-weight:700;margin-right:20px}
+.fr-menu{display:flex;height:100%}
+.fr-menu a{display:flex;align-items:center;gap:2px;padding:0 14px;color:var(--text);font-weight:700;font-size:14px;border-bottom:3px solid transparent}
+.fr-menu a.on{color:var(--primary);border-bottom-color:var(--primary)}
+.fr-office{display:flex;gap:6px;align-items:center;padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;margin-right:8px}
+.fr-body{flex:1}
+.fr-container{max-width:1080px;margin:0 auto;padding:24px 32px 40px;display:grid;gap:16px}
+.fr-titlebar{display:flex;align-items:center;gap:12px}
+.fr-titlebar h1{font-size:24px}
+.fr-sec{padding:20px 24px;display:grid;gap:16px}
+.fr-sec h2{font-size:16px;font-weight:700}
+.fr-fgrid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.5fr;gap:16px}
+.fr-fgrid label{display:grid;gap:6px;font-size:13px;font-weight:700}
+.fr-range{display:flex;align-items:center;gap:6px;font-weight:400}
+.fr-sact{display:flex;justify-content:flex-end;gap:8px}
+.fr-result{display:flex;align-items:baseline;gap:8px;font-size:14px}
+.fr-result b{font-size:20px}
+.fr-pag{display:flex;justify-content:center;gap:4px}
+.fr-pg{min-width:32px;height:32px;border:1px solid var(--border);border-radius:6px;display:grid;place-items:center;background:var(--surface);font-size:13px}
+.fr-pg.on{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:700}
+.fr-crumb{font-size:13px;display:flex;gap:6px;align-items:center;color:var(--text2)}
+.fr-dt{width:100%;border-collapse:collapse;border-top:1px solid var(--border)}
+.fr-dt th{width:200px;background:var(--subtle);text-align:left;font-weight:700;font-size:13px;padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.fr-dt td{padding:12px 16px;border-bottom:1px solid var(--border)}
+.req{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:#fff;background:var(--danger);border-radius:3px;padding:0 5px;line-height:18px}
+.fr-bar{display:flex;gap:8px;align-items:center;padding:12px 32px;background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -2px 8px rgb(0 0 0 / .05);flex:none}
+.fr .stepper{padding:4px 0}
+
+/* ===== kamii: progress tracker ===== */
+.km{display:flex;flex-direction:column;height:100%;background:var(--bg)}
+.km-head{display:flex;align-items:center;gap:28px;height:60px;padding:0 32px;background:var(--surface);border-bottom:2px solid var(--text);flex:none}
+.km-brand{font-weight:700;display:flex;gap:8px;align-items:center}
+.km-nav{display:flex;gap:22px;font-size:14px}
+.km-nav a{color:var(--text)}
+.km-nav a.on{font-weight:700;text-decoration:underline;text-underline-offset:8px;text-decoration-thickness:2px}
+.crm .km-q{width:220px}
+.km-body{flex:1}
+.km-container{max-width:960px;margin:0 auto;padding:28px 32px 48px;display:grid;gap:20px}
+.km-title h1{font-size:24px}
+.km-title p{color:var(--text2);margin-top:4px}
+.km-tabs{display:flex;border:1px solid var(--text);width:max-content}
+.km-tabs button{border:0;border-right:1px solid var(--text);background:var(--surface);padding:6px 16px;font-weight:700;font-size:13px}
+.km-tabs button:last-child{border-right:0}
+.km-tabs button[aria-pressed="true"]{background:var(--text);color:var(--surface)}
+.km-todo{border:2px solid var(--primary);background:color-mix(in oklab,var(--primary) 5%,var(--surface));padding:16px 20px;display:grid;gap:4px}
+.km-todo h2{font-size:15px;margin-bottom:6px}
+.km-titem{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:8px 0;border-top:1px dashed var(--border)}
+.km-date{border:1px solid var(--text);text-align:center;line-height:1.15;padding:4px 0;background:var(--surface)}
+.km-date b{display:block;font-size:18px}
+.km-date small{font-size:10px}
+.km-date.late{border-color:var(--danger);color:var(--danger)}
+.km-ticket{background:var(--surface);border:1px solid var(--border)}
+.km-tk-top{background:var(--subtle);padding:8px 20px;border-bottom:1px solid var(--border);font-size:13px;display:flex;gap:12px;align-items:center}
+.km-tk-main{padding:16px 20px;display:grid;gap:16px}
+.km-tk-main h3{font-size:18px}
+.km-amt{font-size:20px;font-weight:700}
+.km-next{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--subtle);font-size:14px}
+.km-lab{font-size:11px;font-weight:700;border:1px solid var(--text);padding:0 6px;background:var(--surface)}
+.km-expand{border-top:1px solid var(--border);padding:16px 20px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px}
+.km-expand h4{margin:0 0 10px;font-size:14px}
+
+/* ===== Serendie: app bar + card grid ===== */
+.se{display:grid;grid-template-columns:88px minmax(0,1fr);grid-template-rows:64px minmax(0,1fr);height:100%;background:var(--bg)}
+.se-bar{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--primary);color:var(--onPrimary)}
+.se-bar h1{font-size:20px;font-weight:700}
+.se-bar .iconbtn{color:inherit}
+.se-bar .iconbtn:hover{background:rgb(255 255 255 / .12)}
+.se-bar .av{background:rgb(255 255 255 / .2);color:#fff;box-shadow:none;width:32px;height:32px}
+.se-rail{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 0;background:var(--surface);border-right:1px solid var(--border)}
+.se-ri{display:grid;justify-items:center;gap:4px;font-size:11px;border:0;background:none;color:var(--text2)!important}
+.se-ri .pill{width:56px;height:32px;border-radius:16px;display:grid;place-items:center}
+.se-ri.on{color:var(--text)!important;font-weight:700}
+.se-ri.on .pill{background:var(--btn2bg);color:var(--primary)}
+.se-main{padding:20px 24px 28px;display:grid;gap:16px;align-content:start}
+.se-chips{display:flex;gap:8px;align-items:center}
+.se-chip{display:inline-flex;gap:6px;align-items:center;height:32px;padding:0 14px;border-radius:8px;border:1px solid var(--inputBd);background:var(--surface);font-size:13px;font-weight:500}
+.se-chip[aria-pressed="true"]{background:var(--btn2bg);border-color:transparent;color:var(--primary)!important;font-weight:700}
+.se-divider{width:1px;height:20px;background:var(--border)}
+.crm .se-q{width:240px;border-radius:999px}
+.se-widgets{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px}
+.se-w{padding:16px 20px;display:grid;gap:10px;align-content:start}
+.se-w h3{font-size:14px}
+.se-ring{width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--primary) var(--v),var(--subtle) 0);display:grid;place-items:center;flex:none}
+.se-ring span{width:72px;height:72px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-weight:700}
+.se-mini{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:4px 0;border-bottom:1px solid var(--border)}
+.se-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.se-card{padding:16px 18px;display:grid;gap:10px;text-align:left;cursor:pointer;font-size:14px}
+.se-card:hover{box-shadow:0 4px 14px rgb(20 30 60 / .12)}
+.se-prog{height:6px;border-radius:3px;background:var(--subtle);overflow:hidden}
+.se-prog i{display:block;height:100%;border-radius:3px;background:var(--primary)}
+.se-hero{padding:24px;display:grid;gap:18px}
+.se-2col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+.se-panel{padding:20px;display:grid;gap:14px}
+.se-panel h3{font-size:15px}
+
+/* ===== Sparkle: grouped list + reading pane ===== */
+.sp{display:grid;grid-template-columns:220px 380px minmax(0,1fr);height:100%;background:var(--bg)}
+.sp-side{padding:20px 14px;display:flex;flex-direction:column;gap:16px;border-right:1px solid var(--sideBd);background:var(--sideBg);color:var(--sideFg)}
+.sp-guide{margin-top:auto;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);display:grid;gap:8px;font-size:13px}
+.sp-guide .se-prog i{background:var(--primary)}
+.sp-list{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--border);background:var(--surface)}
+.sp-lh{padding:24px 20px 12px;display:grid;gap:12px}
+.sp-lh h1{font-size:22px}
+.sp-items{flex:1;padding:0 12px 20px}
+.sp-gh{position:sticky;top:0;background:var(--surface);font-size:12px;font-weight:700;color:var(--text2);padding:14px 8px 6px;z-index:1}
+.sp-item{display:grid;gap:6px;width:100%;text-align:left;padding:14px;border-radius:12px;border:1px solid transparent;background:none;margin-bottom:4px}
+.sp-item:hover{background:var(--subtle)}
+.sp-item[aria-selected="true"]{background:var(--selBg);border-color:color-mix(in oklab,var(--accent) 35%,transparent)}
+.sp-detail{position:relative}
+.sp-read{max-width:680px;margin:0 auto;padding:40px 40px 24px;display:grid;gap:28px}
+.sp-read h1{font-size:28px;line-height:1.35}
+.sp-sec{display:grid;gap:12px}
+.sp-sec h2{font-size:15px}
+.sp-callout{padding:16px 18px;border-radius:12px;background:var(--subtle);display:flex;gap:12px;align-items:center}
+.sp-float{position:sticky;bottom:20px;display:flex;justify-content:center;pointer-events:none;padding-bottom:4px}
+.sp-float > div{pointer-events:auto;display:flex;gap:8px;padding:8px;border-radius:14px;background:var(--surface);border:1px solid var(--border);box-shadow:0 8px 24px rgb(0 0 0 / .08)}
+
+/* ===== Spindle: mobile ===== */
+.am{height:100%;display:grid;place-items:center;background:color-mix(in oklab,var(--bg) 70%,#d7e2d8)}
+.am-phone{position:relative;width:390px;height:748px;border-radius:44px;background:var(--surface);box-shadow:0 0 0 10px #1b1f1c,0 20px 50px rgb(0 0 0 / .25);overflow:hidden;display:flex;flex-direction:column}
+.am-status{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:14px;font-weight:700;flex:none}
+.am-head{display:flex;align-items:center;gap:10px;padding:4px 20px 8px;flex:none}
+.am-head h1{font-size:24px;font-weight:800}
+.am-chips{display:flex;gap:8px;overflow-x:auto;padding:4px 20px 12px;scrollbar-width:none;flex:none}
+.am-chip{flex:none;height:34px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);font-weight:700;font-size:13px}
+.am-chip[aria-pressed="true"]{background:var(--text);color:var(--surface)!important;border-color:var(--text)}
+.am-scroll{flex:1;padding-bottom:20px;background:var(--bg)}
+.am-sec{padding:16px 20px 4px;display:grid;gap:12px}
+.am-sec h2{font-size:17px;font-weight:800}
+.am-car{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.am-fcard{flex:none;width:240px;border-radius:16px;padding:14px;background:var(--primary);color:#fff!important;display:grid;gap:6px;text-align:left;border:0}
+.am-cards{display:grid;gap:10px}
+.am-card{width:100%;text-align:left;border:0;background:var(--surface);border-radius:16px;padding:16px;display:grid;gap:8px;box-shadow:0 1px 2px rgb(0 0 0 / .06)}
+.crm .am-q{border-radius:999px;height:40px}
+.am-tab{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:78px;padding:0 8px 18px;border-top:1px solid var(--border);background:var(--surface);flex:none}
+.am-ti{display:grid;justify-items:center;gap:2px;font-size:10px;color:var(--text2)!important;border:0;background:none}
+.am-ti.on{color:var(--primary)!important;font-weight:700}
+.am-plus{width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff!important;display:grid;place-items:center;justify-self:center;border:0}
+.am-scrim{position:absolute;inset:0;background:rgb(0 0 0 / .4);z-index:20}
+.am-sheet{position:absolute;left:0;right:0;bottom:0;height:88%;z-index:21;background:var(--surface);border-radius:24px 24px 0 0;display:flex;flex-direction:column}
+.am-handle{width:40px;height:5px;border-radius:3px;background:var(--border);margin:8px auto 4px;border:0;padding:0}
+.am-sb{flex:1;overflow:auto;padding:8px 20px 24px;display:grid;gap:16px;align-content:start}
+.am-dots{display:flex;gap:6px}
+.am-dots i{flex:1;height:6px;border-radius:3px;background:var(--subtle)}
+.am-dots i.done{background:var(--primary)}
+.am-dots i.cur{background:color-mix(in oklab,var(--primary) 55%,var(--surface))}
+.am-full{width:100%;height:48px}
+
+/* ===== Apple HIG: macOS three-pane ===== */
+.mac{height:100%;padding:18px;background:#d9dbe0}
+.mac-win{height:100%;border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 0 0 .5px rgb(0 0 0 / .25),0 20px 40px rgb(0 0 0 / .2);display:grid;grid-template-columns:220px 330px minmax(0,1fr);grid-template-rows:52px minmax(0,1fr);position:relative}
+.mac-src{grid-row:1/-1;background:var(--sideBg);padding:48px 10px 10px;border-right:1px solid var(--sideBd);overflow:auto}
+.mac-lights{position:absolute;top:18px;left:18px;display:flex;gap:8px;z-index:2}
+.mac-lights i{width:12px;height:12px;border-radius:50%}
+.mac-tb{grid-column:2/-1;display:flex;align-items:center;gap:10px;padding:0 12px;border-bottom:1px solid var(--border);background:var(--surface)}
+.mac-title b{display:block;font-size:13px;font-weight:700;line-height:1.2}
+.mac-title small{font-size:11px;color:var(--text2)}
+.mac-seg{display:inline-flex;background:var(--subtle);border-radius:6px;padding:1px}
+.mac-seg button{border:0;background:none;padding:2px 10px;font-size:12px;border-radius:5px}
+.mac-seg button[aria-pressed="true"]{background:#fff;box-shadow:0 0 0 .5px rgb(0 0 0 / .12),0 1px 1px rgb(0 0 0 / .1)}
+.crm .mac-q{width:180px;height:26px;border-radius:6px;background:var(--subtle);border-color:transparent;font-size:12px}
+.mac-sech{font-size:11px;font-weight:600;color:var(--text2);padding:10px 8px 4px}
+.mac-si{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:4px 8px;border-radius:6px;font-size:13px;text-align:left}
+.mac-si[aria-pressed="true"]{background:var(--sideActBg)}
+.mac-si .ic{color:var(--accent)}
+.mac-si .cnt{margin-left:auto;color:var(--text2);font-size:12px}
+.mac-list{border-right:1px solid var(--border);padding:6px 8px}
+.mac-row{display:grid;gap:2px;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:6px;position:relative;font-size:13px}
+.mac-row + .mac-row::before{content:"";position:absolute;top:0;left:10px;right:10px;height:1px;background:var(--border)}
+.mac-row[aria-selected="true"]{background:var(--selBg);color:var(--selFg)}
+.mac-row[aria-selected="true"]::before,.mac-row[aria-selected="true"] + .mac-row::before{display:none}
+.mac-row .l1{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.mac-row .l2{display:flex;justify-content:space-between;gap:8px;color:var(--text2);font-size:12px}
+.mac-row[aria-selected="true"] .l2{color:rgb(255 255 255 / .82)}
+.mac-detail{padding:24px 28px;display:grid;gap:18px;align-content:start}
+.mac-dh{display:flex;gap:12px;align-items:flex-start}
+.mac-dh h2{font-size:20px}
+.mac-amt{font-size:28px;font-weight:600}
+.mac-prog{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.mac-prog span{height:6px;border-radius:3px;background:var(--subtle)}
+.mac-prog span.done,.mac-prog span.cur{background:var(--accent)}
+.mac-prog span.lost{background:var(--danger)}
+.mac-plab{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;font-size:11px;color:var(--text2);margin-top:4px}
+.mac-group{display:grid;gap:6px}
+.mac-group h3{font-size:11px;font-weight:600!important;color:var(--text2);padding-left:10px}
+.mac-box{border-radius:10px;background:#f5f5f7;border:1px solid rgb(0 0 0 / .05)}
+.mac-r{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;font-size:13px}
+.mac-r + .mac-r{border-top:1px solid var(--border)}
+.mac-r > span:last-child{color:var(--text2);text-align:right}
+.mac-scrim{position:absolute;inset:0;background:rgb(0 0 0 / .08);z-index:20}
+.mac-sheet{position:absolute;z-index:21;top:64px;left:50%;transform:translateX(-50%);width:440px;background:#f6f6f6;border-radius:12px;box-shadow:0 0 0 .5px rgb(0 0 0 / .2),0 16px 40px rgb(0 0 0 / .25);padding:20px;display:grid;gap:14px}
+.mac-sheet h2{font-size:13px;font-weight:700!important}
+.mac-fg{display:grid;grid-template-columns:72px 1fr;gap:10px 12px;align-items:center;font-size:13px}
+.mac-fg > label:not(.chk){text-align:right}
+</style>
+
+<div class="ch-wrap">
+  <header class="ch-head">
+    <h1>CRM スタイル標本</h1>
+    <p>同じ商談データを、13 のデザインシステムの設計思想で描き分けています。色だけでなく、画面の構成・詳細の開き方・操作の流れがそれぞれ異なります。行やカードを開き、「活動を記録」「フェーズを進める」も試せます。</p>
+  </header>
+  <nav class="ch-picker" id="picker" aria-label="デザインシステムを選択"></nav>
+  <section class="ch-panel" id="panel" aria-live="polite"></section>
+  <div class="ch-stage">
+    <div class="crm" id="crm"><div id="root"></div><div class="toast" id="toast" role="status" hidden></div></div>
+  </div>
+  <p class="ch-note">金額・会社名はすべて架空のサンプルです。kamii / Serendie / Sparkle / Spindle は色や角丸の数値がテキストで公開されていないため、公開されている原則とブランド色から推定しています。画面構成も、各システムのドキュメントや代表的な製品（Supabase Studio、GitHub、Jira、Kibana、Salesforce、Zendesk、freee など）から読み取った解釈です。</p>
+</div>
+
+<script>
+const SYSTEMS = [
+ {id:"supabase",group:"開発者ツール",name:"Supabase",org:"Supabase",url:"https://supabase.com/design-system",cert:"近似",
+  lede:"Postgres を直接触る開発者のための、ほぼモノクロのダーク UI。色はエメラルド 1 色に絞り、構造は影ではなく 1px の境界線と明度差で作る。",
+  ux:"テーブルエディタ＋右側の編集シート",
+  uxList:["左端のアイコンレール → テーブル一覧 → データグリッドの三段構成","商談をスプレッドシートの行として扱い、列名と型（text / int8 / date）をそのまま見せる","行を開くと右からシートが開き、値の確認と関連行（activities）の追加ができる","絞り込みはツールバーに集め、画面遷移はしない"],
+  look:"ダーク基調、境界線で区切る、主ボタンだけ緑",
+  t:{font:"ui-sans-serif,-apple-system,'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif",numFont:"'Geist Mono',ui-monospace,monospace",fs:"13px",row:"40px",radius:"8px",rbtn:"6px",rbadge:"999px",btnh:"28px",btnw:"400",
+   bg:"#121212",surface:"#171717",subtle:"#232323",border:"#2e2e2e",inputBd:"#363636",text:"#ededed",text2:"#8f8f8f",primary:"#006239",onPrimary:"#ffffff",primaryBd:"#1f8a5a",
+   btn2bg:"#242424",btn2fg:"#ededed",btn2bd:"#363636",accent:"#3ecf8e",selBg:"#1b2a22",selFg:"#ededed",sideBg:"#121212",sideFg:"#a0a0a0",sideActBg:"#242424",sideActFg:"#ededed",sideBd:"#242424",
+   thBg:"#171717",thFg:"#8f8f8f",thCase:"none",thW:"400",thFs:"12px",info:"#5b9cff",success:"#3ecf8e",warning:"#f1a10d",danger:"#ff6166",neutral:"#8f8f8f",
+   shadow:"none",headW:"500",titleFs:"20px",focus:"#3ecf8e",zebra:"transparent",badge:"soft"}},
+ {id:"shadcn",group:"開発者ツール",name:"shadcn/ui",org:"shadcn",url:"https://ui.shadcn.com/blocks",cert:"公開値",
+  lede:"コンポーネントはコピーして自分のものにする前提。色は CSS 変数（OKLCH）に集め、zinc の無彩色と黒い主ボタンで、どのブランドにも差し替えられる土台にする。",
+  ux:"ダッシュボード＋データテーブル＋Sheet",
+  uxList:["サイドバーの内側に角丸の作業面を置く inset レイアウト","上段に指標カード、中段にグラフ、下段にタブ付きデータテーブル（dashboard-01 ブロックの構成）","チェックボックス・列の表示切替・ページ送りなど、テーブル操作が一式そろう","詳細は右から開く Sheet で、一覧の文脈を離れない"],
+  look:"zinc の無彩色、黒い主ボタン、ドット付きバッジ",
+  t:{font:"'Geist','Noto Sans JP',sans-serif",numFont:"inherit",fs:"14px",row:"44px",radius:"10px",rbtn:"8px",rbadge:"6px",btnh:"34px",btnw:"500",
+   bg:"#ffffff",surface:"#ffffff",subtle:"#f4f4f5",border:"#e4e4e7",inputBd:"#e4e4e7",text:"#09090b",text2:"#71717a",primary:"#18181b",onPrimary:"#fafafa",primaryBd:"#18181b",
+   btn2bg:"#ffffff",btn2fg:"#09090b",btn2bd:"#e4e4e7",accent:"#18181b",selBg:"#f4f4f5",selFg:"#09090b",sideBg:"#fafafa",sideFg:"#3f3f46",sideActBg:"#f0f0f1",sideActFg:"#18181b",sideBd:"#e4e4e7",
+   thBg:"#ffffff",thFg:"#71717a",thCase:"none",thW:"500",thFs:"13px",info:"#2563eb",success:"#16a34a",warning:"#d97706",danger:"#dc2626",neutral:"#a1a1aa",
+   shadow:"0 1px 2px rgb(0 0 0 / .05)",headW:"600",titleFs:"24px",focus:"#a1a1aa",zebra:"transparent",badge:"dot"}},
+ {id:"primer",group:"開発者ツール",name:"Primer",org:"GitHub",url:"https://primer.style/",cert:"公開値",
+  lede:"機能色を fg / bg / border × 役割の意味で名付け、情報が密でも迷わせない。コードと一覧を扱う作業の邪魔をしない、静かな UI。",
+  ux:"Issues 型リスト → 個別ページ",
+  uxList:["リポジトリ風の横タブ（UnderlineNav）で領域を切り替える","一覧は 1 行 1 件。状態アイコン・ラベル・メタ情報を 2 行に収める","絞り込みは検索クエリ（is:open owner:@me）の形で表示される","詳細は別ページ。左にコメント型のタイムラインと入力欄、右にメタ情報のサイドバー"],
+  look:"緑の主ボタン、枠線だけのラベル、32px の細いタイトル",
+  t:{font:"-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans','Noto Sans JP',Helvetica,Arial,sans-serif",numFont:"inherit",fs:"14px",row:"44px",radius:"6px",rbtn:"6px",rbadge:"999px",btnh:"32px",btnw:"500",
+   bg:"#ffffff",surface:"#ffffff",subtle:"#f6f8fa",border:"#d1d9e0",inputBd:"#d1d9e0",text:"#1f2328",text2:"#59636e",primary:"#1f883d",onPrimary:"#ffffff",primaryBd:"#1a7431",
+   btn2bg:"#f6f8fa",btn2fg:"#25292e",btn2bd:"#d1d9e0",accent:"#0969da",selBg:"#ddf4ff",selFg:"#1f2328",sideBg:"#ffffff",sideFg:"#1f2328",sideActBg:"#eef0f3",sideActFg:"#1f2328",sideBd:"#d1d9e0",
+   thBg:"#f6f8fa",thFg:"#59636e",thCase:"none",thW:"600",thFs:"12px",info:"#0969da",success:"#1a7f37",warning:"#9a6700",danger:"#d1242f",neutral:"#59636e",
+   shadow:"none",headW:"600",titleFs:"24px",focus:"#0969da",zebra:"transparent",badge:"outline"}},
+ {id:"atlassian",group:"エンタープライズ",name:"Atlassian",org:"Atlassian",url:"https://atlassian.design/",cert:"近似",
+  lede:"先にトークン（Foundations）を固め、色・余白・高さを意味の名前で呼ぶ。チームでの共同作業が前提で、状態は Lozenge で短く強く伝える。",
+  ux:"フェーズ別カンバン＋モーダルの詳細",
+  uxList:["商談をフェーズ別の列に並べるボード表示（Jira のボード）","担当者のアバターをクリックして絞り込む","カードを開くと一覧の上にモーダル（左：説明と活動、右：詳細項目）","ステータスボタンから次のフェーズへ進める（Jira の遷移と同じ操作）"],
+  look:"Lozenge、4px 角丸、影のトークンで浮かせたカード",
+  t:{font:"'Atlassian Sans',ui-sans-serif,-apple-system,'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif",numFont:"inherit",fs:"14px",row:"44px",radius:"8px",rbtn:"4px",rbadge:"3px",btnh:"32px",btnw:"500",
+   bg:"#ffffff",surface:"#ffffff",subtle:"#f1f2f4",border:"#dcdfe4",inputBd:"#8590a2",text:"#172b4d",text2:"#626f86",primary:"#0c66e4",onPrimary:"#ffffff",primaryBd:"#0c66e4",
+   btn2bg:"#f1f2f4",btn2fg:"#44546f",btn2bd:"#f1f2f4",accent:"#0c66e4",selBg:"#e9f2ff",selFg:"#172b4d",sideBg:"#f7f8f9",sideFg:"#44546f",sideActBg:"#e9f2ff",sideActFg:"#0c66e4",sideBd:"#dcdfe4",
+   thBg:"#ffffff",thFg:"#626f86",thCase:"none",thW:"600",thFs:"12px",info:"#0c66e4",success:"#22a06b",warning:"#e2b203",danger:"#c9372c",neutral:"#626f86",
+   shadow:"none",headW:"600",titleFs:"24px",focus:"#388bff",zebra:"transparent",badge:"lozenge"}},
+ {id:"eui",group:"エンタープライズ",name:"Elastic UI",org:"Elastic",url:"https://eui.elastic.co/",cert:"近似",
+  lede:"大量のログやメトリクスを探索・監視する人のための高密度 UI。Borealis テーマでコントラストと読みやすさを高めつつ、情報の密度を保つ。",
+  ux:"クエリバー＋ヒストグラム＋フライアウト",
+  uxList:["Kibana Discover と同じく、検索クエリ・期間・更新ボタンを 1 行に置く","適用中の条件をフィルタピルで見せ、× で外せる","完了予定月ごとの金額をヒストグラムで表示し、その下に密な表","行を開くと右からフライアウト。項目表示 / JSON / 活動をタブで切り替える"],
+  look:"Inter、行の高さ 36px、淡い青灰の地",
+  t:{font:"'Inter','Noto Sans JP',sans-serif",numFont:"inherit",fs:"14px",row:"36px",radius:"6px",rbtn:"6px",rbadge:"4px",btnh:"32px",btnw:"500",
+   bg:"#f6f9fc",surface:"#ffffff",subtle:"#eef2f7",border:"#e3e8f2",inputBd:"#cad3e2",text:"#1d2a3e",text2:"#516381",primary:"#0b64dd",onPrimary:"#ffffff",primaryBd:"#0b64dd",
+   btn2bg:"#e8f1ff",btn2fg:"#0b64dd",btn2bd:"#e8f1ff",accent:"#0b64dd",selBg:"#eef4ff",selFg:"#1d2a3e",sideBg:"#f6f9fc",sideFg:"#2b394f",sideActBg:"#e8f1ff",sideActFg:"#0b64dd",sideBd:"#e3e8f2",
+   thBg:"#ffffff",thFg:"#1d2a3e",thCase:"none",thW:"600",thFs:"12px",info:"#0b64dd",success:"#008a5e",warning:"#c28a00",danger:"#da3737",neutral:"#516381",
+   shadow:"0 1px 2px rgb(7 16 29 / .08)",headW:"700",titleFs:"22px",focus:"#0b64dd",zebra:"transparent",badge:"soft"}},
+ {id:"slds",group:"エンタープライズ",name:"Lightning",org:"Salesforce",url:"https://www.lightningdesignsystem.com/",cert:"近似",
+  lede:"CRM そのものの設計言語で、デザイントークンという考え方の元祖。オブジェクトごとのアイコン色と、フェーズを矢羽根で示す Path が業務の流れを伝える。",
+  ux:"リストビュー → レコードページ",
+  uxList:["上部のグローバル検索と、オブジェクトごとのナビゲーションタブ","リストビューは見出しのプルダウンで切り替える（クリックで順に切替）","レコードページは強調パネル → Path → 詳細タブ＋活動（パブリッシャー）の 3 段構成","「フェーズを完了としてマーク」で Path を進める"],
+  look:"矢羽根の Path、オレンジの商談アイコン、グレーの地に白いカード",
+  t:{font:"'Salesforce Sans',-apple-system,'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif",numFont:"inherit",fs:"13px",row:"34px",radius:"4px",rbtn:"4px",rbadge:"15px",btnh:"32px",btnw:"400",
+   bg:"#f3f3f3",surface:"#ffffff",subtle:"#f3f3f3",border:"#e5e5e5",inputBd:"#c9c9c9",text:"#181818",text2:"#5c5c5c",primary:"#0176d3",onPrimary:"#ffffff",primaryBd:"#0176d3",
+   btn2bg:"#ffffff",btn2fg:"#0176d3",btn2bd:"#c9c9c9",accent:"#0176d3",selBg:"#eef4ff",selFg:"#181818",sideBg:"#ffffff",sideFg:"#181818",sideActBg:"#eef4ff",sideActFg:"#0176d3",sideBd:"#e5e5e5",
+   thBg:"#f3f3f3",thFg:"#444444",thCase:"none",thW:"700",thFs:"12px",info:"#0176d3",success:"#2e844a",warning:"#dd7a01",danger:"#ba0517",neutral:"#747474",
+   shadow:"0 2px 2px rgb(0 0 0 / .1)",headW:"700",titleFs:"18px",focus:"#0176d3",zebra:"transparent",badge:"soft"}},
+ {id:"garden",group:"エンタープライズ",name:"Garden",org:"Zendesk",url:"https://garden.zendesk.com/",cert:"近似",
+  lede:"サポート担当者が一日中使う道具としての UI。ブランドの Kale（深い青緑）はナビに、操作の色は青に役割を分ける。",
+  ux:"ワークスペース型（タブで複数案件を並行処理）",
+  uxList:["開いた商談はブラウザのタブのように上部に並び、並行して扱える","ホームは「ビュー」の一覧と件数。「次の商談を開く」で上から順に処理する","詳細は 3 列：左にプロパティ（担当・フェーズを直接変更）、中央に会話形式の履歴、右に取引先情報","入力欄は「公開返信 / 社内メモ」を切り替え、送信ボタンで記録を確定する"],
+  look:"Kale 色のアイコンレール、社内メモは黄色",
+  t:{font:"system-ui,-apple-system,'Segoe UI','Hiragino Sans','Noto Sans JP',sans-serif",numFont:"inherit",fs:"14px",row:"44px",radius:"4px",rbtn:"4px",rbadge:"4px",btnh:"36px",btnw:"400",
+   bg:"#f8f9f9",surface:"#ffffff",subtle:"#f3f5f5",border:"#d8dcde",inputBd:"#c2c8cc",text:"#2f3941",text2:"#68737d",primary:"#1f73b7",onPrimary:"#ffffff",primaryBd:"#1f73b7",
+   btn2bg:"#ffffff",btn2fg:"#1f73b7",btn2bd:"#1f73b7",accent:"#1f73b7",selBg:"#edf7ff",selFg:"#2f3941",sideBg:"#03363d",sideFg:"#c2d3d5",sideActBg:"#17494d",sideActFg:"#ffffff",sideBd:"#03363d",
+   thBg:"#ffffff",thFg:"#68737d",thCase:"none",thW:"600",thFs:"12px",info:"#1f73b7",success:"#038153",warning:"#ad5918",danger:"#cc3340",neutral:"#68737d",
+   shadow:"none",headW:"600",titleFs:"22px",focus:"#1f73b7",zebra:"transparent",badge:"soft"}},
+ {id:"vibes",group:"日本の業務SaaS",name:"vibes",org:"freee",url:"https://vibes.freee.co.jp/",cert:"近似",
+  lede:"誰もが迷わず使える会計・人事 SaaS のために。組織としてアクセシビリティに取り組む前提で、フォーカスとコントラストを必須の要件にしている。",
+  ux:"検索条件フォーム＋一覧 → 詳細ページ",
+  uxList:["日本の業務システムに多い、上部に検索条件をまとめたフォームを置く構成","結果は件数・CSV 出力・ページ送り付きの表。操作は各行の「詳細」から","詳細は見出し付きのセクション。項目は左に見出し列のある表で見せる","登録フォームには「必須」ラベル。主な操作は画面下部の固定バーにまとめる"],
+  look:"freee ブルー、太字のボタン、暖かいグレー",
+  t:{font:"'Noto Sans JP','Hiragino Sans',sans-serif",numFont:"inherit",fs:"14px",row:"52px",radius:"8px",rbtn:"6px",rbadge:"4px",btnh:"36px",btnw:"700",
+   bg:"#f7f5f5",surface:"#ffffff",subtle:"#f7f5f5",border:"#e3dfdf",inputBd:"#bcb7b7",text:"#323232",text2:"#6e6b6b",primary:"#2864f0",onPrimary:"#ffffff",primaryBd:"#2864f0",
+   btn2bg:"#ffffff",btn2fg:"#323232",btn2bd:"#bcb7b7",accent:"#2864f0",selBg:"#ebf1fe",selFg:"#323232",sideBg:"#ffffff",sideFg:"#323232",sideActBg:"#ebf1fe",sideActFg:"#2864f0",sideBd:"#ebe8e8",
+   thBg:"#f7f5f5",thFg:"#6e6b6b",thCase:"none",thW:"700",thFs:"12px",info:"#2864f0",success:"#00875a",warning:"#c77700",danger:"#dc1e32",neutral:"#8c8989",
+   shadow:"none",headW:"700",titleFs:"22px",focus:"#2864f0",zebra:"transparent",badge:"soft"}},
+ {id:"kamii",group:"日本の業務SaaS",name:"kamii",org:"ラクスル",url:"https://designsystem.raksul.com/",cert:"解釈",
+  lede:"印刷事業全体のデザイン指針。思想・価値観からレイアウト・色・文章表現までを定め、開発しながら維持できる仕組みを重視する（Vue で実装）。",
+  ux:"進み具合トラッカー（中央 1 カラム）",
+  uxList:["注文の配送状況のように、各商談の進み具合を番号付きのステップで見せる","最上部に「3 日以内にやること」を置き、次の行動から始められる","一覧は次の行動の期限が近い順。「詳細」を押すとその場で下に展開する","画面は中央 1 カラムに絞り、視線の横移動をなくす"],
+  look:"罫線で区切る紙面、角ばった枠線のバッジ",
+  t:{font:"'Noto Sans JP','Hiragino Sans',sans-serif",numFont:"inherit",fs:"14px",row:"48px",radius:"4px",rbtn:"4px",rbadge:"2px",btnh:"36px",btnw:"700",
+   bg:"#f5f6f8",surface:"#ffffff",subtle:"#eef1f5",border:"#d8dce3",inputBd:"#aeb5c1",text:"#222831",text2:"#5a6270",primary:"#1a6fc4",onPrimary:"#ffffff",primaryBd:"#1a6fc4",
+   btn2bg:"#ffffff",btn2fg:"#1a6fc4",btn2bd:"#1a6fc4",accent:"#1a6fc4",selBg:"#eaf2fb",selFg:"#222831",sideBg:"#ffffff",sideFg:"#222831",sideActBg:"#eaf2fb",sideActFg:"#1a6fc4",sideBd:"#d8dce3",
+   thBg:"#ffffff",thFg:"#222831",thCase:"none",thW:"700",thFs:"12px",info:"#1a6fc4",success:"#2a8d57",warning:"#c27400",danger:"#d13438",neutral:"#6b7280",
+   shadow:"none",headW:"700",titleFs:"22px",focus:"#1a6fc4",zebra:"transparent",badge:"outline"}},
+ {id:"serendie",group:"日本の業務SaaS",name:"Serendie",org:"三菱電機",url:"https://serendie.design/",cert:"解釈",
+  lede:"多様な事業と人をつなぐ、オープンなデザインシステム。伝統色に由来する 5 テーマ（紺青・浅葱・菫・栗皮・躑躅）をトークンで切り替え、コントラストは APCA で評価する。",
+  ux:"トップアプリバー＋カードグリッド",
+  uxList:["主色で塗ったトップアプリバーと、アイコンにラベルを添えたナビゲーションレール","フィルタチップで絞り込み、上段に指標ウィジェット（リング・リスト）","商談は 3 列のカードで、進捗バーと金額を見比べる","詳細ではアプリバーが「戻る矢印＋商談名」に変わり、階層の移動がバーに表れる"],
+  look:"紺青テーマ、ピル型ボタン、12px 角丸",
+  t:{font:"'Noto Sans JP','Hiragino Sans',sans-serif",numFont:"inherit",fs:"14px",row:"52px",radius:"12px",rbtn:"999px",rbadge:"999px",btnh:"36px",btnw:"700",
+   bg:"#f3f4f8",surface:"#ffffff",subtle:"#eceff5",border:"#dde1e9",inputBd:"#b6bdcb",text:"#1a1d24",text2:"#5b6272",primary:"#193c8c",onPrimary:"#ffffff",primaryBd:"#193c8c",
+   btn2bg:"#e6ebf6",btn2fg:"#193c8c",btn2bd:"#e6ebf6",accent:"#193c8c",selBg:"#eef2fa",selFg:"#1a1d24",sideBg:"#ffffff",sideFg:"#1a1d24",sideActBg:"#e6ebf6",sideActFg:"#193c8c",sideBd:"#e3e6ec",
+   thBg:"#ffffff",thFg:"#5b6272",thCase:"none",thW:"700",thFs:"12px",info:"#2f6fd0",success:"#1f8a5b",warning:"#b87200",danger:"#d0343b",neutral:"#6b7280",
+   shadow:"0 1px 3px rgb(20 30 60 / .08)",headW:"700",titleFs:"24px",focus:"#2f6fd0",zebra:"transparent",badge:"soft"}},
+ {id:"sparkle",group:"日本の業務SaaS",name:"Sparkle Design",org:"Goodpatch",url:"https://sparkle-design.goodpatch.com/sparkle-design",cert:"解釈",
+  lede:"誰もがよいデザインを作れるよう、実務の知見をまとめたシステム。Primary Color・フォント・角丸をプラグインで調整できる「下地」として設計されている。",
+  ux:"月ごとにまとめたリスト＋読みやすい詳細ペイン",
+  uxList:["一覧は完了予定月ごとに見出しで区切る","詳細は幅を絞った読み物のような構成で、「次にやること」を目立たせる","主な操作は画面下に浮くアクションバーにまとめる","サイドバー下部に導入ガイドの進み具合を置き、初めての人を案内する"],
+  look:"無彩色の地、ゆったりした余白、二重の柔らかい影",
+  t:{font:"'Noto Sans JP','Hiragino Sans',sans-serif",numFont:"inherit",fs:"14px",row:"56px",radius:"12px",rbtn:"8px",rbadge:"999px",btnh:"36px",btnw:"600",
+   bg:"#fafafa",surface:"#ffffff",subtle:"#f4f4f4",border:"#e7e7e7",inputBd:"#cfcfcf",text:"#1a1a1a",text2:"#666666",primary:"#0f6e62",onPrimary:"#ffffff",primaryBd:"#0f6e62",
+   btn2bg:"#ffffff",btn2fg:"#1a1a1a",btn2bd:"#d4d4d4",accent:"#0f6e62",selBg:"#eef6f4",selFg:"#1a1a1a",sideBg:"#fafafa",sideFg:"#333333",sideActBg:"#ffffff",sideActFg:"#0f6e62",sideBd:"#ededed",
+   thBg:"#fafafa",thFg:"#666666",thCase:"none",thW:"600",thFs:"12px",info:"#2563eb",success:"#0f6e62",warning:"#b7791f",danger:"#d64545",neutral:"#8a8a8a",
+   shadow:"0 1px 2px rgb(0 0 0 / .04),0 4px 12px rgb(0 0 0 / .04)",headW:"700",titleFs:"24px",focus:"#0f6e62",zebra:"transparent",badge:"dot"}},
+ {id:"spindle",group:"日本の業務SaaS",name:"Spindle",org:"サイバーエージェント（Ameba）",url:"https://spindle.ameba.design/",cert:"解釈",
+  lede:"Ameba らしさ＝伝統のグリーンと親しみやすさ。「書く・読む・反応する」を迷わず行えることと、表示の速さ（パフォーマンス）を原則にしている。",
+  ux:"モバイルファースト（外回り営業のスマホアプリ）",
+  uxList:["Spindle はモバイル中心の Ameba のためのシステムなので、CRM を外回り営業のスマホアプリとして解釈","横スクロールのチップで絞り込み、「今日のフォロー」をカルーセルで見せる","カードをタップすると下からシートが開き、親指の届く位置に大きなボタンを置く","下部のタブバー中央に作成ボタン"],
+  look:"Ameba グリーン、ピル型、16px 角丸、太字",
+  t:{font:"'Noto Sans JP','Hiragino Sans',sans-serif",numFont:"inherit",fs:"14px",row:"54px",radius:"16px",rbtn:"999px",rbadge:"999px",btnh:"36px",btnw:"700",
+   bg:"#f5f5f5",surface:"#ffffff",subtle:"#f2f2f2",border:"#e3e3e3",inputBd:"#bdbdbd",text:"#08121a",text2:"#5a646b",primary:"#2d8c3c",onPrimary:"#ffffff",primaryBd:"#2d8c3c",
+   btn2bg:"#ffffff",btn2fg:"#237332",btn2bd:"#2d8c3c",accent:"#2d8c3c",selBg:"#edf6ee",selFg:"#08121a",sideBg:"#ffffff",sideFg:"#08121a",sideActBg:"#edf6ee",sideActFg:"#237332",sideBd:"#eeeeee",
+   thBg:"#ffffff",thFg:"#5a646b",thCase:"none",thW:"700",thFs:"12px",info:"#1a73e8",success:"#2d8c3c",warning:"#c77800",danger:"#e3372a",neutral:"#6b7378",
+   shadow:"none",headW:"800",titleFs:"24px",focus:"#1a73e8",zebra:"transparent",badge:"soft"}},
+ {id:"hig",group:"プラットフォーム",name:"Human Interface",org:"Apple",url:"https://developer.apple.com/jp/design/human-interface-guidelines/",cert:"近似",
+  lede:"明快さ・コンテンツへの敬意・奥行き。OS 標準の振る舞いに従い、ユーザーがすでに知っている操作を裏切らない（ここでは macOS アプリとして解釈）。",
+  ux:"macOS の 3 ペイン（サイドバー／一覧／詳細）",
+  uxList:["ソースリスト（スマートフォルダとフェーズ）で絞り込み、中央に一覧、右に詳細の 3 ペイン","ツールバーにタイトル・セグメンテッドコントロール・検索をまとめる","選択行は systemBlue で塗り、詳細はグループ化した項目で見せる","記録はウインドウ上部から開くシート（モーダル）で入力する"],
+  look:"システムフォント 13pt、信号ボタン、グループ表示",
+  t:{font:"-apple-system,BlinkMacSystemFont,'SF Pro Text','Hiragino Sans','Noto Sans JP',sans-serif",numFont:"inherit",fs:"13px",row:"34px",radius:"10px",rbtn:"6px",rbadge:"999px",btnh:"28px",btnw:"400",
+   bg:"#ffffff",surface:"#ffffff",subtle:"#f2f2f7",border:"#e5e5ea",inputBd:"#d1d1d6",text:"#1d1d1f",text2:"#6e6e73",primary:"#007aff",onPrimary:"#ffffff",primaryBd:"#007aff",
+   btn2bg:"#e9e9ee",btn2fg:"#1d1d1f",btn2bd:"#e9e9ee",accent:"#007aff",selBg:"#0a6cf5",selFg:"#ffffff",sideBg:"#e8e8ed",sideFg:"#1d1d1f",sideActBg:"#d5d5da",sideActFg:"#1d1d1f",sideBd:"#d8d8dc",
+   thBg:"#ffffff",thFg:"#6e6e73",thCase:"none",thW:"500",thFs:"11px",info:"#007aff",success:"#248a3d",warning:"#c93400",danger:"#ff3b30",neutral:"#8e8e93",
+   shadow:"none",headW:"700",titleFs:"26px",focus:"#007aff",zebra:"#f5f5f7",badge:"soft"}},
+];
+
+/* ---------- data ---------- */
+const STAGES = ["リード","ヒアリング","提案","見積","交渉","受注"];
+const TONE = {"リード":"neutral","ヒアリング":"info","提案":"info","見積":"warning","交渉":"warning","受注":"success","失注":"danger"};
+const TODAY = new Date("2026-09-23T00:00:00");
+const ME = "佐藤";
+const OWNERS = ["佐藤","田中","鈴木","高橋"];
+const KL = {call:"電話",mail:"メール",meet:"打合せ",memo:"メモ"};
+const KI = {call:"phone",mail:"mail",meet:"meet",memo:"memo"};
+const deals = [
+ {id:1,co:"北辰ロジスティクス株式会社",name:"倉庫管理SaaS 全拠点導入",stage:"交渉",amt:4800000,p:70,close:"2026-10-15",owner:"佐藤",upd:2,next:{t:"価格の最終回答を送る",d:"2026-09-25"},
+  info:{業種:"物流・倉庫",従業員数:"1,240名",流入経路:"展示会",競合:"A社 WMS"},
+  acts:[{k:"meet",who:"佐藤",d:"9/21",t:"打合せ",x:"情報システム部と価格条件を協議。年額一括払いなら 5% 値引きで合意の見込み。"},{k:"mail",who:"佐藤",d:"9/17",t:"メール",x:"全 6 拠点分の見積書（改訂版）を送付。"},{k:"call",who:"佐藤",d:"9/10",t:"電話",x:"物流部長より、年末の繁忙期前に稼働させたいとの連絡。"}]},
+ {id:2,co:"青葉メディカル",name:"予約・問診連携 PoC",stage:"提案",amt:1200000,p:40,close:"2026-11-02",owner:"田中",upd:5,next:{t:"PoC 提案の感触を確認する",d:"2026-09-29"},
+  info:{業種:"医療法人",従業員数:"380名",流入経路:"Web問い合わせ",競合:"なし"},
+  acts:[{k:"mail",who:"田中",d:"9/18",t:"メール",x:"PoC の範囲（2 診療科・3 か月）の提案書を送付。"},{k:"meet",who:"田中",d:"9/12",t:"打合せ",x:"事務長と現行の電話予約の流れを確認。"}]},
+ {id:3,co:"株式会社ミナト精機",name:"生産管理 追加ライセンス",stage:"見積",amt:2350000,p:60,close:"2026-10-08",owner:"佐藤",upd:1,next:{t:"稟議の進み具合を確認する",d:"2026-10-01"},
+  info:{業種:"精密機器製造",従業員数:"620名",流入経路:"既存顧客（追加）",競合:"なし"},
+  acts:[{k:"mail",who:"佐藤",d:"9/22",t:"メール",x:"追加 40 ライセンスの見積を提出。稟議は 10 月第 1 週。"},{k:"call",who:"佐藤",d:"9/15",t:"電話",x:"第 2 工場の稼働に合わせて席数を増やしたいとの相談。"}]},
+ {id:4,co:"くすのき不動産",name:"顧客ポータル刷新",stage:"ヒアリング",amt:3600000,p:20,close:"2026-12-20",owner:"鈴木",upd:16,next:{t:"ヒアリング内容のまとめを送る",d:"2026-09-16"},
+  info:{業種:"不動産管理",従業員数:"210名",流入経路:"パートナー紹介",競合:"自社開発"},
+  acts:[{k:"meet",who:"鈴木",d:"9/7",t:"打合せ",x:"入居者向けポータルの課題をヒアリング。解約手続きのオンライン化が最優先。"}]},
+ {id:5,co:"東雲フーズ",name:"受発注EDI 連携",stage:"受注",amt:1980000,p:100,close:"2026-09-18",owner:"田中",upd:0,next:{t:"キックオフの日程を確定する",d:"2026-09-26"},
+  info:{業種:"食品卸",従業員数:"450名",流入経路:"セミナー",競合:"B社 EDI"},
+  acts:[{k:"meet",who:"田中",d:"9/18",t:"契約",x:"契約締結。10 月から導入支援を開始。"},{k:"mail",who:"田中",d:"9/11",t:"メール",x:"最終見積と導入スケジュールを送付。"}]},
+ {id:6,co:"ヤマブキ電装",name:"保守契約 更新",stage:"交渉",amt:860000,p:80,close:"2026-09-30",owner:"鈴木",upd:3,next:{t:"延長サポートの見積を出す",d:"2026-09-24"},
+  info:{業種:"電装部品",従業員数:"890名",流入経路:"既存顧客（更新）",競合:"なし"},
+  acts:[{k:"call",who:"鈴木",d:"9/20",t:"電話",x:"サポート時間を平日 20 時まで延長する条件で更新を検討中。"}]},
+ {id:7,co:"オリオン教育",name:"学習管理 全校展開",stage:"リード",amt:5400000,p:10,close:"2027-01-31",owner:"高橋",upd:21,next:{t:"面談の日程を再提案する",d:"2026-09-24"},
+  info:{業種:"学校法人",従業員数:"1,050名",流入経路:"資料ダウンロード",競合:"未確認"},
+  acts:[{k:"mail",who:"高橋",d:"9/2",t:"メール",x:"資料ダウンロードへのお礼と、面談の候補日を送付（返信なし）。"}]},
+ {id:8,co:"さくら信用金庫",name:"融資審査ワークフロー",stage:"失注",amt:2700000,p:0,close:"2026-09-05",owner:"高橋",upd:18,next:{t:"来期の再提案時期を確認する",d:"2027-03-01"},
+  info:{業種:"金融",従業員数:"730名",流入経路:"Web問い合わせ",競合:"C社（採用）"},
+  acts:[{k:"call",who:"高橋",d:"9/5",t:"電話",x:"オンプレミスでの稼働が必須となり失注。来期に再提案の余地あり。"}]},
+];
+
+/* ---------- state ---------- */
+const state = {ds:"primer",tab:"open",owner:null,stale:false,stage:null,q:"",sel:1,view:"list",overlay:false,form:false,dtab:"act",
+  openTabs:[],gview:"open",expanded:null,note:false,kind:"call"};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const yen = n => "¥" + n.toLocaleString("ja-JP");
+const man = n => Math.round(n/10000).toLocaleString("ja-JP") + "万円";
+const isOpen = d => d.stage !== "受注" && d.stage !== "失注";
+const md = s => { const [y,m,d] = s.split("-"); return (y!=="2026"?y+"/":"") + (+m) + "/" + (+d); };
+const isLate = d => isOpen(d) && new Date(d.close+"T00:00:00") < TODAY;
+const nextLate = d => d.stage!=="失注" && new Date(d.next.d+"T00:00:00") < TODAY;
+const code = d => "OPP-" + (140 + d.id);
+const updTxt = d => d.upd===0 ? "今日" : d.upd + " 日前";
+const updDate = d => { const x = new Date(TODAY - d.upd*864e5); return x.toISOString().slice(0,10); };
+const cur = () => deals.find(x => x.id === state.sel) || deals[0];
+const TABS = [["open","進行中"],["won","受注"],["lost","失注"],["all","すべて"]];
+const WD = ["日","月","火","水","木","金","土"];
+
+const P = {
+ home:"M2.5 7.5 8 3l5.5 4.5V13a.5.5 0 0 1-.5.5H9.5v-3h-3v3H3a.5.5 0 0 1-.5-.5z",
+ table:"M3 3h10a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5v-9A.5.5 0 0 1 3 3zM2.5 6.5h11M6.5 6.5v6.5",
+ code:"M6 4.5 2.5 8 6 11.5M10 4.5 13.5 8 10 11.5",
+ chart:"M2.5 13.5h11M4.5 11V8M8 11V4.5M11.5 11V6.5",
+ gear:"M8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4",
+ search:"M7 2.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zM10.5 10.5l3 3",
+ plus:"M8 3v10M3 8h10", chev:"M4 6l4 4 4-4", x:"M4 4l8 8M12 4l-8 8",
+ left:"M10 3.5 5.5 8l4.5 4.5", right:"M6 3.5 10.5 8 6 12.5",
+ flag:"M3.5 14V2.5M3.5 3h8l-1.5 3 1.5 3h-8",
+ bell:"M4 11V7a4 4 0 0 1 8 0v4l1 1.5H3zM6.5 14h3",
+ user:"M8 2.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM2.5 14c.8-2.6 2.9-4 5.5-4s4.7 1.4 5.5 4",
+ grid:"M2.5 2.5h4.5v4.5H2.5zM9 2.5h4.5v4.5H9zM2.5 9h4.5v4.5H2.5zM9 9h4.5v4.5H9z",
+ list:"M5.5 4h8M5.5 8h8M5.5 12h8M2.5 4h.5M2.5 8h.5M2.5 12h.5",
+ board:"M2.5 2.5h3v11h-3zM6.5 2.5h3v7h-3zM10.5 2.5h3v9h-3z",
+ inbox:"M2.5 9l1.5-5.5h8L13.5 9v4h-11zM2.5 9h3l1 1.5h3l1-1.5h3",
+ filter:"M2.5 3.5h11L9.5 8.5v4l-3 1.5V8.5z",
+ sort:"M5 3v10M2.5 10.5 5 13l2.5-2.5M11 13V3M8.5 5.5 11 3l2.5 2.5",
+ dots:"M3.5 8h.01M8 8h.01M12.5 8h.01",
+ apps:"M3.5 3.5h.01M8 3.5h.01M12.5 3.5h.01M3.5 8h.01M8 8h.01M12.5 8h.01M3.5 12.5h.01M8 12.5h.01M12.5 12.5h.01",
+ check:"M3 8.5 6.5 12 13 4.5",
+ opencirc:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM8 7a1 1 0 1 1 0 2 1 1 0 0 1 0-2z",
+ donecirc:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM5.5 8l1.8 1.8L10.8 6.3",
+ skip:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM4.5 11.5l7-7",
+ phone:"M3 2.5h3l1.2 3-1.7 1.2a8 8 0 0 0 3.8 3.8L10.5 8.8l3 1.2v3a1 1 0 0 1-1 1A11.5 11.5 0 0 1 2 3.5a1 1 0 0 1 1-1z",
+ mail:"M3.5 3.5h9a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V5a1.5 1.5 0 0 1 1.5-1.5zM2.5 4.5 8 8.5l5.5-4",
+ meet:"M6 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM1.5 13.5c.6-2.3 2.3-3.5 4.5-3.5s3.9 1.2 4.5 3.5M11.5 3.5a2 2 0 1 1 0 4M11 9.6c1.8 0 3.1 1.1 3.5 3",
+ memo:"M3 2.5h7l3 3v8H3zM5.5 8h5M5.5 10.5h3.5",
+ edit:"M10.5 2.5l3 3-8 8h-3v-3z",
+ star:"M8 2l1.8 3.8 4.2.5-3.1 2.9.8 4.1L8 11.3 4.3 13.3l.8-4.1L2 6.3l4.2-.5z",
+ menu:"M2.5 4h11M2.5 8h11M2.5 12h11",
+ cal:"M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3",
+ sidebar:"M2.5 3h11v10h-11zM6 3v10",
+ db:"M8 2.5c3 0 5.5.9 5.5 2s-2.5 2-5.5 2-5.5-.9-5.5-2 2.5-2 5.5-2zM2.5 4.5v7c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2v-7M2.5 8c0 1.1 2.5 2 5.5 2s5.5-.9 5.5-2",
+ clock:"M8 2.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zM8 5v3l2 1.5",
+ comment:"M2.5 3.5h11v7.5H7l-3 2.5V11H2.5z",
+ building:"M3 13.5V3h6v10.5M9 6h4v7.5M2 13.5h12M5 5.5h2M5 8h2M5 10.5h2",
+ expand:"M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9",
+ refresh:"M13 3v3.5H9.5M3 13V9.5h3.5M12.6 6.5A5 5 0 0 0 3.8 5M3.4 9.5a5 5 0 0 0 8.8 1.5",
+ up:"M4 10l4-4 4 4", warn:"M8 2.5l6 11H2zM8 6.5v3M8 11.5h.01",
+};
+const ic = (n, s=16) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 16 16" aria-hidden="true"${n==="dots"||n==="apps"?' style="stroke-width:2.4"':""}><path d="${P[n]}"/></svg>`;
+const badge = st => `<span class="badge tone-${TONE[st]}">${st}</span>`;
+const av = (n, extra="") => `<span class="av" title="${n}" ${extra}>${n[0]}</span>`;
+const B = (label, act, kind="", extra="") => `<button type="button" class="btn ${kind}" data-act="${act}" ${extra}>${label}</button>`;
+const advLabel = d => d.stage==="交渉" ? "受注にする" : "フェーズを進める";
+const advBtn = (d, kind="", label) => B(label || advLabel(d), "advance", kind, `data-id="${d.id}" ${isOpen(d)?"":"disabled"}`);
+const empty = () => `<div class="empty">条件に合う商談はありません。絞り込みを変えてください。</div>`;
+const tabsCounts = () => ({open:deals.filter(isOpen).length, won:deals.filter(d=>d.stage==="受注").length, lost:deals.filter(d=>d.stage==="失注").length, all:deals.length});
+
+function match(d, o=state){
+  if(o.stage){ if(d.stage !== o.stage) return false; }
+  else {
+    if(o.tab==="open" && !isOpen(d)) return false;
+    if(o.tab==="won" && d.stage!=="受注") return false;
+    if(o.tab==="lost" && d.stage!=="失注") return false;
+  }
+  if(o.owner && d.owner !== o.owner) return false;
+  if(o.stale && !(isOpen(d) && d.upd >= 14)) return false;
+  if(o.q && !(d.name + d.co).toLowerCase().includes(o.q.toLowerCase())) return false;
+  return true;
+}
+const filtered = (o=state) => deals.filter(d => match(d, o));
+
+function sums(){
+  const open = deals.filter(isOpen);
+  const by = s => open.filter(d => d.stage===s);
+  return {open, total:open.reduce((s,d)=>s+d.amt,0), weighted:open.reduce((s,d)=>s+d.amt*d.p/100,0),
+    thisMonth:open.filter(d=>d.close.startsWith("2026-09")).length, stale:open.filter(d=>d.upd>=14).length,
+    late:open.filter(isLate).length,
+    byStage:STAGES.slice(0,5).map((s,i)=>({s,i,n:by(s).length,v:by(s).reduce((a,d)=>a+d.amt,0)}))};
+}
+function pathHTML(d){
+  const idx = STAGES.indexOf(d.stage), lost = d.stage==="失注";
+  return `<ol class="path" aria-label="商談フェーズ">${STAGES.map((s,i)=>{
+    if(lost) return i===5 ? `<li class="lostcur">失注</li>` : `<li>${s}</li>`;
+    return `<li class="${i<idx?"done":i===idx?"cur":""}">${s}</li>`;
+  }).join("")}</ol>`;
+}
+function stepper(d){
+  const idx = STAGES.indexOf(d.stage), lost = d.stage==="失注";
+  return `<ol class="stepper" aria-label="商談フェーズ">${STAGES.map((s,i)=>{
+    if(lost) return i===5 ? `<li class="lostcur"><span class="dot">×</span>失注</li>` : `<li><span class="dot">${i+1}</span>${s}</li>`;
+    const c = i<idx ? "done" : i===idx ? "cur" : "";
+    return `<li class="${c}"><span class="dot">${c==="done"?ic("check",14):i+1}</span>${s}</li>`;
+  }).join("")}</ol>`;
+}
+function timeline(d){
+  return `<ol class="tl">${d.acts.map(a=>`<li><span class="tli k-${a.k}" aria-hidden="true">${ic(KI[a.k]||"memo",14)}</span><div><div class="h"><b>${esc(a.t)}</b><span>${a.who}・${a.d}</span></div><p>${esc(a.x)}</p></div></li>`).join("")}</ol>`;
+}
+const kv = d => `<dl class="kv"><dt>取引先</dt><dd>${d.co}</dd>${Object.entries(d.info).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
+const metaDL = d => `<dl class="kv"><dt>フェーズ</dt><dd>${badge(d.stage)}</dd><dt>確度</dt><dd class="num">${d.p}%</dd><dt>完了予定</dt><dd class="num ${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</dd><dt>担当</dt><dd>${d.owner}</dd><dt>次にやること</dt><dd>${d.next.t}（${md(d.next.d)}）</dd></dl>`;
+const kindOptions = () => Object.entries(KL).map(([k,l])=>`<option value="${k}">${l}</option>`).join("");
+function logForm({cancel=true, submit="保存", kinds=true}={}){
+  return `<form class="form" id="logForm">
+    ${kinds?`<label for="f-kind">種別<select id="f-kind">${kindOptions()}</select></label>`:""}
+    <label for="f-note">内容<textarea id="f-note" placeholder="例：決裁者と日程を調整。10/3 に再訪問。"></textarea></label>
+    <label class="chk" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後にリマインドする</label>
+    ${submit?`<div class="formrow">${cancel?B("キャンセル","cancel","ghost"):""}<button class="btn primary" type="submit">${submit}</button></div>`:""}
+  </form>`;
+}
+const LAYOUTS = {};
+</script>
+<script>
+/* ===== Supabase ===== */
+LAYOUTS.supabase = {mode:"overlay", dtab:"act", actTab:"act", render(){
+  const list = filtered(), c = tabsCounts(), d = cur();
+  const COLS = [["name","text"],["company","text"],["stage","deal_stage"],["amount","int8"],["probability","int2"],["close_date","date"],["owner","text"],["updated_at","timestamptz"]];
+  const rail = [["home","ホーム"],["table","テーブルエディタ"],["code","SQL エディタ"],["db","データベース"],["chart","レポート"],["gear","設定"]];
+  return `<div class="sb">
+  <nav class="sb-rail" aria-label="プロジェクトメニュー"><span class="sb-logo">${ic("db",20)}</span>${rail.map(([n,l])=>`<button type="button" class="sb-railbtn ${n==="table"?"on":""}" data-act="noop" aria-label="${l}" title="${l}">${ic(n)}</button>`).join("")}</nav>
+  <aside class="sb-panel">
+    <div class="sb-ph">テーブルエディタ</div>
+    <div class="sb-schema"><span class="muted">schema</span><b>public</b><span class="grow"></span>${ic("chev",12)}</div>
+    ${B(ic("plus",14)+"新しいテーブル","noop","sb-full")}
+    <ul class="sb-tables">${["deals","accounts","contacts","activities","profiles"].map(t=>`<li class="${t==="deals"?"on":""}">${ic("table",14)}${t}</li>`).join("")}</ul>
+  </aside>
+  <section class="sb-main">
+    <header class="sb-top"><span class="muted">tsumugi-crm</span><span class="muted">/</span><span class="muted">public</span><span class="muted">/</span><b>deals</b><span class="sb-rls">RLS 有効</span><span class="grow"></span>${B("API ドキュメント","noop")}</header>
+    <div class="sb-tool">
+      <div class="sb-seg" role="group" aria-label="stage で絞り込み">${TABS.map(([k,l])=>`<button type="button" data-act="tab" data-v="${k}" aria-pressed="${state.tab===k&&!state.stage}">${l} <span class="num muted">${c[k]}</span></button>`).join("")}</div>
+      ${B(ic("filter",14)+(state.owner?`owner = ${state.owner}`:"フィルタ"),"own","",`aria-pressed="${!!state.owner}"`)}
+      ${B(ic("sort",14)+"並べ替え: close_date","noop")}
+      <input type="search" id="q" class="sb-q" placeholder="行を検索" value="${esc(state.q)}" aria-label="行を検索">
+      <span class="grow"></span>
+      ${B(ic("plus",14)+"行を挿入","noop","primary")}
+    </div>
+    <div class="sb-gridwrap scroll" data-scroll="sb">
+      <table class="sb-grid"><thead><tr><th class="sb-idx">#</th>${COLS.map(([n,t])=>`<th>${n}<small>${t}</small></th>`).join("")}</tr></thead>
+      <tbody>${list.map(x=>`<tr data-act="open" data-id="${x.id}" tabindex="0" aria-selected="${state.overlay&&x.id===state.sel}">
+        <td class="sb-idx num">${x.id}</td><td>${x.name}</td><td>${x.co}</td><td><span class="sb-enum">${x.stage}</span></td>
+        <td class="r num">${x.amt}</td><td class="r num">${x.p}</td><td class="num">${x.close}</td><td>${x.owner}</td><td class="num muted">${updDate(x)} 10:12</td></tr>`).join("")}</tbody></table>
+      ${list.length?"":empty()}
+    </div>
+    <footer class="sb-foot"><span class="num">${list.length} 行</span><span class="grow"></span><span class="muted">ページ 1 / 1</span></footer>
+  </section>
+  ${state.overlay?`<div class="scrim" data-act="close"></div>
+  <aside class="sheet sb-sheet" aria-label="行の編集">
+    <div class="sheet-head"><div class="grow"><div class="small muted">行を表示</div><h2 style="font-size:16px">deals · id ${d.id}</h2></div><button type="button" class="iconbtn" data-act="close" aria-label="閉じる">${ic("x")}</button></div>
+    <div class="sheet-body">
+      ${[["name","text",d.name],["company","text",d.co],["stage","deal_stage",d.stage],["amount","int8",d.amt],["probability","int2",d.p],["close_date","date",d.close],["owner","text",d.owner]].map(([n,t,v])=>`<div class="sb-field"><div><b>${n}</b><small>${t}</small></div><input type="text" id="sb-${n}" value="${esc(v)}" readonly aria-label="${n}"></div>`).join("")}
+      <div class="sb-rel"><div class="row"><b>activities</b><span class="muted small">deal_id = ${d.id} · ${d.acts.length} 行</span><span class="grow"></span>${B(ic("plus",14)+"行を追加","log")}</div>
+      ${state.form?logForm({submit:"挿入"}):""}${timeline(d)}</div>
+    </div>
+    <div class="sheet-foot">${B("閉じる","close")}${advBtn(d,"primary")}</div>
+  </aside>`:""}
+  </div>`;
+}};
+
+/* ===== shadcn/ui ===== */
+LAYOUTS.shadcn = {mode:"overlay", dtab:"act", actTab:"act", render(){
+  const s = sums(), c = tabsCounts(), list = filtered(), d = cur();
+  const max = Math.max(...s.byStage.map(x=>x.v), 1);
+  const cards = [["パイプライン総額",man(s.total),"+12.5%",`進行中 ${s.open.length} 件`,"先月末からの増減"],
+    ["加重見込",man(s.weighted),"+4.2%","金額 × 確度で算出","受注見込みの目安"],
+    ["今月クローズ予定",`${s.thisMonth} 件`,"9/30 まで",`期限超過 ${s.late} 件`,"完了予定日が今月の商談"],
+    ["14日以上更新なし",`${s.stale} 件`,s.stale?"要対応":"なし","フォローが必要","最後の活動から 14 日以上"]];
+  const nav = [["home","ダッシュボード"],["list","商談",true],["building","取引先"],["comment","活動"],["chart","レポート"]];
+  return `<div class="sh">
+  <aside class="sh-side">
+    <div class="sh-team"><span class="logo">紡</span><div class="grow"><b>Tsumugi CRM</b><small>営業チーム</small></div>${ic("sort",14)}</div>
+    <div class="sh-quick">${B(ic("plus",14)+"クイック作成","noop","primary")}</div>
+    <div class="nav"><div class="nav-l">営業</div>${nav.map(([i,l,on])=>`<button type="button" class="navi ${on?"on":""}" data-act="noop">${ic(i)}${l}${on?`<span class="cnt num">${c.open}</span>`:""}</button>`).join("")}</div>
+    <div class="nav"><div class="nav-l">資料</div><button type="button" class="navi" data-act="noop">${ic("memo")}提案書テンプレート</button><button type="button" class="navi" data-act="noop">${ic("table")}価格表</button></div>
+    <div class="sh-user">${av(ME)}<div class="grow">佐藤 美咲<small>sato@example.jp</small></div>${ic("dots")}</div>
+  </aside>
+  <main class="sh-inset">
+    <header class="sh-head"><button type="button" class="iconbtn" data-act="noop" aria-label="サイドバーを切り替え">${ic("sidebar")}</button><span class="sh-sep"></span><span class="muted">営業</span>${ic("right",12)}<span>商談</span><span class="grow"></span>${B("エクスポート","noop")}</header>
+    <div class="sh-body scroll" data-scroll="sh">
+      <div class="sh-cards">${cards.map(([l,v,t,f1,f2])=>`<div class="card sh-card"><span class="muted small">${l}</span><span class="v num">${v}</span><span class="badge tone-neutral tr">${t}</span><span class="small" style="margin-top:6px;font-weight:500">${f1}</span><span class="small muted">${f2}</span></div>`).join("")}</div>
+      <div class="card sh-chart">
+        <div class="row"><div class="grow"><h3 style="font-size:15px">フェーズ別パイプライン</h3><p class="muted small">進行中の商談の金額合計</p></div><div class="sh-toggle"><button type="button" data-act="noop" aria-pressed="true">金額</button><button type="button" data-act="noop" aria-pressed="false">件数</button></div></div>
+        <div class="sh-bars">${s.byStage.map(x=>`<div class="sh-bar"><span class="muted">${x.s}</span><div class="sh-track"><i style="width:${x.v/max*100}%"></i></div><span class="num" style="text-align:right">${man(x.v)}</span></div>`).join("")}</div>
+      </div>
+      <div class="sh-tbar">
+        <div class="sh-tabs" role="tablist" aria-label="状態">${TABS.map(([k,l])=>`<button type="button" role="tab" data-act="tab" data-v="${k}" aria-selected="${state.tab===k}">${l}<span class="sh-cnt num">${c[k]}</span></button>`).join("")}</div>
+        <span class="grow"></span>
+        <input type="search" id="q" class="sh-q" placeholder="商談を絞り込み…" value="${esc(state.q)}" aria-label="商談を絞り込み">
+        ${B("列を表示"+ic("chev",14),"noop")}${B(ic("plus",14)+"商談を追加","noop")}
+      </div>
+      <div class="card sh-tablecard"><table class="tbl"><thead><tr><th class="w1"><input type="checkbox" id="sh-all" aria-label="すべて選択"></th><th>商談</th><th>フェーズ</th><th class="r">金額</th><th class="r">確度</th><th>完了予定</th><th>担当</th><th class="w1"></th></tr></thead>
+      <tbody>${list.map(x=>`<tr data-act="open" data-id="${x.id}" tabindex="0">
+        <td data-stop><input type="checkbox" id="sh-c${x.id}" aria-label="${x.name}を選択"></td>
+        <td><div class="cellmain"><b>${x.name}</b><span class="muted small">${x.co}</span></div></td><td>${badge(x.stage)}</td>
+        <td class="r num">${yen(x.amt)}</td><td class="r num">${x.p}%</td><td class="num ${isLate(x)?"late":""}">${md(x.close)}</td><td>${x.owner}</td>
+        <td><span class="iconbtn" aria-hidden="true">${ic("dots")}</span></td></tr>`).join("")}</tbody></table>${list.length?"":empty()}</div>
+      <div class="sh-pag"><span class="muted">0 / ${list.length} 行を選択中</span><span class="grow"></span><span>1 / 1 ページ</span><button type="button" class="btn" disabled aria-label="前のページ">${ic("left",14)}</button><button type="button" class="btn" disabled aria-label="次のページ">${ic("right",14)}</button></div>
+    </div>
+  </main>
+  ${state.overlay?`<div class="scrim" data-act="close"></div>
+  <aside class="sheet" aria-label="商談の詳細">
+    <div class="sheet-head"><div class="grow"><h2 style="font-size:18px">${d.name}</h2><p class="muted small">${d.co} · ${code(d)}</p></div><button type="button" class="iconbtn" data-act="close" aria-label="閉じる">${ic("x")}</button></div>
+    <div class="sheet-body">
+      <div class="row"><span class="num" style="font-size:26px;font-weight:600">${yen(d.amt)}</span><span class="grow"></span>${badge(d.stage)}</div>
+      ${pathHTML(d)}
+      <div class="row">${B("活動を記録","log","primary",`aria-expanded="${state.form}"`)}${advBtn(d)}</div>
+      ${state.form?logForm():""}
+      <div class="utabs" role="tablist"><button type="button" role="tab" data-act="dtab" data-v="act" aria-selected="${state.dtab==="act"}">活動</button><button type="button" role="tab" data-act="dtab" data-v="info" aria-selected="${state.dtab==="info"}">詳細</button></div>
+      ${state.dtab==="act"?timeline(d):`${metaDL(d)}${kv(d)}`}
+    </div>
+    <div class="sheet-foot">${B("閉じる","close")}</div>
+  </aside>`:""}
+  </div>`;
+}};
+
+/* ===== Primer ===== */
+LAYOUTS.primer = {mode:"page", dtab:"act", render(){
+  const c = tabsCounts(), d = cur();
+  const stIcon = x => x.stage==="受注" ? `<span class="st-won">${ic("donecirc")}</span>` : x.stage==="失注" ? `<span class="st-lost">${ic("skip")}</span>` : `<span class="st-open">${ic("opencirc")}</span>`;
+  const head = `<header class="pr-gh"><button type="button" class="iconbtn" data-act="noop" aria-label="メニュー">${ic("menu")}</button><span class="pr-mark">紡</span><span class="pr-crumb">tsumugi / <b>営業</b></span><span class="grow"></span>
+    <input type="search" id="q" class="pr-search" placeholder="商談を検索" value="${esc(state.q)}" aria-label="商談を検索">
+    <button type="button" class="iconbtn" data-act="noop" aria-label="作成">${ic("plus")}</button><button type="button" class="iconbtn" data-act="noop" aria-label="通知">${ic("bell")}</button>${av(ME)}</header>
+    <nav class="pr-under" aria-label="領域">${[["home","概要"],["opencirc","商談",c.open],["building","取引先",128],["comment","活動"],["chart","レポート"],["gear","設定"]].map(([i,l,n])=>`<a data-act="${l==="商談"?"back":"noop"}" class="${l==="商談"?"on":""}">${ic(i)}${l}${n!=null?`<span class="pr-ctr num">${n}</span>`:""}</a>`).join("")}</nav>`;
+  if(state.view === "detail"){
+    const idx = STAGES.indexOf(d.stage), st = d.stage==="受注"?"won":d.stage==="失注"?"lost":"open";
+    return `<div class="pr">${head}<div class="pr-body scroll" data-scroll="pr-d"><div class="pr-container">
+      <a class="pr-back" data-act="back">${ic("left",14)} 商談一覧</a>
+      <h1 class="pr-h1">${d.name} <span class="muted">#${140+d.id}</span></h1>
+      <div class="pr-statebar"><span class="pr-state ${st}">${stIcon(d).replace(/st-\w+/,"")} ${st==="open"?"進行中":d.stage}</span><span><b style="color:var(--text)">${d.owner}</b> が担当 · ${d.co} · 活動 ${d.acts.length} 件</span></div>
+      <div class="pr-cols">
+        <div class="pr-tl">
+          ${d.acts.map(a=>`<div class="pr-ev">${av(a.who)}<div class="pr-cbox"><div class="pr-chead"><b>${a.who}</b> が${esc(a.t)}を記録<span class="muted">· ${a.d}</span></div><div class="pr-cbody">${esc(a.x)}</div></div></div>`).join("")}
+          <div class="pr-ev">${av(ME)}<form class="pr-cbox pr-composer" id="logForm"><div class="pr-chead pr-ctabs"><b>書く</b><span>プレビュー</span><span class="grow"></span><select id="f-kind" aria-label="種別">${kindOptions()}</select></div>
+            <div class="pr-cbody"><textarea id="f-note" placeholder="活動の内容を書く（Markdown 対応）" aria-label="活動の内容"></textarea>
+            <div class="row pr-cfoot"><label class="chk" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後にリマインド</label><span class="grow"></span>${advBtn(d)}<button type="submit" class="btn primary">活動を記録</button></div></div></form></div>
+        </div>
+        <aside class="pr-sb">
+          <div class="pr-sbsec" style="padding-top:0"><h3>担当者</h3><div class="row">${av(d.owner)}${d.owner}</div></div>
+          <div class="pr-sbsec"><h3>フェーズ</h3><div>${badge(d.stage)}</div>${d.stage!=="失注"?`<div class="pr-prog"><i style="width:${(idx+1)/6*100}%"></i></div><span class="small muted">${idx+1} / 6 ステップ</span>`:""}</div>
+          <div class="pr-sbsec"><h3>金額・確度</h3><span class="num">${yen(d.amt)} · ${d.p}%</span></div>
+          <div class="pr-sbsec"><h3>完了予定</h3><span class="num ${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</span></div>
+          <div class="pr-sbsec"><h3>次にやること</h3><span>${d.next.t}<br><span class="small muted">${md(d.next.d)} まで</span></span></div>
+          <div class="pr-sbsec"><h3>取引先</h3>${kv(d)}</div>
+        </aside>
+      </div></div></div></div>`;
+  }
+  const list = filtered();
+  const qtxt = `is:${state.tab==="open"?"open":state.tab==="won"?"closed reason:won":state.tab==="lost"?"closed reason:lost":"all"}${state.owner?` owner:@${state.owner===ME?"me":state.owner}`:""} sort:close-asc`;
+  return `<div class="pr">${head}<div class="pr-body scroll" data-scroll="pr-l"><div class="pr-container">
+    <div class="pr-bar"><div class="pr-filter">${ic("filter",14)}<b>${qtxt}</b></div>${B(ic("flag",14)+"ラベル","noop")}${B("マイルストーン","noop")}${B("新規商談","noop","primary")}</div>
+    <div class="pr-box">
+      <div class="pr-boxhead">
+        <button type="button" data-act="tab" data-v="open" aria-pressed="${state.tab==="open"}">${ic("opencirc")}<span class="num">${c.open}</span> 進行中</button>
+        <button type="button" data-act="tab" data-v="won" aria-pressed="${state.tab==="won"}">${ic("check")}<span class="num">${c.won}</span> 受注</button>
+        <button type="button" data-act="tab" data-v="lost" aria-pressed="${state.tab==="lost"}">${ic("skip")}<span class="num">${c.lost}</span> 失注</button>
+        <span class="grow"></span>
+        <button type="button" class="pr-menu" data-act="own" aria-pressed="${!!state.owner}">担当者${state.owner?`: ${state.owner}`:""} ${ic("chev",12)}</button>
+        <button type="button" class="pr-menu" data-act="noop">フェーズ ${ic("chev",12)}</button>
+        <button type="button" class="pr-menu" data-act="noop">並べ替え ${ic("chev",12)}</button>
+      </div>
+      ${list.map(x=>`<div class="pr-row" data-act="open" data-id="${x.id}" tabindex="0">${stIcon(x)}
+        <div><span class="pr-title">${x.name}</span><span class="pr-lbls">${badge(x.stage)}<span class="badge tone-neutral">${x.info.業種}</span></span>
+        <div class="meta">#${140+x.id} · ${x.co} · ${x.owner} が${updTxt(x)}に更新 · 完了予定 <span class="${isLate(x)?"late":""}">${md(x.close)}</span>${isOpen(x)&&x.upd>=14?` · <span class="stale">${x.upd}日間更新なし</span>`:""}</div></div>
+        <div class="pr-right"><span class="num" style="color:var(--text);font-size:14px">${yen(x.amt)}</span>${av(x.owner)}<span class="row" style="gap:4px">${ic("comment",14)}${x.acts.length}</span></div></div>`).join("") || empty()}
+    </div>
+    <p class="small muted">${ic("search",12)} ヒント: 上の「担当者」で自分の商談だけに絞り込めます。</p>
+  </div></div></div>`;
+}};
+
+/* ===== Atlassian ===== */
+LAYOUTS.atlassian = {mode:"overlay", dtab:"act", actTab:"act", render(){
+  const list = filtered({...state, tab:"all", stage:null}), d = cur();
+  const cols = [...STAGES.slice(0,5).map(s=>({l:s, items:list.filter(x=>x.stage===s)})), {l:"クローズ", items:list.filter(x=>!isOpen(x))}];
+  const desc = x => `${x.co}（${x.info.業種}・${x.info.従業員数}）向けの商談。${x.info.流入経路}から発生。競合: ${x.info.競合}。`;
+  return `<div class="at">
+  <header class="at-top"><button type="button" class="iconbtn" data-act="noop" aria-label="アプリ">${ic("apps")}</button><span class="at-brand">${ic("board",18)}Tsumugi</span>${B(ic("plus",14)+"作成","noop","primary")}<span class="grow"></span><input type="search" class="at-search" id="at-gsearch" placeholder="検索" aria-label="全体を検索" readonly><button type="button" class="iconbtn" data-act="noop" aria-label="通知">${ic("bell")}</button>${av(ME)}</header>
+  <aside class="at-side">
+    <div class="at-proj"><span class="at-pic">営</span><div><b>営業パイプライン</b><small>営業プロジェクト</small></div></div>
+    <div class="nav"><div class="nav-l">計画</div>${[["board","ボード",1],["list","リスト"],["cal","タイムライン"],["chart","レポート"]].map(([i,l,on])=>`<button type="button" class="navi ${on?"on":""}" data-act="noop">${ic(i)}${l}</button>`).join("")}</div>
+    <div class="nav"><div class="nav-l">ショートカット</div><button type="button" class="navi" data-act="noop">${ic("memo")}価格表</button><button type="button" class="navi" data-act="noop">${ic("memo")}提案書テンプレート</button></div>
+  </aside>
+  <main class="at-main">
+    <div class="at-crumb">プロジェクト / 営業パイプライン</div>
+    <h1 class="at-title">商談ボード</h1>
+    <div class="at-tool">
+      <input type="search" id="q" class="at-q" placeholder="ボードを検索" value="${esc(state.q)}" aria-label="ボードを検索">
+      <div class="at-avs" role="group" aria-label="担当者で絞り込み">${OWNERS.map(n=>`<button type="button" class="av ${state.owner===n?"on":""}" data-act="owner" data-v="${n}" title="${n}" aria-pressed="${state.owner===n}">${n[0]}</button>`).join("")}</div>
+      ${B("クイックフィルタ"+ic("chev",14),"noop")}<span class="grow"></span>${B("グループ: なし"+ic("chev",14),"noop")}
+    </div>
+    <div class="at-board scroll" data-scroll="at">${cols.map(col=>`<section class="at-col" aria-label="${col.l}">
+      <div class="at-colh">${col.l}<span class="num">${col.items.length}</span><span class="grow"></span><span class="num">${col.items.length?man(col.items.reduce((a,x)=>a+x.amt,0)):""}</span></div>
+      ${col.items.map(x=>`<button type="button" class="at-card" data-act="open" data-id="${x.id}">
+        <span>${x.name}</span><span class="muted small">${x.co}</span>
+        <span class="at-cfoot"><span class="num small">${man(x.amt)}</span><span class="grow"></span>${isOpen(x)&&x.upd>=14?`<span class="at-flag" title="${x.upd}日間更新なし">${ic("flag",14)}</span>`:""}${!isOpen(x)?badge(x.stage):""}<span class="at-key">${code(x)}</span>${av(x.owner)}</span>
+      </button>`).join("")}</section>`).join("")}</div>
+  </main>
+  ${state.overlay?`<div class="scrim" data-act="close"></div>
+  <div class="at-modal" role="dialog" aria-label="${d.name}">
+    <div class="at-mhead"><span class="muted small">営業パイプライン / ${code(d)}</span><span class="grow"></span><button type="button" class="iconbtn" data-act="noop" aria-label="その他">${ic("dots")}</button><button type="button" class="iconbtn" data-act="close" aria-label="閉じる">${ic("x")}</button></div>
+    <div class="at-mbody">
+      <div class="at-mleft scroll" data-scroll="at-m">
+        <h2 class="at-mtitle">${d.name}</h2>
+        <div class="row">${B(ic("comment",14)+"活動を記録","log")}${B(ic("plus",14)+"子商談を追加","noop")}</div>
+        <section><h3 class="at-h">説明</h3><p>${desc(d)}</p></section>
+        <section><h3 class="at-h">アクティビティ</h3><div class="at-atabs"><span class="on">すべて</span><span>コメント</span><span>履歴</span></div>
+          ${state.form?logForm():`<button type="button" class="at-fake" data-act="log">${av(ME)}<span>コメントを追加…</span></button>`}
+          ${timeline(d)}</section>
+      </div>
+      <aside class="at-mright">
+        <div class="row">${isOpen(d)?`<button type="button" class="btn at-status tone-${TONE[d.stage]}" data-act="advance" data-id="${d.id}" title="次のフェーズへ移動">${d.stage}${ic("chev",14)}</button>`:badge(d.stage)}<span class="small muted">${isOpen(d)?"クリックで次のフェーズへ":""}</span></div>
+        <div class="at-details"><div class="at-dhead">詳細</div><dl class="at-dl">
+          <dt>担当者</dt><dd class="row">${av(d.owner)}${d.owner}</dd><dt>金額</dt><dd class="num">${yen(d.amt)}</dd><dt>確度</dt><dd class="num">${d.p}%</dd>
+          <dt>完了予定</dt><dd class="num ${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</dd><dt>取引先</dt><dd>${d.co}</dd><dt>次のアクション</dt><dd>${d.next.t}（${md(d.next.d)}）</dd></dl></div>
+        <p class="small muted">作成 2026/09/01 · 更新 ${updTxt(d)}</p>
+      </aside>
+    </div>
+  </div>`:""}
+  </div>`;
+}};
+</script>
+<script>
+/* ===== Elastic UI ===== */
+LAYOUTS.eui = {mode:"overlay", dtab:"fields", actTab:"act", render(){
+  const list = filtered(), d = cur();
+  const months = ["2026-09","2026-10","2026-11","2026-12","2027-01"];
+  const mv = months.map(m => list.filter(x=>x.close.startsWith(m)).reduce((a,x)=>a+x.amt,0));
+  const mx = Math.max(...mv, 1);
+  const tabName = {open:"進行中",won:"受注",lost:"失注",all:"すべて"}[state.tab];
+  const json = JSON.stringify({id:d.id,code:code(d),name:d.name,account:{name:d.co,industry:d.info.業種,employees:d.info.従業員数},stage:d.stage,amount:d.amt,probability:d.p,close_date:d.close,owner:d.owner,next_action:d.next},null,2);
+  const F = [["t","deal.name",d.name],["t","account.name",d.co],["k","stage",d.stage],["#","amount",yen(d.amt)],["#","probability",d.p+"%"],["d","close_date",d.close],["t","owner",d.owner],["t","account.industry",d.info.業種],["t","lead_source",d.info.流入経路],["t","competitor",d.info.競合],["d","updated_at",updDate(d)]];
+  return `<div class="eu">
+  <header class="eu-head"><button type="button" class="iconbtn" data-act="noop" aria-label="メニュー">${ic("menu")}</button><span class="logo" style="width:24px;height:24px;font-size:11px">紡</span>
+    <nav class="eu-crumbs" aria-label="パンくず"><span class="eu-cr">分析</span><span class="eu-cr">Discover</span><span class="eu-cr last">商談</span></nav><span class="grow"></span>
+    <button type="button" class="iconbtn" data-act="noop" aria-label="ヘルプ">${ic("comment")}</button>${av(ME)}</header>
+  <aside class="eu-nav">
+    <div class="nav"><div class="eu-navt">${ic("clock",14)}最近表示</div><button type="button" class="navi" data-act="noop">商談ディスカバー</button><button type="button" class="navi" data-act="noop">北辰ロジスティクス</button></div>
+    <div class="nav"><div class="eu-navt">${ic("chart",14)}分析</div><button type="button" class="navi on" data-act="noop">Discover</button><button type="button" class="navi" data-act="noop">ダッシュボード</button><button type="button" class="navi" data-act="noop">可視化</button></div>
+    <div class="nav"><div class="eu-navt">${ic("building",14)}営業</div><button type="button" class="navi" data-act="noop">商談</button><button type="button" class="navi" data-act="noop">取引先</button><button type="button" class="navi" data-act="noop">活動</button></div>
+  </aside>
+  <main class="eu-main">
+    <div class="eu-query">${B(ic("db",14)+"deals"+ic("chev",12),"noop")}<input type="search" id="q" class="eu-q" placeholder="検索（例: 北辰）" value="${esc(state.q)}" aria-label="商談を検索">${B(ic("cal",14)+"直近 90 日","noop")}${B(ic("refresh",14)+"更新","noop","primary")}</div>
+    <div class="eu-filters">
+      <span class="eu-pill"><button type="button" class="lk" data-act="cycle" title="クリックで状態を切り替え">状態: <b>${tabName}</b></button>${state.tab!=="all"?`<button type="button" data-act="tab" data-v="all" aria-label="状態の条件を外す">${ic("x",12)}</button>`:""}</span>
+      ${state.owner?`<span class="eu-pill">担当者: <b>${state.owner}</b><button type="button" data-act="own" aria-label="担当者の条件を外す">${ic("x",12)}</button></span>`:""}
+      ${B(ic("plus",14)+(state.owner?"フィルタを追加":"自分の担当に絞る"),state.owner?"noop":"own","ghost")}
+    </div>
+    <div class="card eu-hist">
+      <div class="row small"><b class="num" style="font-size:15px">${list.length}</b><span>件ヒット</span><span class="grow"></span><span class="muted">完了予定月ごとの金額（最大 ${man(mx)}）</span></div>
+      <div class="eu-bars" role="img" aria-label="完了予定月ごとの金額">${mv.map((v,i)=>`<i style="height:${v/mx*100}%" title="${months[i]}: ${man(v)}"></i>`).join("")}</div>
+      <div class="eu-axis">${months.map((m,i)=>`<span>${m.replace("-","/")}<br><b class="num" style="color:var(--text);font-weight:500">${mv[i]?man(mv[i]):"—"}</b></span>`).join("")}</div>
+    </div>
+    <div class="eu-gridwrap scroll" data-scroll="eu"><table class="tbl"><thead><tr><th class="w1"></th><th>close_date</th><th>deal.name</th><th>account.name</th><th>stage</th><th class="r">amount</th><th class="r">probability</th><th>owner</th></tr></thead>
+    <tbody>${list.map(x=>`<tr data-act="open" data-id="${x.id}" tabindex="0" aria-selected="${state.overlay&&x.id===state.sel}"><td><span class="iconbtn" style="width:24px;height:24px" aria-hidden="true">${ic("expand",14)}</span></td><td class="num ${isLate(x)?"late":""}">${x.close}</td><td>${x.name}</td><td>${x.co}</td><td>${badge(x.stage)}</td><td class="r num">${yen(x.amt)}</td><td class="r num">${x.p}</td><td>${x.owner}</td></tr>`).join("")}</tbody></table>${list.length?"":empty()}</div>
+  </main>
+  ${state.overlay?`<div class="eu-mask" data-act="close"></div>
+  <aside class="eu-fly" aria-label="ドキュメントの詳細">
+    <div class="eu-fh"><div class="row"><span class="small muted">ドキュメント · ${code(d)}</span><span class="grow"></span><button type="button" class="iconbtn" data-act="close" aria-label="閉じる">${ic("x")}</button></div><h2 style="font-size:20px">${d.name}</h2>
+      <div class="eu-ftabs" role="tablist">${[["fields","表"],["json","JSON"],["act","活動"]].map(([k,l])=>`<button type="button" role="tab" data-act="dtab" data-v="${k}" aria-selected="${state.dtab===k}">${l}</button>`).join("")}</div></div>
+    <div class="eu-fb">
+      ${state.dtab==="fields"?`<table class="eu-fields">${F.map(([t,k,v])=>`<tr><td><span class="eu-tok">${t}</span>${k}</td><td>${esc(v)}</td></tr>`).join("")}</table>`:
+        state.dtab==="json"?`<pre class="eu-json">${esc(json)}</pre>`:`${state.form?logForm():""}${timeline(d)}`}
+    </div>
+    <div class="eu-ff">${B("閉じる","close","ghost")}<span class="grow"></span>${B("活動を記録","log")}${advBtn(d,"primary")}</div>
+  </aside>`:""}
+  </div>`;
+}};
+
+/* ===== Salesforce Lightning ===== */
+LAYOUTS.slds = {mode:"page", dtab:"info", actTab:null, render(){
+  const d = cur(), c = tabsCounts();
+  const lvName = {open:"進行中の商談",won:"受注した商談",lost:"失注した商談",all:"すべての商談"}[state.tab];
+  const head = `<header class="sf-global"><span class="sf-logo">紡</span><label class="sf-gsearch">${ic("search",14)}<input type="search" id="sf-g" placeholder="Salesforce を検索…" aria-label="全体を検索" readonly></label>
+    ${["star","plus","gear","bell"].map(i=>`<button type="button" class="iconbtn" data-act="noop" aria-label="${i}">${ic(i)}</button>`).join("")}${av(ME)}</header>
+    <nav class="sf-appnav" aria-label="アプリナビゲーション"><span class="sf-appname">${ic("apps")}営業</span>${["ホーム","商談","取引先","取引先責任者","レポート","ダッシュボード"].map(l=>`<a data-act="${l==="商談"?"back":"noop"}" class="${l==="商談"?"on":""}">${l}${l==="商談"?ic("chev",12):""}</a>`).join("")}</nav>`;
+  const obj = `<span class="obj" aria-hidden="true">${ic("star",18)}</span>`;
+  if(state.view === "detail"){
+    const fields = [["商談名",d.name],["取引先名",`<a>${d.co}</a>`],["金額",yen(d.amt)],["確度 (%)",d.p+"%"],["完了予定日",d.close.replaceAll("-","/")],["フェーズ",d.stage],["商談 所有者",d.owner],["業種",d.info.業種],["リードソース",d.info.流入経路],["競合",d.info.競合]];
+    return `<div class="sf">${head}<main class="sf-body scroll" data-scroll="sf-d">
+      <div class="card sf-hl">
+        <div class="sf-hltop">${obj}<div class="grow"><small><a data-act="back">商談</a></small><h1>${d.name}</h1></div><div class="btngroup">${B(ic("plus",14)+"フォロー","noop")}${B("編集","noop")}${B(ic("chev",14),"noop","",`aria-label="その他の操作"`)}</div></div>
+        <div class="sf-hlf"><div><small>取引先名</small><a>${d.co}</a></div><div><small>完了予定日</small><span class="num ${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</span></div><div><small>金額</small><span class="num">${yen(d.amt)}</span></div><div><small>商談 所有者</small><span class="row" style="gap:6px">${av(d.owner)}<a>${d.owner}</a></span></div></div>
+      </div>
+      <div class="card sf-pathcard">${pathHTML(d)}${advBtn(d,"primary",isOpen(d)?(d.stage==="交渉"?"受注としてマーク":ic("check",14)+"フェーズを完了としてマーク"):"クローズ済み")}</div>
+      <div class="sf-cols">
+        <div class="card">
+          <div class="sf-tabs" role="tablist"><button type="button" role="tab" data-act="dtab" data-v="rel" aria-selected="${state.dtab==="rel"}">関連</button><button type="button" role="tab" data-act="dtab" data-v="info" aria-selected="${state.dtab==="info"}">詳細</button></div>
+          ${state.dtab==="info"?`<div class="sf-fields">${fields.map(([k,v])=>`<div class="sf-field"><small>${k}</small><span>${v}</span>${ic("edit",14)}</div>`).join("")}</div>`:
+          `<div class="sf-rel"><div class="sf-relc"><span class="obj" style="width:24px;height:24px;background:#a094ed">${ic("user",14)}</span><b>取引先責任者 (2)</b><span class="grow"></span><span class="muted small">情報システム部長 ほか</span></div><div class="sf-relc"><span class="obj" style="width:24px;height:24px;background:#7f8de1">${ic("memo",14)}</span><b>ファイル (1)</b><span class="grow"></span><span class="muted small">見積書_改訂版.pdf</span></div><div class="sf-relc"><span class="obj" style="width:24px;height:24px;background:#3ba755">${ic("table",14)}</span><b>商談商品 (3)</b><span class="grow"></span><span class="muted small">年額ライセンス ほか</span></div></div>`}
+        </div>
+        <div class="card sf-act">
+          <div class="sf-acthead">活動</div>
+          <div class="sf-pub" role="group" aria-label="活動の種類">${[["call","電話を記録"],["memo","新規 ToDo"],["meet","新規行動"],["mail","メール"]].map(([k,l])=>`<button type="button" data-act="kind" data-v="${k}" aria-pressed="${state.kind===k}">${l}</button>`).join("")}</div>
+          <div class="sf-pubform">${logForm({cancel:false,submit:"保存",kinds:false})}</div>
+          <div class="sf-sec"><div class="sf-sech">今後 &amp; 期限切れ</div><div class="row small">${ic("cal",14)}<span class="grow">${d.next.t}</span><span class="num ${nextLate(d)?"late":"muted"}">${md(d.next.d)}</span></div></div>
+          <div class="sf-sec"><div class="sf-sech">2026年9月</div>${timeline(d)}</div>
+        </div>
+      </div>
+    </main></div>`;
+  }
+  const list = filtered();
+  return `<div class="sf">${head}<main class="sf-body">
+    <div class="card sf-lv">
+      <div class="sf-lvhead">${obj}<div class="grow"><small>商談</small><button type="button" class="sf-h1" data-act="cycle" title="クリックでリストビューを切り替え">${lvName}${ic("chev",14)}</button></div><div class="btngroup">${B("新規","noop")}${B("インポート","noop")}${B(ic("chev",14),"noop","",`aria-label="その他の操作"`)}</div></div>
+      <div class="sf-meta"><span class="num">${list.length} 件 · 並び替え: 完了予定日 · ${state.owner?"自分の商談":"すべての商談"} · 数秒前に更新</span><span class="grow"></span>
+        <input type="search" id="q" class="sf-lq" placeholder="このリストを検索…" value="${esc(state.q)}" aria-label="このリストを検索">
+        <button type="button" class="sf-ibtn" data-act="own" aria-label="自分の商談に絞り込み" title="自分の商談に絞り込み" aria-pressed="${!!state.owner}" style="${state.owner?"background:#eef4ff;color:var(--accent)":""}">${ic("filter",14)}</button>
+        <button type="button" class="sf-ibtn" data-act="noop" aria-label="表示設定">${ic("gear",14)}</button><button type="button" class="sf-ibtn" data-act="noop" aria-label="更新">${ic("refresh",14)}</button></div>
+      <div class="sf-tblwrap scroll" data-scroll="sf-l"><table class="tbl"><thead><tr><th class="w1"></th><th class="w1"><input type="checkbox" id="sf-all" aria-label="すべて選択"></th><th>商談名</th><th>取引先名</th><th>フェーズ</th><th class="r">金額</th><th>完了予定日</th><th>商談 所有者 別名</th><th class="w1"></th></tr></thead>
+      <tbody>${list.map((x,i)=>`<tr><td class="num muted">${i+1}</td><td data-stop><input type="checkbox" id="sf-c${x.id}" aria-label="${x.name}を選択"></td><td><a data-act="open" data-id="${x.id}">${x.name}</a></td><td><a>${x.co}</a></td><td>${x.stage}</td><td class="r num">${yen(x.amt)}</td><td class="num ${isLate(x)?"late":""}">${x.close.replaceAll("-","/")}</td><td>${x.owner}</td><td><button type="button" class="sf-rowact" data-act="noop" aria-label="行の操作">${ic("chev",12)}</button></td></tr>`).join("")}</tbody></table>${list.length?"":empty()}</div>
+    </div>
+  </main></div>`;
+}};
+
+/* ===== Zendesk Garden ===== */
+function setGview(v){
+  state.gview = v; state.stage = null; state.stale = false; state.owner = null;
+  if(v==="me"){state.tab="open"; state.owner=ME;} else if(v==="open"){state.tab="open";} else if(v==="stale"){state.tab="open"; state.stale=true;} else state.tab = v;
+}
+const GVIEWS = [["me","自分の担当（進行中）"],["open","すべての進行中"],["stale","14日以上更新なし"],["won","受注"],["lost","失注"]];
+const gopts = v => { const o = {tab:"open",owner:null,stale:false,stage:null,q:""}; if(v==="me") o.owner=ME; else if(v==="stale") o.stale=true; else if(v==="won"||v==="lost") o.tab=v; return o; };
+LAYOUTS.garden = {mode:"tab", dtab:"act", render(){
+  const d = cur();
+  const zst = st => `<span class="zd-st tone-${TONE[st]}">${st}</span>`;
+  const top = `<header class="zd-top">
+    <div class="zd-tab ${state.view==="list"?"on":""}"><button type="button" data-act="back">${ic("inbox")}ビュー</button></div>
+    ${state.openTabs.map(id=>{const x=deals.find(y=>y.id===id); return `<div class="zd-tab ${state.view==="detail"&&state.sel===id?"on":""}"><button type="button" data-act="open" data-id="${id}">${zst(x.stage)}<span class="t">${x.name}</span></button><button type="button" class="zd-x" data-act="closetab" data-id="${id}" aria-label="${x.name}のタブを閉じる">${ic("x",12)}</button></div>`;}).join("")}
+    <span class="grow"></span><input type="search" id="q" class="zd-search" placeholder="検索" value="${esc(state.q)}" aria-label="商談を検索"><span class="zd-online"><i></i>オンライン</span></header>`;
+  const rail = `<nav class="zd-rail" aria-label="メインメニュー"><span class="zd-logo">紡</span>${[["inbox","ビュー",1],["user","顧客"],["chart","レポート"],["gear","管理"]].map(([i,l,on])=>`<button type="button" class="zd-rb ${on?"on":""}" data-act="${on?"back":"noop"}" aria-label="${l}" title="${l}">${ic(i,20)}</button>`).join("")}${av(ME)}</nav>`;
+  if(state.view === "detail"){
+    return `<div class="zd">${rail}${top}<div class="zd-body"><div class="zd-rec">
+      <aside class="zd-props"><div class="zd-propsb">
+        <label for="zd-owner">担当者<select id="zd-owner">${OWNERS.map(n=>`<option ${n===d.owner?"selected":""}>${n}</option>`).join("")}</select></label>
+        <label for="zd-stage">フェーズ<select id="zd-stage">${[...STAGES,"失注"].map(s=>`<option ${s===d.stage?"selected":""}>${s}</option>`).join("")}</select></label>
+        <label for="zd-amt">金額<input type="text" id="zd-amt" value="${yen(d.amt)}" readonly></label>
+        <label for="zd-close">完了予定日<input type="text" id="zd-close" value="${d.close.replaceAll("-","/")}" readonly></label>
+        <div style="display:grid;gap:6px"><b style="font-size:13px">タグ</b><div class="zd-tags"><span class="zd-tag">${d.info.業種}</span><span class="zd-tag">${d.info.流入経路}</span><span class="zd-tag">確度 ${d.p}%</span></div></div>
+      </div><div class="zd-propsf"><button type="submit" form="logForm" class="btn primary">送信（${d.stage}）</button></div></aside>
+      <section class="zd-conv">
+        <div class="zd-convh"><h2>${d.name}</h2><p class="small muted">${d.co} · ${code(d)} · 更新 ${updTxt(d)}</p></div>
+        <div class="zd-thread scroll" data-scroll="zd-t">${d.acts.slice().reverse().map(a=>`<div class="zd-msg ${a.k==="memo"?"note":""}">${av(a.who)}<div><div class="who"><b>${a.who}</b> <span class="muted small">${esc(a.t)} · ${a.d}</span></div><div class="body">${esc(a.x)}</div></div></div>`).join("")}</div>
+        <form class="zd-composer ${state.note?"note":""}" id="logForm">
+          <div class="zd-ctabs" role="group" aria-label="記録の種類"><button type="button" data-act="note" data-v="0" aria-pressed="${!state.note}">公開返信</button><button type="button" data-act="note" data-v="1" aria-pressed="${state.note}">社内メモ</button></div>
+          <textarea id="f-note" placeholder="${state.note?"チーム内だけに共有するメモ":"先方とのやり取りを記録"}" aria-label="内容"></textarea>
+          <div class="row">${state.note?"":`<select id="f-kind" aria-label="種別">${kindOptions()}</select>`}<label class="chk" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後にリマインド</label></div>
+        </form>
+      </section>
+      <aside class="zd-ctx">
+        <div class="zd-ctxcard"><h3>${ic("building")}${d.co}</h3>${kv({...d, co:d.co})}</div>
+        <div class="zd-ctxcard"><h3>${ic("clock")}次にやること</h3><p>${d.next.t}</p><p class="small ${nextLate(d)?"late":"muted"}">${md(d.next.d)} まで</p></div>
+        <div class="zd-ctxcard"><h3>${ic("chart")}フェーズ</h3>${pathHTML(d)}${advBtn(d)}</div>
+      </aside>
+    </div></div></div>`;
+  }
+  const list = filtered(), vname = GVIEWS.find(v=>v[0]===state.gview)[1];
+  return `<div class="zd">${rail}${top}<div class="zd-body"><div class="zd-listv">
+    <nav class="zd-views" aria-label="ビュー"><h2>ビュー</h2>${GVIEWS.map(([k,l])=>`<button type="button" data-act="gview" data-v="${k}" aria-pressed="${state.gview===k}"><span>${l}</span><span class="num muted">${filtered(gopts(k)).length}</span></button>`).join("")}</nav>
+    <section class="zd-listmain">
+      <div class="row"><div class="grow"><h1 style="font-size:22px">${vname}</h1><p class="muted small num">${list.length} 件の商談</p></div>${B("次の商談を開く"+ic("right",14),"play","primary",list.length?"":"disabled")}</div>
+      <div class="card scroll" data-scroll="zd-l"><table class="tbl"><thead><tr><th class="w1"><input type="checkbox" id="zd-all" aria-label="すべて選択"></th><th>フェーズ</th><th>件名</th><th>取引先</th><th>担当</th><th>更新</th><th>完了予定</th></tr></thead>
+      <tbody>${list.map(x=>`<tr data-act="open" data-id="${x.id}" tabindex="0"><td data-stop><input type="checkbox" id="zd-c${x.id}" aria-label="${x.name}を選択"></td><td>${zst(x.stage)}</td><td><b style="font-weight:600">${x.name}</b></td><td>${x.co}</td><td>${x.owner}</td><td class="${isOpen(x)&&x.upd>=14?"stale":"muted"}">${updTxt(x)}</td><td class="num ${isLate(x)?"late":""}">${md(x.close)}</td></tr>`).join("")}</tbody></table>${list.length?"":empty()}</div>
+    </section>
+  </div></div></div>`;
+}};
+
+/* ===== freee vibes ===== */
+LAYOUTS.vibes = {mode:"page", dtab:"act", render(){
+  const d = cur();
+  const head = `<header class="fr-gh"><span class="fr-brand"><span class="logo">紡</span>Tsumugi CRM</span>
+    <nav class="fr-menu">${["ホーム","商談","取引先","活動","レポート","設定"].map(l=>`<a data-act="${l==="商談"?"back":"noop"}" class="${l==="商談"?"on":""}">${l}${l!=="ホーム"?ic("chev",12):""}</a>`).join("")}</nav>
+    <span class="grow"></span><span class="fr-office">${ic("building",14)}サンプル商事株式会社${ic("chev",12)}</span><button type="button" class="iconbtn" data-act="noop" aria-label="通知">${ic("bell")}</button>${av(ME)}</header>`;
+  if(state.view === "detail"){
+    const rows = [["商談名",d.name],["取引先",d.co],["ステータス",badge(d.stage)],["金額",`<span class="num">${yen(d.amt)}</span>`],["確度",`<span class="num">${d.p}%</span>`],["完了予定日",`<span class="num ${isLate(d)?"late":""}">${d.close.replaceAll("-","/")}</span>`],["担当者",d.owner],["次のアクション",`${d.next.t}（${md(d.next.d)} まで）`],["業種",d.info.業種],["流入経路",d.info.流入経路],["競合",d.info.競合]];
+    return `<div class="fr">${head}<div class="fr-body scroll" data-scroll="fr-d"><div class="fr-container">
+      <div class="fr-crumb"><a data-act="back">商談一覧</a>${ic("right",12)}<span>商談詳細</span></div>
+      <div class="fr-titlebar"><h1>${d.name}</h1>${badge(d.stage)}<span class="grow"></span>${B(ic("edit",14)+"編集","noop")}${B("削除","noop","ghost",`style="color:var(--danger)"`)}</div>
+      <section class="card fr-sec"><h2>進捗</h2>${stepper(d)}</section>
+      ${state.form?`<section class="card fr-sec"><h2>活動を登録</h2><form id="logForm"><table class="fr-dt">
+        <tr><th><label for="f-kind">種別</label><span class="req">必須</span></th><td><select id="f-kind" style="max-width:240px">${kindOptions()}</select></td></tr>
+        <tr><th><label for="f-note">内容</label><span class="req">必須</span></th><td><textarea id="f-note" placeholder="例：決裁者と日程を調整。10/3 に再訪問。"></textarea></td></tr>
+        <tr><th>リマインド</th><td><label class="chk" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後に通知する</label></td></tr></table></form></section>`:""}
+      <section class="card fr-sec"><h2>基本情報</h2><table class="fr-dt">${rows.map(([k,v])=>`<tr><th>${k}</th><td>${v}</td></tr>`).join("")}</table></section>
+      <section class="card fr-sec"><h2>活動履歴</h2><table class="tbl"><thead><tr><th>日付</th><th>種別</th><th>担当者</th><th>内容</th></tr></thead><tbody>${d.acts.map(a=>`<tr><td class="num">${a.d}</td><td>${esc(a.t)}</td><td>${a.who}</td><td style="padding-block:10px">${esc(a.x)}</td></tr>`).join("")}</tbody></table></section>
+    </div></div>
+    <div class="fr-bar">${B(ic("left",14)+"一覧に戻る","back")}<span class="grow"></span>${state.form?`${B("キャンセル","cancel")}<button type="submit" form="logForm" class="btn primary">登録する</button>`:`${B("活動を登録","log")}${advBtn(d,"primary",isOpen(d)?(d.stage==="交渉"?"受注にする":"次のステータスへ進める"):"クローズ済み")}`}</div></div>`;
+  }
+  const list = filtered();
+  return `<div class="fr">${head}<div class="fr-body scroll" data-scroll="fr-l"><div class="fr-container">
+    <div class="fr-titlebar"><h1>商談一覧</h1><span class="grow"></span>${B(ic("plus",14)+"商談を登録","noop","primary")}</div>
+    <section class="card fr-sec"><h2>検索条件</h2>
+      <div class="fr-fgrid">
+        <label for="q">キーワード<input type="search" id="q" placeholder="商談名・取引先名" value="${esc(state.q)}"></label>
+        <label for="f-status">ステータス<select id="f-status">${TABS.map(([k,l])=>`<option value="${k}" ${state.tab===k?"selected":""}>${l}</option>`).join("")}</select></label>
+        <label for="f-owner">担当者<select id="f-owner"><option value="">すべて</option>${OWNERS.map(n=>`<option value="${n}" ${state.owner===n?"selected":""}>${n}${n===ME?"（自分）":""}</option>`).join("")}</select></label>
+        <div style="display:grid;gap:6px;font-size:13px;font-weight:700">完了予定日<div class="fr-range"><input type="text" id="fr-from" value="2026/09/01" aria-label="開始日" readonly>〜<input type="text" id="fr-to" value="2027/01/31" aria-label="終了日" readonly></div></div>
+      </div>
+      <div class="fr-sact">${B("条件をクリア","clear")}</div>
+    </section>
+    <div class="fr-result"><span>検索結果</span><b class="num">${list.length}</b><span>件</span><span class="grow"></span>${B("CSV エクスポート","noop")}</div>
+    <div class="card" style="overflow:hidden"><table class="tbl"><thead><tr><th>ステータス</th><th>商談名</th><th>取引先</th><th class="r">金額</th><th class="r">確度</th><th>完了予定日</th><th>担当者</th><th class="w1">操作</th></tr></thead>
+    <tbody>${list.map(x=>`<tr><td>${badge(x.stage)}</td><td><b style="font-weight:700">${x.name}</b>${isOpen(x)&&x.upd>=14?`<br><span class="stale">${x.upd}日間更新なし</span>`:""}</td><td>${x.co}</td><td class="r num">${yen(x.amt)}</td><td class="r num">${x.p}%</td><td class="num ${isLate(x)?"late":""}">${x.close.replaceAll("-","/")}</td><td>${x.owner}</td><td>${B("詳細","open","",`data-id="${x.id}"`)}</td></tr>`).join("")}</tbody></table>${list.length?"":empty()}</div>
+    <div class="fr-pag"><span class="fr-pg">${ic("left",14)}</span><span class="fr-pg on">1</span><span class="fr-pg">${ic("right",14)}</span></div>
+    <p class="small muted" style="text-align:center">1〜${list.length} 件を表示 / 全 ${list.length} 件</p>
+  </div></div></div>`;
+}};
+</script>
+<script>
+/* ===== kamii ===== */
+LAYOUTS.kamii = {mode:"expand", dtab:"act", render(){
+  const c = tabsCounts();
+  const list = filtered().sort((a,b)=> (isOpen(b)-isOpen(a)) || a.next.d.localeCompare(b.next.d));
+  const todo = deals.filter(x=>x.stage!=="失注" && x.next.d <= "2026-09-26").sort((a,b)=>a.next.d.localeCompare(b.next.d));
+  const dbox = (s, late) => { const x = new Date(s+"T00:00:00"); return `<span class="km-date ${late?"late":""}"><small>${x.getMonth()+1}月</small><b class="num">${x.getDate()}</b><small>${WD[x.getDay()]}曜</small></span>`; };
+  return `<div class="km">
+  <header class="km-head"><span class="km-brand"><span class="logo">紡</span>Tsumugi CRM</span><nav class="km-nav">${["商談","取引先","見積書","レポート"].map(l=>`<a data-act="${l==="商談"?"tab":"noop"}" data-v="open" class="${l==="商談"?"on":""}">${l}</a>`).join("")}</nav><span class="grow"></span>
+    <input type="search" id="q" class="km-q" placeholder="商談名・取引先名で検索" value="${esc(state.q)}" aria-label="商談を検索">${B(ic("plus",14)+"新規商談","noop","primary")}</header>
+  <div class="km-body scroll" data-scroll="km"><div class="km-container">
+    <div class="km-title"><h1>商談の進み具合</h1><p>次にやることの期限が近い順に並んでいます。</p></div>
+    <section class="km-todo" aria-label="3日以内にやること"><h2>3 日以内にやること（${todo.length} 件）</h2>
+      ${todo.map(x=>`<div class="km-titem">${dbox(x.next.d, nextLate(x))}<div><b>${x.next.t}</b><div class="small muted">${x.co} · ${x.name}${nextLate(x)?` · <span class="late">期限を過ぎています</span>`:""}</div></div>${B("記録する","log","",`data-id="${x.id}"`)}</div>`).join("")}
+    </section>
+    <div class="row"><div class="km-tabs" role="group" aria-label="状態で絞り込み">${TABS.map(([k,l])=>`<button type="button" data-act="tab" data-v="${k}" aria-pressed="${state.tab===k}">${l}（<span class="num">${c[k]}</span>）</button>`).join("")}</div><span class="grow"></span>
+      <label class="chk" for="km-own"><input type="checkbox" id="km-own" ${state.owner?"checked":""}>自分の担当のみ</label></div>
+    ${list.map(x=>{ const open = state.expanded===x.id; return `<article class="km-ticket">
+      <div class="km-tk-top"><span class="mono">No. ${code(x)}</span><span>${x.co}</span><span class="grow"></span>${badge(x.stage)}<span>担当: ${x.owner}</span></div>
+      <div class="km-tk-main">
+        <div class="row" style="align-items:baseline"><h3 class="grow">${x.name}</h3><span class="km-amt num">${yen(x.amt)}</span></div>
+        ${stepper(x)}
+        <div class="km-next"><span class="km-lab">次にやること</span><span class="grow">${x.next.t} <span class="${nextLate(x)?"late":"muted"}">— ${md(x.next.d)} まで</span></span>
+          ${B(open?"閉じる"+ic("up",14):"詳細を見る"+ic("chev",14),"open","",`data-id="${x.id}" aria-expanded="${open}"`)}${isOpen(x)?advBtn(x,"primary"):""}</div>
+      </div>
+      ${open?`<div class="km-expand"><div><h4>活動履歴</h4>${state.form&&state.sel===x.id?logForm():`<p style="margin-bottom:12px">${B(ic("plus",14)+"活動を記録","log","",`data-id="${x.id}"`)}</p>`}${timeline(x)}</div><div><h4>取引先情報</h4>${kv(x)}</div></div>`:""}
+    </article>`;}).join("") || empty()}
+  </div></div></div>`;
+}};
+
+/* ===== Serendie ===== */
+LAYOUTS.serendie = {mode:"page", dtab:"act", render(){
+  const d = cur(), s = sums(), c = tabsCounts();
+  const rail = `<nav class="se-rail" aria-label="ナビゲーション">${[["home","ホーム"],["grid","商談",1],["building","取引先"],["chart","分析"],["gear","設定"]].map(([i,l,on])=>`<button type="button" class="se-ri ${on?"on":""}" data-act="${on?"back":"noop"}"><span class="pill">${ic(i,20)}</span>${l}</button>`).join("")}</nav>`;
+  const bar = state.view==="detail"
+    ? `<header class="se-bar"><button type="button" class="iconbtn" data-act="back" aria-label="一覧に戻る">${ic("left",20)}</button><h1>${d.name}</h1><span class="grow"></span><button type="button" class="iconbtn" data-act="noop" aria-label="編集">${ic("edit",20)}</button><button type="button" class="iconbtn" data-act="noop" aria-label="その他">${ic("dots",20)}</button></header>`
+    : `<header class="se-bar"><button type="button" class="iconbtn" data-act="noop" aria-label="メニュー">${ic("menu",20)}</button><h1>商談</h1><span class="grow"></span><button type="button" class="iconbtn" data-act="noop" aria-label="通知">${ic("bell",20)}</button><span class="av">佐</span></header>`;
+  if(state.view === "detail"){
+    return `<div class="se">${bar}${rail}<main class="se-main scroll" data-scroll="se-d">
+      <section class="card se-hero">
+        <div class="row"><div class="grow"><p class="muted small">${d.co} · ${code(d)}</p><p class="num" style="font-size:32px;font-weight:700;line-height:1.2;margin-top:4px">${yen(d.amt)}</p></div>${badge(d.stage)}</div>
+        ${stepper(d)}
+        <div class="row">${B("活動を記録","log","primary",`aria-expanded="${state.form}"`)}${advBtn(d)}<span class="grow"></span><span class="small muted">確度 ${d.p}% · 完了予定 ${d.close.replaceAll("-","/")} · 担当 ${d.owner}</span></div>
+      </section>
+      <div class="se-2col">
+        <section class="card se-panel"><h3>活動</h3>${state.form?logForm():""}${timeline(d)}</section>
+        <div style="display:grid;gap:16px"><section class="card se-panel"><h3>次にやること</h3><p>${d.next.t}</p><p class="small ${nextLate(d)?"late":"muted"}">${md(d.next.d)} まで</p></section>
+        <section class="card se-panel"><h3>取引先</h3>${kv(d)}</section></div>
+      </div>
+    </main></div>`;
+  }
+  const list = filtered();
+  const ratio = s.total ? Math.round(s.weighted/s.total*100) : 0;
+  const staleList = s.open.filter(x=>x.upd>=14);
+  return `<div class="se">${bar}${rail}<main class="se-main scroll" data-scroll="se-l">
+    <div class="se-chips">${TABS.map(([k,l])=>`<button type="button" class="se-chip" data-act="tab" data-v="${k}" aria-pressed="${state.tab===k}">${state.tab===k?ic("check",14):""}${l} <span class="num">${c[k]}</span></button>`).join("")}
+      <span class="se-divider"></span><button type="button" class="se-chip" data-act="own" aria-pressed="${!!state.owner}">${state.owner?ic("check",14):""}自分の担当</button><span class="grow"></span>
+      <input type="search" id="q" class="se-q" placeholder="商談を検索" value="${esc(state.q)}" aria-label="商談を検索"></div>
+    <div class="se-widgets">
+      <section class="card se-w"><h3>加重見込 / パイプライン総額</h3><div class="row" style="gap:20px"><div class="se-ring" style="--v:${ratio}%"><span class="num">${ratio}%</span></div><div><p class="num" style="font-size:22px;font-weight:700">${man(s.weighted)}</p><p class="small muted num">総額 ${man(s.total)} · ${s.open.length} 件</p></div></div></section>
+      <section class="card se-w"><h3>今月クローズ予定</h3>${s.open.filter(x=>x.close.startsWith("2026-09")).map(x=>`<div class="se-mini"><span>${x.name}</span><span class="num">${md(x.close)}</span></div>`).join("") || `<p class="muted small">ありません</p>`}</section>
+      <section class="card se-w"><h3>14 日以上更新なし</h3>${staleList.map(x=>`<div class="se-mini"><span class="row" style="gap:6px"><span class="stale">${ic("warn",14)}</span>${x.name}</span><span class="num stale">${x.upd}日</span></div>`).join("") || `<p class="muted small">ありません</p>`}</section>
+    </div>
+    <div class="se-grid">${list.map(x=>{const idx=STAGES.indexOf(x.stage); return `<article class="card se-card" data-act="open" data-id="${x.id}" tabindex="0">
+      <div class="row">${badge(x.stage)}<span class="grow"></span><span class="small muted">${code(x)}</span></div>
+      <div><p class="small muted">${x.co}</p><p style="font-weight:700;font-size:15px">${x.name}</p></div>
+      <p class="num" style="font-size:22px;font-weight:700">${yen(x.amt)}</p>
+      ${x.stage!=="失注"?`<div><div class="se-prog"><i style="width:${(idx+1)/6*100}%"></i></div><p class="small muted" style="margin-top:4px">${x.stage} · ${idx+1}/6</p></div>`:`<p class="small muted">失注 · ${x.info.競合}</p>`}
+      <div class="row small">${av(x.owner)}<span>${x.owner}</span><span class="grow"></span><span class="num ${isLate(x)?"late":"muted"}">完了予定 ${md(x.close)}</span></div>
+    </article>`;}).join("") || empty()}</div>
+  </main></div>`;
+}};
+
+/* ===== Sparkle ===== */
+LAYOUTS.sparkle = {mode:"panel", dtab:"act", render(){
+  const d = cur(), c = tabsCounts(), list = filtered().sort((a,b)=>a.close.localeCompare(b.close));
+  const groups = [];
+  list.forEach(x=>{ const k = x.close.slice(0,7); let g = groups.find(y=>y.k===k); if(!g){ g={k,items:[]}; groups.push(g);} g.items.push(x); });
+  const gl = k => `${k.slice(0,4)}年${+k.slice(5)}月にクローズ予定`;
+  return `<div class="sp">
+  <aside class="sp-side">
+    <div class="row" style="padding:0 8px;font-weight:700"><span class="logo">紡</span>Tsumugi CRM</div>
+    <div class="nav">${[["home","ホーム"],["list","商談",1],["building","取引先"],["comment","活動"],["chart","レポート"]].map(([i,l,on])=>`<button type="button" class="navi ${on?"on":""}" data-act="noop">${ic(i)}${l}</button>`).join("")}</div>
+    <div class="sp-guide"><b>はじめてガイド</b><span class="muted">3 / 5 ステップ完了</span><div class="se-prog"><i style="width:60%"></i></div><span>次は「活動を記録する」を試してみましょう。</span></div>
+  </aside>
+  <section class="sp-list">
+    <div class="sp-lh"><div class="row"><h1 class="grow">商談</h1>${B(ic("plus",14)+"追加","noop")}</div>
+      <input type="search" id="q" placeholder="商談名・取引先名で検索" value="${esc(state.q)}" aria-label="商談を検索">
+      <div class="utabs" role="tablist">${TABS.map(([k,l])=>`<button type="button" role="tab" data-act="tab" data-v="${k}" aria-selected="${state.tab===k}">${l} <span class="num muted">${c[k]}</span></button>`).join("")}</div></div>
+    <div class="sp-items scroll" data-scroll="sp-l">${groups.map(g=>`<div class="sp-gh">${gl(g.k)}</div>${g.items.map(x=>`<button type="button" class="sp-item" data-act="open" data-id="${x.id}" aria-selected="${x.id===state.sel}">
+      <span class="row"><b class="grow" style="font-weight:600">${x.name}</b>${badge(x.stage)}</span>
+      <span class="row small muted"><span class="grow">${x.co}</span><span class="num" style="color:var(--text)">${man(x.amt)}</span></span>
+      <span class="small ${nextLate(x)?"late":"muted"}">次: ${x.next.t}（${md(x.next.d)}）</span></button>`).join("")}`).join("") || empty()}</div>
+  </section>
+  <main class="sp-detail scroll" data-scroll="sp-d">
+    <div class="sp-read">
+      <div><p class="muted">${d.co} · ${code(d)}</p><h1>${d.name}</h1><div class="row" style="margin-top:12px">${badge(d.stage)}<span class="small muted">担当 ${d.owner} · 更新 ${updTxt(d)}</span></div></div>
+      <div class="row" style="gap:40px"><div><p class="small muted">金額</p><p class="num" style="font-size:26px;font-weight:700">${yen(d.amt)}</p></div><div><p class="small muted">確度</p><p class="num" style="font-size:26px;font-weight:700">${d.p}%</p></div><div><p class="small muted">完了予定</p><p class="num ${isLate(d)?"late":""}" style="font-size:26px;font-weight:700">${md(d.close)}</p></div></div>
+      <div class="sp-callout">${ic("flag",18)}<div class="grow"><p class="small muted">次にやること</p><p style="font-weight:600">${d.next.t}</p></div><span class="num ${nextLate(d)?"late":"muted"}">${md(d.next.d)} まで</span></div>
+      <section class="sp-sec"><h2>進み具合</h2>${pathHTML(d)}</section>
+      ${state.form?`<section class="sp-sec"><h2>活動を記録</h2>${logForm()}</section>`:""}
+      <section class="sp-sec"><h2>活動</h2>${timeline(d)}</section>
+      <section class="sp-sec"><h2>取引先</h2>${kv(d)}</section>
+    </div>
+    <div class="sp-float"><div>${B(ic("comment",14)+"活動を記録","log","primary",`aria-expanded="${state.form}"`)}${advBtn(d)}${B(ic("mail",14)+"メールを作成","noop")}</div></div>
+  </main>
+  </div>`;
+}};
+
+/* ===== Spindle ===== */
+LAYOUTS.spindle = {mode:"overlay", dtab:"act", actTab:"act", render(){
+  const d = cur(), c = tabsCounts(), list = filtered();
+  const follow = deals.filter(x=>x.stage!=="失注" && x.next.d <= "2026-09-26").sort((a,b)=>a.next.d.localeCompare(b.next.d));
+  const idx = STAGES.indexOf(d.stage);
+  return `<div class="am"><div class="am-phone">
+    <div class="am-status"><span>9:41</span><span class="small">●●● 100%</span></div>
+    <header class="am-head"><h1 class="grow">商談</h1><button type="button" class="iconbtn" data-act="noop" aria-label="通知">${ic("bell",20)}</button><span class="av" style="width:32px;height:32px">佐</span></header>
+    <div class="am-chips" role="group" aria-label="絞り込み">${TABS.map(([k,l])=>`<button type="button" class="am-chip" data-act="tab" data-v="${k}" aria-pressed="${state.tab===k}">${l} ${c[k]}</button>`).join("")}<button type="button" class="am-chip" data-act="own" aria-pressed="${!!state.owner}">自分の担当</button></div>
+    <div class="am-scroll scroll" data-scroll="am">
+      <section class="am-sec"><h2>今日のフォロー</h2></section>
+      <div class="am-car">${follow.map(x=>`<button type="button" class="am-fcard" data-act="open" data-id="${x.id}"><span class="small" style="opacity:.85">${md(x.next.d)}${nextLate(x)?"（期限切れ）":""}</span><b style="font-size:15px">${x.next.t}</b><span class="small" style="opacity:.85">${x.co}</span></button>`).join("")}</div>
+      <section class="am-sec"><h2>商談 <span class="num muted" style="font-weight:500">${list.length}件</span></h2>
+        <input type="search" id="q" class="am-q" placeholder="商談を検索" value="${esc(state.q)}" aria-label="商談を検索">
+        <div class="am-cards">${list.map(x=>`<button type="button" class="am-card" data-act="open" data-id="${x.id}">
+          <span class="row">${badge(x.stage)}<span class="grow"></span><span class="small muted">${x.owner}</span></span>
+          <b style="font-size:16px">${x.name}</b><span class="small muted">${x.co}</span>
+          <span class="row"><span class="num" style="font-size:18px;font-weight:800">${man(x.amt)}</span><span class="grow"></span><span class="small ${isLate(x)?"late":"muted"}">完了予定 ${md(x.close)}</span></span></button>`).join("") || empty()}</div>
+      </section>
+    </div>
+    <nav class="am-tab" aria-label="タブ">${[["home","ホーム"],["list","商談",1]].map(([i,l,on])=>`<button type="button" class="am-ti ${on?"on":""}" data-act="noop">${ic(i,22)}${l}</button>`).join("")}<button type="button" class="am-plus" data-act="noop" aria-label="新規作成">${ic("plus",22)}</button>${[["bell","通知"],["user","マイページ"]].map(([i,l])=>`<button type="button" class="am-ti" data-act="noop">${ic(i,22)}${l}</button>`).join("")}</nav>
+    ${state.overlay?`<div class="am-scrim" data-act="close"></div>
+    <section class="am-sheet" aria-label="商談の詳細"><button type="button" class="am-handle" data-act="close" aria-label="閉じる"></button>
+      <div class="am-sb">
+        <div class="row"><div class="grow"><p class="small muted">${d.co}</p><h2 style="font-size:20px;font-weight:800">${d.name}</h2></div><button type="button" class="iconbtn" data-act="close" aria-label="閉じる">${ic("x",20)}</button></div>
+        <div class="row"><span class="num" style="font-size:28px;font-weight:800">${yen(d.amt)}</span><span class="grow"></span>${badge(d.stage)}</div>
+        <div><div class="am-dots">${STAGES.map((s,i)=>`<i class="${d.stage==="失注"?"":i<idx?"done":i===idx?"cur":""}"></i>`).join("")}</div><p class="small muted" style="margin-top:6px">${d.stage==="失注"?"失注":`${d.stage}（${idx+1}/6）`} · 確度 ${d.p}%</p></div>
+        <div style="display:grid;gap:8px">${B("活動を記録","log","primary am-full",`aria-expanded="${state.form}"`)}${advBtn(d,"am-full")}</div>
+        ${state.form?logForm():""}
+        <div class="utabs" role="tablist"><button type="button" role="tab" data-act="dtab" data-v="act" aria-selected="${state.dtab==="act"}">活動</button><button type="button" role="tab" data-act="dtab" data-v="info" aria-selected="${state.dtab==="info"}">取引先</button></div>
+        ${state.dtab==="act"?timeline(d):kv(d)}
+      </div>
+    </section>`:""}
+  </div></div>`;
+}};
+
+/* ===== Apple HIG ===== */
+function setSrc(v){
+  state.owner = null; state.stale = false; state.stage = null;
+  if(v==="own") state.owner = ME; else if(v==="stale") state.stale = true; else if(v!=="all") state.stage = v;
+  if(v==="all" || v==="own" || v==="stale") state.tab = "all";
+}
+LAYOUTS.hig = {mode:"panel", dtab:"act", logOverlay:true, render(){
+  const d = cur(), list = filtered(), idx = STAGES.indexOf(d.stage);
+  const src = state.stage ? state.stage : state.stale ? "stale" : state.owner ? "own" : state.tab==="all" ? "all" : "";
+  const smart = [["all","tray","すべての商談",deals.length],["own","user","自分の担当",deals.filter(x=>x.owner===ME).length],["stale","clock","停滞中",deals.filter(x=>isOpen(x)&&x.upd>=14).length]];
+  return `<div class="mac"><div class="mac-win">
+    <div class="mac-lights" aria-hidden="true"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+    <aside class="mac-src">
+      <div class="mac-sech">スマートフォルダ</div>${smart.map(([k,i,l,n])=>`<button type="button" class="mac-si" data-act="src" data-v="${k}" aria-pressed="${src===k}">${ic(i==="tray"?"inbox":i)}${l}<span class="cnt num">${n}</span></button>`).join("")}
+      <div class="mac-sech">フェーズ</div>${[...STAGES,"失注"].map(s=>`<button type="button" class="mac-si" data-act="src" data-v="${s}" aria-pressed="${src===s}">${ic("opencirc")}${s}<span class="cnt num">${deals.filter(x=>x.stage===s).length}</span></button>`).join("")}
+    </aside>
+    <header class="mac-tb"><div class="mac-title"><b>商談</b><small class="num">${list.length} 件</small></div><span class="grow"></span>
+      <div class="mac-seg" role="group" aria-label="状態">${TABS.map(([k,l])=>`<button type="button" data-act="tab" data-v="${k}" aria-pressed="${!state.stage&&!state.stale&&!state.owner&&state.tab===k}">${l}</button>`).join("")}</div><span class="grow"></span>
+      <button type="button" class="iconbtn" data-act="log" aria-label="活動を記録" title="活動を記録">${ic("edit")}</button><button type="button" class="iconbtn" data-act="noop" aria-label="新規商談" title="新規商談">${ic("plus")}</button>
+      <input type="search" id="q" class="mac-q" placeholder="検索" value="${esc(state.q)}" aria-label="商談を検索"></header>
+    <section class="mac-list scroll" data-scroll="mac-l">${list.map(x=>`<button type="button" class="mac-row" data-act="open" data-id="${x.id}" aria-selected="${x.id===state.sel}">
+      <span class="l1"><span>${x.name}</span><span class="num">${man(x.amt)}</span></span>
+      <span class="l2"><span>${x.co}</span><span class="num">${md(x.close)}</span></span>
+      <span class="l2"><span>${x.stage} · ${x.next.t}</span></span></button>`).join("") || empty()}</section>
+    <main class="mac-detail scroll" data-scroll="mac-d">
+      <div class="mac-dh"><div class="grow"><h2>${d.name}</h2><p class="muted">${d.co}</p></div>${B("記録…","log")}${advBtn(d,"primary")}</div>
+      <div><p class="mac-amt num">${yen(d.amt)}</p></div>
+      <div><div class="mac-prog">${STAGES.map((s,i)=>`<span class="${d.stage==="失注"?(i===5?"lost":""):i<idx?"done":i===idx?"cur":""}"></span>`).join("")}</div><div class="mac-plab">${STAGES.map((s,i)=>`<span style="${i===idx?"color:var(--text);font-weight:600":""}">${d.stage==="失注"&&i===5?"失注":s}</span>`).join("")}</div></div>
+      <div class="mac-group"><h3>概要</h3><div class="mac-box">${[["フェーズ",d.stage],["確度",d.p+"%"],["完了予定",d.close.replaceAll("-","/")],["担当",d.owner],["次にやること",`${d.next.t}（${md(d.next.d)}）`]].map(([k,v])=>`<div class="mac-r"><span>${k}</span><span>${v}</span></div>`).join("")}</div></div>
+      <div class="mac-group"><h3>取引先</h3><div class="mac-box">${[["会社名",d.co],...Object.entries(d.info)].map(([k,v])=>`<div class="mac-r"><span>${k}</span><span>${v}</span></div>`).join("")}</div></div>
+      <div class="mac-group"><h3>アクティビティ</h3><div class="mac-box">${d.acts.map(a=>`<div class="mac-r" style="justify-content:flex-start;gap:10px"><span style="color:var(--accent)">${ic(KI[a.k]||"memo")}</span><span style="color:var(--text);text-align:left;flex:1">${esc(a.x)}</span><span class="small">${a.d}</span></div>`).join("")}</div></div>
+    </main>
+    ${state.overlay?`<div class="mac-scrim" data-act="cancel"></div>
+    <form class="mac-sheet" id="logForm" aria-label="活動を記録"><h2>「${d.name}」に活動を記録</h2>
+      <div class="mac-fg"><label for="f-kind">種別:</label><select id="f-kind">${kindOptions()}</select><label for="f-note">内容:</label><textarea id="f-note" placeholder="内容を入力"></textarea><span></span><label class="chk" for="f-rem"><input type="checkbox" id="f-rem" checked>3 日後にリマインド</label></div>
+      <div class="formrow">${B("キャンセル","cancel")}<button type="submit" class="btn primary">記録</button></div></form>`:""}
+  </div></div>`;
+}};
+</script>
+<script>
+/* ---------- render ---------- */
+function render(){
+  const root = $("#root"), L = LAYOUTS[state.ds];
+  const a = document.activeElement, fid = root.contains(a) && a.id ? a.id : null;
+  let s0 = null, s1 = null; try{ s0 = a.selectionStart; s1 = a.selectionEnd; }catch(_){}
+  const draft = {note:$("#f-note")?.value, kind:$("#f-kind")?.value};
+  const scrolls = {}; root.querySelectorAll("[data-scroll]").forEach(el => scrolls[el.dataset.scroll] = el.scrollTop);
+  root.innerHTML = L.render();
+  root.querySelectorAll("[data-scroll]").forEach(el => { if(scrolls[el.dataset.scroll] != null) el.scrollTop = scrolls[el.dataset.scroll]; });
+  if(draft.note && $("#f-note")) $("#f-note").value = draft.note;
+  if(draft.kind && $("#f-kind")) $("#f-kind").value = draft.kind;
+  if(fid){ const el = document.getElementById(fid); if(el){ el.focus({preventScroll:true}); try{ if(s0 != null) el.setSelectionRange(s0, s1); }catch(_){} } }
+}
+let toastTimer;
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>{ t.hidden = true; }, 2400);
+}
+function setStage(id, s){
+  const d = deals.find(x=>x.id===id), prev = d.stage; if(prev === s) return;
+  d.stage = s; d.p = s==="受注" ? 100 : s==="失注" ? 0 : Math.max(d.p, [10,20,40,60,70][STAGES.indexOf(s)] ?? d.p); d.upd = 0;
+  d.acts.unshift({k:"memo", who:ME, d:"9/23", t:"フェーズ変更", x:`${prev} → ${s}`});
+  render(); toast(s==="受注" ? `「${d.name}」を受注にしました` : `フェーズを「${s}」に変更しました`);
+}
+function advance(id){
+  const d = deals.find(x=>x.id===id), i = STAGES.indexOf(d.stage);
+  if(i >= 0 && i < STAGES.length-1){ const nxt = STAGES[i+1]; d.p = nxt==="受注" ? 100 : Math.min(90, d.p+15); setStage(id, nxt); }
+}
+function openDeal(id){
+  const L = LAYOUTS[state.ds];
+  state.form = false; state.dtab = L.dtab || "act";
+  if(L.mode === "expand"){ state.expanded = state.expanded===id ? null : id; state.sel = id; }
+  else {
+    state.sel = id;
+    if(L.mode === "page") state.view = "detail";
+    else if(L.mode === "overlay") state.overlay = true;
+    else if(L.mode === "tab"){ if(!state.openTabs.includes(id)) state.openTabs.push(id); state.view = "detail"; }
+  }
+  render();
+}
+function act(name, el){
+  const L = LAYOUTS[state.ds], id = el.dataset.id ? +el.dataset.id : null, v = el.dataset.v;
+  switch(name){
+    case "open": return openDeal(id);
+    case "back": state.view = "list"; state.overlay = false; state.form = false; break;
+    case "close": state.overlay = false; state.form = false; break;
+    case "tab": state.tab = v; state.stage = null; if(state.ds!=="hig"){ state.stale = false; } else { state.owner = null; state.stale = false; } break;
+    case "cycle": { const i = TABS.findIndex(t=>t[0]===state.tab); state.tab = TABS[(i+1)%TABS.length][0]; state.stage = null; break; }
+    case "owner": state.owner = state.owner===v ? null : v; break;
+    case "own": state.owner = state.owner ? null : ME; break;
+    case "gview": setGview(v); break;
+    case "src": setSrc(v); break;
+    case "clear": state.tab = "all"; state.owner = null; state.q = ""; state.stale = false; state.stage = null; break;
+    case "dtab": state.dtab = v; break;
+    case "kind": state.kind = v; break;
+    case "note": state.note = v==="1"; break;
+    case "log":
+      if(id){ state.sel = id; if(L.mode==="expand") state.expanded = id; }
+      if(L.logOverlay){ state.overlay = true; state.form = true; }
+      else { state.form = !state.form || !!id; if(L.actTab) state.dtab = L.actTab; }
+      break;
+    case "cancel": state.form = false; if(L.logOverlay) state.overlay = false; break;
+    case "advance": return advance(id || state.sel);
+    case "closetab":
+      state.openTabs = state.openTabs.filter(x=>x!==id);
+      if(state.sel===id && state.view==="detail"){ if(state.openTabs.length) state.sel = state.openTabs.at(-1); else state.view = "list"; }
+      break;
+    case "play": { const f = filtered()[0]; if(f) return openDeal(f.id); return; }
+    case "noop": return toast("この操作はモックに含まれていません");
+    default: return;
+  }
+  render();
+  if(name==="log" && state.form) setTimeout(()=>$("#f-note")?.focus(), 0);
+}
+const crm = $("#crm");
+crm.addEventListener("click", e=>{
+  const t = e.target;
+  if(t.closest("[data-stop]") || t.matches("input,select,textarea,option")) return;
+  const el = t.closest("[data-act]");
+  if(!el || el.disabled || !crm.contains(el)) return;
+  if(t.closest("label") && !t.closest("label").contains(el)) return;
+  e.preventDefault(); act(el.dataset.act, el);
+});
+crm.addEventListener("keydown", e=>{
+  const el = e.target.closest("[data-act]");
+  if(el && el.tagName!=="BUTTON" && (e.key==="Enter" || e.key===" ")){ e.preventDefault(); act(el.dataset.act, el); }
+  if(e.key==="Escape" && (state.overlay || state.form)){ state.overlay = false; state.form = false; render(); }
+});
+crm.addEventListener("input", e=>{ if(e.target.id==="q"){ state.q = e.target.value.trim(); render(); } });
+crm.addEventListener("change", e=>{
+  const t = e.target;
+  if(t.id==="f-status"){ state.tab = t.value; render(); }
+  else if(t.id==="f-owner"){ state.owner = t.value || null; render(); }
+  else if(t.id==="km-own"){ state.owner = t.checked ? ME : null; render(); }
+  else if(t.id==="zd-stage"){ setStage(state.sel, t.value); }
+  else if(t.id==="zd-owner"){ cur().owner = t.value; render(); toast(`担当者を${t.value}に変更しました`); }
+});
+crm.addEventListener("submit", e=>{
+  e.preventDefault();
+  const L = LAYOUTS[state.ds], noteEl = $("#f-note"), note = noteEl ? noteEl.value.trim() : "";
+  if(!note){ noteEl?.focus(); toast("内容を入力してください"); return; }
+  const kEl = $("#f-kind"), k = kEl ? kEl.value : (state.ds==="garden" && state.note ? "memo" : state.kind || "call");
+  const d = cur(), rem = $("#f-rem")?.checked !== false;
+  d.acts.unshift({k, who:ME, d:"9/23", t:KL[k], x:note}); d.upd = 0;
+  noteEl.value = "";
+  state.form = false; if(L.logOverlay) state.overlay = false; if(L.actTab) state.dtab = L.actTab;
+  render(); toast(rem ? "活動を記録しました（9/26 にリマインド）" : "活動を記録しました");
+});
+
+/* ---------- chrome: picker, panel, export ---------- */
+function hexToOklch(hex){
+  const n = hex.replace("#",""); if(n.length!==6) return hex;
+  const lin = c => (c/=255) <= .04045 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4);
+  const [r,g,b] = [0,2,4].map(i=>lin(parseInt(n.slice(i,i+2),16)));
+  const l = Math.cbrt(.4122214708*r+.5363325363*g+.0514459929*b), m = Math.cbrt(.2119034982*r+.6806995451*g+.1073969566*b), s = Math.cbrt(.0883024619*r+.2817188376*g+.6299787005*b);
+  const L = .2104542553*l+.7936177850*m-.0040720468*s, A = 1.9779984951*l-2.4285922050*m+.4505937099*s, B2 = .0259040371*l+.7827717662*m-.8086757660*s;
+  const C = Math.hypot(A,B2); let h = Math.atan2(B2,A)*180/Math.PI; if(h<0) h += 360;
+  return `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${C<.002?0:h.toFixed(1)})`;
+}
+function shadcnVars(t){
+  const map = [["background","bg"],["foreground","text"],["card","surface"],["card-foreground","text"],["popover","surface"],["popover-foreground","text"],
+    ["primary","primary"],["primary-foreground","onPrimary"],["secondary","btn2bg"],["secondary-foreground","btn2fg"],["muted","subtle"],["muted-foreground","text2"],
+    ["accent","selBg"],["accent-foreground","selFg"],["destructive","danger"],["border","border"],["input","inputBd"],["ring","focus"],
+    ["chart-1","info"],["chart-2","success"],["chart-3","warning"],["chart-4","danger"],["chart-5","neutral"],
+    ["sidebar","sideBg"],["sidebar-foreground","sideFg"],["sidebar-primary","primary"],["sidebar-primary-foreground","onPrimary"],["sidebar-accent","sideActBg"],["sidebar-accent-foreground","sideActFg"],["sidebar-border","sideBd"],["sidebar-ring","focus"]];
+  const rem = (parseFloat(t.radius)/16).toFixed(3).replace(/0+$/,"").replace(/\.$/,"");
+  return ":root {\n  --radius: " + rem + "rem;\n" + map.map(([k,v])=>`  --${k}: ${hexToOklch(t[v])};`).join("\n") + "\n}";
+}
+function renderPicker(){
+  const groups = [...new Set(SYSTEMS.map(s=>s.group))];
+  $("#picker").innerHTML = groups.map(g=>`<div class="ch-group"><span class="ch-group-label">${g}</span><div class="ch-chips">${
+    SYSTEMS.filter(s=>s.group===g).map(s=>`<button type="button" class="ch-chip" data-ds="${s.id}" aria-pressed="${s.id===state.ds}"><i style="background:${s.t.primary}"></i>${s.name}</button>`).join("")}</div></div>`).join("");
+}
+function renderPanel(s){
+  const t = s.t, sw = [["地","bg"],["面","surface"],["文字","text"],["主色","primary"],["強調","accent"],["境界","border"]];
+  $("#panel").innerHTML = `
+    <div><h2>${s.name}</h2>
+      <div class="ch-org"><span>${s.org}</span><a href="${s.url}" target="_blank" rel="noopener">ドキュメント ↗</a><span class="ch-cert" data-k="${s.cert}" title="トークン値の確度">${s.cert}</span></div>
+      <p class="ch-lede">${s.lede}</p></div>
+    <div><h3 class="ch-h3">画面構成と操作（UX）</h3><p class="ch-ux">${s.ux}</p><ul class="ch-list">${s.uxList.map(a=>`<li>${a}</li>`).join("")}</ul></div>
+    <div><h3 class="ch-h3">主要トークン</h3>
+      <div class="ch-tokens">${sw.map(([l,k])=>`<div class="ch-tok"><i style="background:${t[k]}"></i><span>${l}</span>${t[k]}</div>`).join("")}</div>
+      <div class="ch-metrics"><span>角丸 <b>${t.radius}</b> / ボタン <b>${t.rbtn==="999px"?"pill":t.rbtn}</b></span><span>本文 <b>${t.fs}</b></span><span>行の高さ <b>${t.row}</b></span></div>
+      <p class="ch-look">見た目: ${s.look}</p></div>
+    <details class="ch-export"><summary>shadcn/ui の CSS 変数（OKLCH）として見る</summary>
+      <div class="ch-export-bar"><span>globals.css の :root にそのまま貼れる形式です（ライトテーマのみ）。</span><button type="button" class="ch-btn" id="copyVars">コピー</button></div>
+      <pre id="varsOut">${shadcnVars(t)}</pre></details>`;
+}
+function applyDS(id){
+  const s = SYSTEMS.find(x=>x.id===id) || SYSTEMS[2];
+  Object.assign(state, {ds:s.id, tab:"open", owner:null, stale:false, stage:null, q:"", sel:1, view:"list", overlay:false, form:false,
+    dtab:LAYOUTS[s.id].dtab || "act", openTabs:[], gview:"open", expanded:null, note:false, kind:"call"});
+  const el = $("#crm");
+  el.dataset.ds = s.id; el.dataset.badge = s.t.badge;
+  for(const [k,v] of Object.entries(s.t)) if(k!=="badge") el.style.setProperty("--"+k, v);
+  document.querySelectorAll(".ch-chip").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ds===s.id));
+  renderPanel(s); render();
+  try{ localStorage.setItem("crm-ds", s.id); }catch(_){}
+  if(location.hash.slice(1)!==s.id) history.replaceState(null, "", "#"+s.id);
+}
+$("#picker").addEventListener("click", e=>{ const b = e.target.closest("[data-ds]"); if(b) applyDS(b.dataset.ds); });
+$("#panel").addEventListener("click", async e=>{
+  const btn = e.target.closest("#copyVars"); if(!btn) return;
+  const txt = $("#varsOut").textContent;
+  try{ await navigator.clipboard.writeText(txt); btn.textContent = "コピーしました"; }
+  catch(_){ const r = document.createRange(); r.selectNodeContents($("#varsOut")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = "選択しました（⌘C でコピー）"; }
+  setTimeout(()=>{ btn.textContent = "コピー"; }, 2000);
+});
+window.addEventListener("hashchange", ()=>{ const h = location.hash.slice(1); if(SYSTEMS.some(s=>s.id===h) && h!==state.ds) applyDS(h); });
+let initial = location.hash.slice(1);
+if(!SYSTEMS.some(s=>s.id===initial)){ try{ initial = localStorage.getItem("crm-ds") || "primer"; }catch(_){ initial = "primer"; } }
+renderPicker(); applyDS(initial);
+</script>
